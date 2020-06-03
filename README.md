@@ -45,21 +45,21 @@ __This will also be bold__
 
 _You **can** combine them_
 
-#Lists
-##Unordered
+# Lists
+## Unordered
 * Item 1
 * item 2
     * Item 2a
     * Item 2b
 
-##Ordered
+## Ordered
 1. Item 1
 1. Item 2
 1. Item 3
     1. Item 3a
     1. Item 3b
     
-#Images
+# Images
 ![GitHub Logo](/images/logo.png)
 Format: ![Alt Text](url)
 
@@ -67,15 +67,15 @@ Format: ![Alt Text](url)
 http://github.com - automatic!
 [GitHub](http://github.com)
 
-#Blockquotes
+# Blockquotes
 As Kanye West said:
 > We're living the future so
 >the present is our past.
 
-#Inline code
+# Inline code
 I think you should use an `<addr>` element here instead.
 
-#Syntax highlighting
+# Syntax highlighting
 ```javascript
 function fancyAlert(arg) {
     if(arg) {
@@ -83,13 +83,13 @@ function fancyAlert(arg) {
 }}
 ```
 
-#Task Lists
+# Task Lists
 - [x] @mentions, #refs, [links](), **formatting**, and <del>tags</del> supported
 - [x] list syntax required (any unordered or ordered list supported)
 - [x] this is a complete item
 - [ ] this is an incomplete item
 
-#Tables
+# Tables
 First Header | Second Header
 -------------|--------------
 Content from cell 1 | Content from cell 2
