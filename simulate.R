@@ -1,16 +1,16 @@
-simulation_fun <- function() {
-  foldername = "~/PycharmProjects/Bayesian_analysis_GUI"
+simulation_fun <- function(newfolder, molspercluster, background, nclusters, xlim, ylim, gammaparams, nsim, sdcluster, ab) {
+  # foldername = "~/PycharmProjects/Bayesian_analysis_GUI"
 
 
-  r = readLines(con = file.path(paste0(foldername, "/sim_params.txt", sep = "")))
+  # r = readLines(con = file.path(paste0(foldername, "/sim_params.txt", sep = "")))
 
-  get <- function(type) {
-    i = grep(type, r)
-    if (length(i) == 0) NA
-    else strsplit(r[i], "=")[[1]][2]
-  }
+  #get <- function(type) {
+  #  i = grep(type, r)
+  #  if (length(i) == 0) NA
+  #  else strsplit(r[i], "=")[[1]][2]
+  #}
 
-  as.v <- function(ch) { as.numeric(strsplit(ch, ",")[[1]]) }
+  #as.v <- function(ch) { as.numeric(strsplit(ch, ",")[[1]]) }
 
   ##multimer: if greater than 1, ignore all clustering parameters (e.g. nclusters, sdcluster) and do CSR with some proportion multimered.
   ##If zero or unspecified, normal simulation
@@ -18,42 +18,42 @@ simulation_fun <- function() {
   ##ab: background density is fixed in any vertical line, and a Beta with parameters a and b going left to right
 
 
-  xlim = as.v(get("xlim"))
-  ylim = as.v(get("ylim"))
-  gammaparams = as.v(get("gammaparams"))
-  nsim = as.numeric(get("nsim"))
-  dataname = get("name")
+  #xlim = as.v(get("xlim"))
+  #ylim = as.v(get("ylim"))
+  #gammaparams = as.v(get("gammaparams"))
+  #nsim = as.numeric(get("nsim"))
+  #dataname = get("name")
+  #
+  #multimer = as.numeric(get("multimerisation"))
 
-  multimer = as.numeric(get("multimerisation"))
+  #  if (is.na(multimer)) multimer = 0
+  #
+  #  { if (multimer <= 1) {
+  #  multimer = 1
+  #  background = as.numeric(get("background"))
+  #  sdcluster = as.v(get("sdcluster"))
+  #  if (length(sdcluster) == 1) {
+  #    nclusters = as.numeric(get("nclusters"))
+  #    sdcluster = rep(sdcluster, nclusters)
+  #  }
+  #  else nclusters = length(sdcluster)
+  #
+  #  molspercluster = as.numeric(get("molspercluster"))
+  #
+  #
+  #}
+  #else {
+  #  propmultimered = as.numeric(get("propmultimered"))
+  #  nmols = as.numeric(get("nmols_for_multimer_case"))
+  #  nclusters = floor(propmultimered * nmols)
+  #} }
+  #
+  #  ab = get("ab")
+  #  { if (!is.na(ab)) { ab = as.v(ab); fa = ab[1]; fb = ab[2]; ab = TRUE }
+  #else ab = FALSE }
 
-  if (is.na(multimer)) multimer = 0
-
-  { if (multimer <= 1) {
-  multimer = 1
-  background = as.numeric(get("background"))
-  sdcluster = as.v(get("sdcluster"))
-  if (length(sdcluster) == 1) {
-    nclusters = as.numeric(get("nclusters"))
-    sdcluster = rep(sdcluster, nclusters)
-  }
-  else nclusters = length(sdcluster)
-
-  molspercluster = as.numeric(get("molspercluster"))
-
-
-}
-else {
-  propmultimered = as.numeric(get("propmultimered"))
-  nmols = as.numeric(get("nmols_for_multimer_case"))
-  nclusters = floor(propmultimered * nmols)
-} }
-
-  ab = get("ab")
-  { if (!is.na(ab)) { ab = as.v(ab); fa = ab[1]; fb = ab[2]; ab = TRUE }
-else ab = FALSE }
-
-  newfolder <- file.path(paste(foldername, "/", dataname, sep = ""))
-  dir.create(newfolder, showWarnings = F)
+  #  newfolder <- file.path(paste(foldername, "/", dataname, sep = ""))
+  #  dir.create(newfolder, showWarnings = F)
 
   sapply(1:nsim, function(expi) {
 
@@ -134,3 +134,8 @@ else ab = FALSE }
 
 }
 
+test_fun <- function(vector) {
+  print(vector)
+  print(vector[1])
+  print(vector[2])
+}
