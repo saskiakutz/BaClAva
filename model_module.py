@@ -11,9 +11,10 @@ class Model(qtc.QObject):
 
     def print_income(self, inputs):
         print("save_called")
-        print(inputs)
+
         error = ''
         dir_ = inputs.get('directory')
+
         if dir_ == "select directory":
             error = f'You need to choose a directory'
         elif not path.isdir(dir_.rsplit('/', 1)[0]):

@@ -1,4 +1,4 @@
-simulation_fun <- function(newfolder, molspercluster, background, nclusters, xlim, ylim, gammaparams, nsim, sdcluster, ab) {
+simulation_fun <- function(newfolder, nclusters, molspercluster, background, xlim, ylim, gammaparams, nsim, sdcluster, ab = NA) {
   # foldername = "~/PycharmProjects/Bayesian_analysis_GUI"
 
 
@@ -37,7 +37,6 @@ simulation_fun <- function(newfolder, molspercluster, background, nclusters, xli
   #    sdcluster = rep(sdcluster, nclusters)
   #  }
   #  else nclusters = length(sdcluster)
-  #
   #  molspercluster = as.numeric(get("molspercluster"))
   #
   #
@@ -54,6 +53,20 @@ simulation_fun <- function(newfolder, molspercluster, background, nclusters, xli
 
   #  newfolder <- file.path(paste(foldername, "/", dataname, sep = ""))
   #  dir.create(newfolder, showWarnings = F)
+
+  if (length(sdcluster) == 1) {
+    sdcluster = rep(sdcluster, nclusters)
+  }
+  else nclusters = length(sdcluster)
+
+  if (length(ab) == 1) {
+    ab = FALSE
+  }else {
+    fa = ab[1]
+    fb = ab[2]
+    ab = TRUE
+  }
+  multimer = 1
 
   sapply(1:nsim, function(expi) {
 
@@ -77,7 +90,6 @@ simulation_fun <- function(newfolder, molspercluster, background, nclusters, xli
         while (sum(
           sqrt(abs(center_tmp[, 1] - centre[1])^2 + abs(center_tmp[, 2] - centre[2])^2) <= 2 * sdcluster[1])) {
           centre <- centre_calculation(xlim, ylim)
-          print(centre)
         }
       }
 
@@ -85,6 +97,7 @@ simulation_fun <- function(newfolder, molspercluster, background, nclusters, xli
 
       if (multimer <= 1) {
         lc = c(lc, rep(i, molspercluster))
+        print(sdcluster[i])
         ptsc <- rbind(ptsc, centeredpts(molspercluster, centre, sdcluster[i]))
       } else {
         if (nclusters > 0) {

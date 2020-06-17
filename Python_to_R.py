@@ -10,32 +10,26 @@ def r_simulation(input_dic):
     r = r_objects.r
     r.source('simulate.R')
 
-    print(input_dic.get('roixmin'))
-    print(input_dic.get('roixmax'))
-    print(input_dic.get('roiymin'))
-    print(input_dic.get('roiymax'))
-    print(input_dic.get('alpha'))
-    print(input_dic.get('beta'))
-    print(input_dic.get('a'))
-    print(input_dic.get('b'))
+    print(input_dic.get("sdcluster"))
 
     numpy2ri.activate()
-    test_array = np.array([input_dic.get('roixmin'), input_dic.get('roixmax')])
+    xlim = np.array([input_dic.get('roixmin'), input_dic.get('roixmax')])
+    ylim = np.array([input_dic.get('roiymin'), input_dic.get('roiymax')])
+    gammaparams = np.array([input_dic.get('alpha'), input_dic.get('beta')])
+    ab = np.array([input_dic.get('a'), input_dic.get('b')])
 
-    r.test_fun(test_array)
+    r.simulation_fun(
+        newfolder=input_dic.get('directory'),
+        nclusters=input_dic.get('nclusters'),
+        molspercluster=input_dic.get('molspercluster'),
+        background=input_dic.get('background'),
+        xlim=xlim,
+        ylim=ylim,
+        gammaparams=gammaparams,
+        nsim=input_dic.get('nsim'),
+        sdcluster=input_dic.get('sdcluster'),
+        ab=ab
+    )
     numpy2ri.deactivate()
-
-    # r.simulation_fun(
-    #     input_dic.get('directory'),
-    #     input_dic.get('nclusters'),
-    #     input_dic.get('molspercluster'),
-    #     input_dic.get('background'),
-    #     xlim,
-    #     ylim,
-    #     gammaparams,
-    #     input_dic.get('nsim'),
-    #     input_dic.get('sdcluster'),
-    #     ab
-    # )
     print("done")
-    # TODO: add np.arrays to simulation_fun(). All keys in print statements have to get converted/combined to np.arrays
+    # TODO: multimerisation not ready yet
