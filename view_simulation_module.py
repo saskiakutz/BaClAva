@@ -4,7 +4,7 @@ from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 
 
-class View(qtw.QWidget):
+class View_sim(qtw.QWidget):
     submitted = qtc.pyqtSignal(object)
 
     # noinspection PyArgumentList
@@ -56,6 +56,7 @@ class View(qtw.QWidget):
             self,
             minimum=0,
             maximum=100,
+            singleStep=1,
             value=5
         )
         self.beta = qtw.QDoubleSpinBox(
@@ -63,6 +64,7 @@ class View(qtw.QWidget):
             minimum=0,
             maximum=100,
             decimals=6,
+            singleStep=0.000001,
             value=0.166667
         )
 

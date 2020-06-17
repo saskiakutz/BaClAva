@@ -6,7 +6,7 @@ from PyQt5 import QtCore as qtc
 from Python_to_R import r_simulation
 
 
-class Model(qtc.QObject):
+class Model_sim(qtc.QObject):
     error = qtc.pyqtSignal(str)
 
     def print_income(self, inputs):

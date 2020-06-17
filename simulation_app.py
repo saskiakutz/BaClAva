@@ -4,8 +4,8 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 
-from view_module import View
-from model_module import Model
+from view_simulation_module import View_sim
+from model_simulation_module import Model_sim
 
 
 class MainWindow(qtw.QMainWindow):
@@ -24,10 +24,10 @@ class MainWindow(qtw.QMainWindow):
 
         self.setWindowTitle("Simulation 1.0")
 
-        self.view = View()
+        self.view = View_sim()
         self.setCentralWidget(self.view)
 
-        self.model = Model()
+        self.model = Model_sim()
 
         self.view.submitted.connect(self.model.print_income)
         self.model.error.connect(self.view.show_error)
@@ -35,6 +35,7 @@ class MainWindow(qtw.QMainWindow):
         status_bar = qtw.QStatusBar()
         self.setStatusBar(status_bar)
         status_bar.showMessage('cluster simulation')
+        # TODO: status_bar update messages
 
         # End main UI code
         self.show()
