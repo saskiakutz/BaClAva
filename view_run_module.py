@@ -7,7 +7,7 @@ import multiprocessing
 
 
 class View_run(qtw.QWidget):
-    submitted = qtc.pyqtSignal(object)
+    submitted = qtc.pyqtSignal(object, object)
 
     # noinspection PyArgumentList
     def __init__(self):
@@ -112,6 +112,10 @@ class View_run(qtw.QWidget):
                 maximum=multiprocessing.cpu_count(),
                 value=multiprocessing.cpu_count() / 2
             ),
+            "ROI x size [nm]": roi_layout_x,
+            "ROI y size [nm]": roi_layout_y,
+            "Radius sequence": radius_layout,
+            "Threshold sequence": threshold_layout,
             "Dirichlet process: \u03B1": qtw.QDoubleSpinBox(
                 self,
                 minimum=0,
@@ -125,21 +129,17 @@ class View_run(qtw.QWidget):
                 maximum=1,
                 singleStep=0.1,
                 value=0.5
-            ),
-            "ROI x size [nm]": roi_layout_x,
-            "ROI y size [nm]": roi_layout_y,
-            "Radius sequence": radius_layout,
-            "Threshold sequence": threshold_layout
+            )
         }
 
-        models = ('Gaussian', 'no other model implemented')
-        # TODO: making 'no other model implemented' not a choosable option
+        models = ('Gaussian(prec)', 'no other model implemented')
         self.b_inputs["model"].addItems(models)
+        self.b_inputs["model"].model().item(1).setEnabled(False)
 
         datasources = ('simulation', 'experiment')
         self.b_inputs["datasource"].addItems(datasources)
 
-        clustermethods = ("1 - Ripley' K based", "2 - DBSCAN", "3 - ToMATo")
+        clustermethods = ("Ripley' K based", "DBSCAN", "ToMATo")
         self.b_inputs["clustermethod"].addItems(clustermethods)
 
         if os.name == 'nt':
@@ -154,6 +154,23 @@ class View_run(qtw.QWidget):
         for label, widget in self.b_inputs.items():
             self.layout().addRow(label, widget)
 
+        self.dir_btn = qtw.QPushButton("Select data directory")
+        self.dir_btn.clicked.connect(self.chooseFile)
+        self.dir_line = qtw.QLineEdit("select data directory")
+        self.dir_line.setReadOnly(True)
+        self.dir_line.textChanged.connect(lambda x: self.dir_line.setReadOnly(x == ''))
+
+        self.layout().addRow(self.dir_btn, self.dir_line)
+
+        self.start_btn = qtw.QPushButton(
+            "start",
+            clicked=self.start_run
+        )
+        self.start_btn.setDisabled(True)
+        self.dir_line.textChanged.connect(lambda x: self.start_btn.setDisabled(x == ''))
+
+        self.layout().addRow(self.start_btn)
+
     def on_currentIndexChanged(self):
         if self.b_inputs["datasource"].currentText() == "experiment":
             self.roi_x_min.setDisabled(True)
@@ -165,3 +182,46 @@ class View_run(qtw.QWidget):
             self.roi_x_max.setDisabled(False)
             self.roi_y_min.setDisabled(False)
             self.roi_y_max.setDisabled(False)
+
+    def chooseFile(self):
+        filename = qtw.QFileDialog.getExistingDirectory(
+            self,
+            "Select data directory",
+            qtc.QDir.homePath()
+        )
+        self.dir_line.setText(filename)
+
+    def start_run(self):
+        if self.b_inputs['parallelization'].isChecked():
+            parallel = {
+                "parallel": 1,
+                "cores": self.b_inputs['cores'].value()
+            }
+        else:
+            parallel = {
+                "parallel": 0
+            }
+        data = {
+            'directory': self.dir_line.text(),
+            'model': self.b_inputs['model'].currentText(),
+            'datasource': self.b_inputs['datasource'].currentText(),
+            'clustermethod': self.b_inputs['clustermethod'].currentText(),
+            'rmin': self.r_min.value(),
+            'rmax': self.r_max.value(),
+            'rstep': self.r_step.value(),
+            'thmin': self.th_min.value(),
+            'thmax': self.th_max.value(),
+            'thstep': self.th_step.value(),
+            'roixmin': self.roi_x_min.value(),
+            'roixmax': self.roi_x_max.value(),
+            'roiymin': self.roi_y_min.value(),
+            'roiymax': self.roi_y_max.value(),
+            'alpha': self.b_inputs['Dirichlet process: \u03B1'].value(),
+            'background': self.b_inputs['background proportion'].value()
+        }
+        self.submitted.emit(data, parallel)
+
+    def show_error(self, error):
+        qtw.QMessageBox.critical(None, 'Error', error)
+
+    # TODO: import option for stored config files

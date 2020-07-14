@@ -132,6 +132,7 @@ class View_sim(qtw.QWidget):
         }
         models = ('Gaussian', 'no other model implemented')
         self.inputs["model"].addItems(models)
+        self.inputs["model"].model().item(1).setEnabled(False)
 
         for label, widget in self.inputs.items():
             self.layout().addRow(label, widget)
@@ -185,4 +186,5 @@ class View_sim(qtw.QWidget):
     def show_error(self, error):
         qtw.QMessageBox.critical(None, 'Error', error)
 
-    # TODO: multimerisation as a checkbox option, if chosen: option to state number of molecules, proportion multimers
+    # TODO: multimerisation as a checkbox option, if chosen: option to state number of molecules, proportion multimers,
+    # import stored sim_parameters.txt
