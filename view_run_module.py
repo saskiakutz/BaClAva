@@ -3,19 +3,23 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 import os
+import time
 import multiprocessing
 
 
 class View_run(qtw.QWidget):
     submitted = qtc.pyqtSignal(object, object)
+    status = True
 
     # noinspection PyArgumentList
     def __init__(self):
         super().__init__()
-        self.setLayout(qtw.QFormLayout())
 
+        main_layout = qtw.QVBoxLayout()
+
+        parameter_layout = qtw.QFormLayout()
         heading = qtw.QLabel("Bayesian Clustering")
-        self.layout().addRow(heading)
+        parameter_layout.addRow(heading)
         heading_font = qtg.QFont('Arial', 32, qtg.QFont.Bold)
         heading_font.setStretch(qtg.QFont.ExtraExpanded)
         heading.setFont(heading_font)
@@ -32,11 +36,11 @@ class View_run(qtw.QWidget):
             maximum=100000,
             value=3000
         )
-        # form.layout().addRow(self.roi_x_min, self.roi_x_max)
+
         roi_layout_x = qtw.QHBoxLayout()
         roi_layout_x.layout().addWidget(self.roi_x_min)
         roi_layout_x.layout().addWidget(self.roi_x_max)
-
+        #
         self.roi_y_min = qtw.QSpinBox(
             self,
             minimum=0,
@@ -49,7 +53,6 @@ class View_run(qtw.QWidget):
             maximum=100000,
             value=3000
         )
-        # form.layout().addRow(self.roi_x_min, self.roi_x_max)
         roi_layout_y = qtw.QHBoxLayout()
         roi_layout_y.layout().addWidget(self.roi_y_min)
         roi_layout_y.layout().addWidget(self.roi_y_max)
@@ -64,7 +67,7 @@ class View_run(qtw.QWidget):
             self,
             minimum=2,
             maximum=1000,
-            value=300
+            value=500
         )
         self.th_step = qtw.QSpinBox(
             self,
@@ -152,7 +155,7 @@ class View_run(qtw.QWidget):
         self.b_inputs["datasource"].currentIndexChanged[int].connect(self.on_currentIndexChanged)
 
         for label, widget in self.b_inputs.items():
-            self.layout().addRow(label, widget)
+            parameter_layout.addRow(label, widget)
 
         self.dir_btn = qtw.QPushButton("Select data directory")
         self.dir_btn.clicked.connect(self.chooseFile)
@@ -160,16 +163,31 @@ class View_run(qtw.QWidget):
         self.dir_line.setReadOnly(True)
         self.dir_line.textChanged.connect(lambda x: self.dir_line.setReadOnly(x == ''))
 
-        self.layout().addRow(self.dir_btn, self.dir_line)
+        parameter_layout.addRow(self.dir_btn, self.dir_line)
+
+        main_layout.addLayout(parameter_layout)
+
+        button_layout = qtw.QHBoxLayout()
 
         self.start_btn = qtw.QPushButton(
             "start",
+            # checkable=True,
             clicked=self.start_run
+            # TODO: grey out start button after starting run
         )
-        self.start_btn.setDisabled(True)
+        self.start_btn.setDisabled(self.status)
         self.dir_line.textChanged.connect(lambda x: self.start_btn.setDisabled(x == ''))
 
-        self.layout().addRow(self.start_btn)
+        self.cancel_btn = qtw.QPushButton(
+            "cancel"
+        )
+
+        button_layout.addWidget(self.start_btn)
+        button_layout.addWidget(self.cancel_btn)
+
+        main_layout.addLayout(button_layout)
+
+        self.setLayout(main_layout)
 
     def on_currentIndexChanged(self):
         if self.b_inputs["datasource"].currentText() == "experiment":
@@ -191,7 +209,34 @@ class View_run(qtw.QWidget):
         )
         self.dir_line.setText(filename)
 
+    def btnstate(self, change_status):
+        print("here")
+        print(change_status)
+        if not change_status:
+            self.status = change_status
+            self.start_btn.setDisabled(self.status)
+            print(self.status)
+
+    def disableButton(self):
+        self.start_btn.setDisabled(self.status)
+        self.start_btn.repaint()
+
+    def toggleStateAndButton(self):
+        self.start_btn.setDisabled(self.status)
+        self.status = not self.status
+        self.start_btn.repaint()
+
     def start_run(self):
+        # if self.start_btn.isChecked():
+        # self.disableButton()
+        # self.toggleStateAndButton()
+        # # self.status = not self.status
+        # print("button pressed")
+        #
+        # time.sleep(5)
+        #
+        # self.toggleStateAndButton()
+
         if self.b_inputs['parallelization'].isChecked():
             parallel = {
                 "parallel": 1,

@@ -10,8 +10,7 @@ run_fun <- function(
   rpar,
   thpar,
   dirichlet_alpha,
-  bayes_background,
-  run_packages) {
+  bayes_background) {
   source("internal.R")
   tic('code')
   l_ply(newfolder, function(foldername) {
@@ -124,10 +123,41 @@ run_fun <- function(
         writeRes(res, file.path(paste0(foldername, "/r_vs_thresh.txt", sep = "")),
                  file.path(paste0(foldername, "/labels", sep = "")))
       }
-
+      else {
+        res = Kclust_parallel(
+          pts = pts,
+          sds = sds,
+          xlim = xlim,
+          ylim = ylim,
+          psd = psd,
+          minsd = minsd,
+          maxsd = maxsd,
+          useplabel = useplabel,
+          alpha = dirichlet_alpha,
+          pb = bayes_background,
+          score = TRUE,
+          rlabel = TRUE,
+          rseq = rseq,
+          thseq = thseq,
+          clustermethod = clustermethod,
+          numCores = cores
+        )
+        writeRes_r_vs_th(
+          res = res,
+          rseq = rseq,
+          thseq = thseq,
+          file.path(paste(
+            foldername, "/r_vs_thresh.txt", sep = ""
+          ))
+        )
+        writeRes_labels(
+          res = res,
+          rseq = rseq,
+          thseq = thseq,
+          file.path(paste(foldername, "/labels", sep = ""))
+        )
+      }
     })
-
-
   })
   toc()
 }

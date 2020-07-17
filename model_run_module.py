@@ -4,17 +4,18 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 from Python_to_R import r_bayesian_run
+from Python_to_R import r_test
 
 
 class Model_run(qtc.QObject):
     error = qtc.pyqtSignal(str)
+    status = qtc.pyqtSignal(object)
 
     def check_income(self, inputs, parallel):
         print('save_connected')
-        print(inputs)
-        print(parallel)
 
         error = ''
+        status = ''
         dir_ = inputs.get('directory')
 
         if dir_ == "select directory":
@@ -39,10 +40,13 @@ class Model_run(qtc.QObject):
                 error = f'Cannot store parameters: {e}'
 
             try:
-                r_bayesian_run(inputs, parallel)
+                # r_bayesian_run(inputs, parallel)
+                r_test(inputs)
 
             except Exception as e:
                 error = f'Cannot do the Bayesian analysis: {e}'
+
+        self.status.emit(False)
 
         if error:
             self.error.emit(error)

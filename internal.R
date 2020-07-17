@@ -156,7 +156,7 @@ Kclust_parallel <- function(pts,
                             thseq = seq(5, 500, by = 5),
                             score = T,
                             rlabel = T,
-                            report = T,
+                            report = F,
                             clustermethod = "Ripley' K based",
                             numCores = 1) {
   N = dim(pts)[1]

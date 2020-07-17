@@ -12,8 +12,6 @@ def r_simulation(input_dic):
     r = r_objects.r
     r.source('simulate.R')
 
-    print(input_dic.get("sdcluster"))
-
     numpy2ri.activate()
     xlim = np.array([input_dic.get('roixmin'), input_dic.get('roixmax')])
     ylim = np.array([input_dic.get('roiymin'), input_dic.get('roiymax')])
@@ -38,16 +36,10 @@ def r_simulation(input_dic):
 
 
 def r_bayesian_run(input_dic, status):
-    print("input: ", input_dic)
-    print("status: ", status)
-    print(len(status))
     r = r_objects.r
-    packnames = [
-        'devtools', "dplyr", "pryr", "ggpubr", "splancs", "igraph", "RSMLM", "tictoc", "geometry", "doParallel",
-        "data.table", "plyr"]
     r.source('run.R')
     if len(status) == 2:
-        ncores = input_dic.get('cores')
+        ncores = status.get('cores')
     else:
         ncores = 0
     numpy2ri.activate()
@@ -56,7 +48,7 @@ def r_bayesian_run(input_dic, status):
     rseq = np.array([input_dic.get('rmin'), input_dic.get('rmax'), input_dic.get('rstep')])
     thseq = np.array([input_dic.get('thmin'), input_dic.get('thmax'), input_dic.get('thstep')])
 
-    temp = r.run_fun(
+    r.run_fun(
         newfolder=input_dic.get('directory'),
         bayes_model=input_dic.get('model'),
         datasource=input_dic.get('datasource'),
@@ -68,15 +60,14 @@ def r_bayesian_run(input_dic, status):
         rpar=rseq,
         thpar=thseq,
         dirichlet_alpha=input_dic.get('alpha'),
-        bayes_background=input_dic.get('background'),
-        run_packages=packnames
+        bayes_background=input_dic.get('background')
     )
-    print(temp)
     numpy2ri.deactivate()
     print("done")
 
 
 def r_test(input_test):
+    input_test = 4
     print("Length of parameter: ", input_test)
     r = r_objects.r
     r.source("run.R")
