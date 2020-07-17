@@ -4,7 +4,9 @@ from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 import os
 import time
+import csv
 import multiprocessing
+from model_table import TableModel
 
 
 class View_run(qtw.QWidget):
@@ -167,6 +169,53 @@ class View_run(qtw.QWidget):
 
         main_layout.addLayout(parameter_layout)
 
+        col_layout = qtw.QHBoxLayout()
+        name_layout = qtw.QHBoxLayout()
+
+        col_inputs = {
+            'x column': qtw.QSpinBox(
+                self,
+                minimum=1,
+                maximum=100,
+                singleStep=1,
+                value=1
+            ),
+            'y column': qtw.QSpinBox(
+                self,
+                minimum=1,
+                maximum=100,
+                singleStep=1,
+                value=2
+            ),
+            'SD column': qtw.QSpinBox(
+                self,
+                minimum=1,
+                maximum=100,
+                singleStep=1,
+                value=3
+            )
+        }
+
+        for label, widget in col_inputs.items():
+            name_layout.addWidget(qtw.QLabel(label))
+            col_layout.addWidget(widget)
+
+        # test_layout = qtw.QHBoxLayout()
+        # self.x_col = qtw.QSpinBox(
+        #     self,
+        #     minimum=1,
+        #     maximum=100,
+        #     singleStep=1,
+        #     value=1
+        # )
+        # test_layout.addWidget(self.x_col)
+
+        main_layout.addLayout(name_layout)
+        main_layout.addLayout(col_layout)
+
+        self.tableview = qtw.QTableView()
+        main_layout.addWidget(self.tableview)
+
         button_layout = qtw.QHBoxLayout()
 
         self.start_btn = qtw.QPushButton(
@@ -202,12 +251,16 @@ class View_run(qtw.QWidget):
             self.roi_y_max.setDisabled(False)
 
     def chooseFile(self):
-        filename = qtw.QFileDialog.getExistingDirectory(
+        filename, _ = qtw.QFileDialog.getOpenFileName(
             self,
-            "Select data directory",
-            qtc.QDir.homePath()
+            "Select data file",
+            qtc.QDir.homePath(),
+            'txt files (*.txt);; csv files (*.csv) ;; All files (*)'
         )
-        self.dir_line.setText(filename)
+        if filename:
+            self.model = TableModel(filename)
+            self.tableview.setModel(self.model)
+            self.dir_line.setText(os.path.dirname(os.path.dirname(filename)))
 
     def btnstate(self, change_status):
         print("here")

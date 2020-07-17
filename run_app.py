@@ -5,6 +5,7 @@ from PyQt5 import QtCore as qtc
 
 from view_run_module import View_run
 from model_run_module import Model_run
+from model_table import TableModel
 
 
 class MainWindow(qtw.QMainWindow):
