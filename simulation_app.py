@@ -23,14 +23,21 @@ class MainWindow(qtw.QMainWindow):
         quit_action = file_menu.addAction("Quit", self.close)
 
         self.setWindowTitle("Simulation 1.0")
-
+        self.model = Model_sim()
         self.view = View_sim()
         self.setCentralWidget(self.view)
 
-        self.model = Model_sim()
+        self.sim_thread = qtc.QThread()
+        self.model.moveToThread(self.sim_thread)
+        self.model.finished.connect(self.sim_thread.quit)
+        self.sim_thread.start()
 
+        self.view.submitted.connect(self.model.set_data)
+        self.view.startsim.connect(self.sim_thread.start)
         self.view.submitted.connect(self.model.print_income)
         self.model.error.connect(self.view.show_error)
+
+        self.model.finished.connect(self.on_finished)
 
         status_bar = qtw.QStatusBar()
         self.setStatusBar(status_bar)
@@ -39,6 +46,10 @@ class MainWindow(qtw.QMainWindow):
 
         # End main UI code
         self.show()
+
+    def on_finished(self):
+        self.statusBar().showMessage('Simulation finished.')
+        self.view.start_btn.setEnabled(True)
 
 
 if __name__ == '__main__':

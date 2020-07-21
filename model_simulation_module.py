@@ -3,17 +3,27 @@ from os import path, mkdir
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
-from Python_to_R import r_simulation
+from Python_to_R import PythonToR
 
 
 class Model_sim(qtc.QObject):
     error = qtc.pyqtSignal(str)
+    finished = qtc.pyqtSignal()
 
-    def print_income(self, inputs):
+    def __init__(self):
+        super().__init__()
+        self.inputs = None
+
+    @qtc.pyqtSlot(object)
+    def set_data(self, inputs):
+        self.inputs = inputs
+
+    @qtc.pyqtSlot()
+    def print_income(self):
         print("save_called")
 
         error = ''
-        dir_ = inputs.get('directory')
+        dir_ = self.inputs.get('directory')
 
         if dir_ == "select directory":
             error = f'You need to choose a directory'
@@ -27,7 +37,7 @@ class Model_sim(qtc.QObject):
         else:
             try:
                 dir_file = dir_ + '/' + 'sim_parameters.txt'
-                list_dir = [f'{key}={inputs[key]}' for key in inputs]
+                list_dir = [f'{key}={self.inputs[key]}' for key in self.inputs]
                 with open(dir_file, 'w') as fh:
                     [fh.write(f'{st}\n') for st in list_dir]
 
@@ -35,10 +45,13 @@ class Model_sim(qtc.QObject):
                 error = f'Cannot store parameters: {e}'
 
             try:
-                r_simulation(inputs)
+                simulation = PythonToR()
+                simulation.r_simulation(self.inputs)
 
             except Exception as e:
                 error = f'Cannot do the simulations: {e}'
+
+        self.finished.emit()
 
         if error:
             self.error.emit(error)

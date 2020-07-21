@@ -3,20 +3,30 @@ from os import path, mkdir
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
-from Python_to_R import r_bayesian_run
-from Python_to_R import r_test
+from Python_to_R import PythonToR
 
 
 class Model_run(qtc.QObject):
     error = qtc.pyqtSignal(str)
-    status = qtc.pyqtSignal(object)
+    finished = qtc.pyqtSignal()
 
-    def check_income(self, inputs, parallel):
+    def __init__(self):
+        super().__init__()
+        self.inputs = None
+        self.parallel = None
+
+    @qtc.pyqtSlot(object, object)
+    def set_data(self, inputs, parallel):
+        self.inputs = inputs
+        self.parallel = parallel
+
+    @qtc.pyqtSlot()
+    def check_income(self):
         print('save_connected')
+        print(self.inputs, self.parallel)
 
         error = ''
-        status = ''
-        dir_ = inputs.get('directory')
+        dir_ = self.inputs.get('directory')
 
         if dir_ == "select directory":
             error = f'You need to choose a directory'
@@ -30,8 +40,8 @@ class Model_run(qtc.QObject):
         else:
             try:
                 dir_file = dir_ + '/' + 'run_config.txt'
-                list_dir = [f'{key}={inputs[key]}' for key in inputs]
-                par_dir = [f'{key}={parallel[key]}' for key in parallel]
+                list_dir = [f'{key}={self.inputs[key]}' for key in self.inputs]
+                par_dir = [f'{key}={self.parallel[key]}' for key in self.parallel]
                 with open(dir_file, 'w') as fh:
                     [fh.write(f'{st}\n') for st in list_dir]
                     [fh.write(f'{st}\n') for st in par_dir]
@@ -40,13 +50,15 @@ class Model_run(qtc.QObject):
                 error = f'Cannot store parameters: {e}'
 
             try:
-                # r_bayesian_run(inputs, parallel)
-                r_test(inputs)
+                test = PythonToR()
+                test.r_bayesian_run(self.inputs, self.parallel)
+
+                # test.r_test(inputs)
 
             except Exception as e:
                 error = f'Cannot do the Bayesian analysis: {e}'
 
-        self.status.emit(False)
+        self.finished.emit()
 
         if error:
             self.error.emit(error)

@@ -21,14 +21,21 @@ class MainWindow(qtw.QMainWindow):
         quit_action = file_menu.addAction('Quit', self.close)
 
         self.setWindowTitle("Bayesian clustering 1.0")
+        self.run_model = Model_run()
         self.run_view = View_run()
         self.setCentralWidget(self.run_view)
 
-        self.run_model = Model_run()
+        self.run_thread = qtc.QThread()
+        self.run_model.moveToThread(self.run_thread)
+        self.run_model.finished.connect(self.run_thread.quit)
+        self.run_thread.start()
 
+        self.run_view.submitted.connect(self.run_model.set_data)
+        self.run_view.startsim.connect(self.run_thread.start)
         self.run_view.submitted.connect(self.run_model.check_income)
         self.run_model.error.connect(self.run_view.show_error)
-        self.run_model.status.connect(self.run_view.btnstate)
+
+        self.run_model.finished.connect(self.on_finished)
 
         status_bar = qtw.QStatusBar()
         self.setStatusBar(status_bar)
@@ -37,6 +44,10 @@ class MainWindow(qtw.QMainWindow):
 
         # End main UI code
         self.show()
+
+    def on_finished(self):
+        self.statusBar().showMessage('Bayesian clustering finished.')
+        self.run_view.start_btn.setEnabled(True)
 
 
 if __name__ == '__main__':

@@ -6,6 +6,7 @@ from PyQt5 import QtCore as qtc
 
 class View_sim(qtw.QWidget):
     submitted = qtc.pyqtSignal(object)
+    startsim = qtc.pyqtSignal()
 
     # noinspection PyArgumentList
     def __init__(self):
@@ -181,6 +182,9 @@ class View_sim(qtw.QWidget):
             'a': self.beta_a.value(),
             'b': self.beta_b.value()
         }
+        self.start_btn.setDisabled(True)
+        self.startsim.emit()
+        print(data)
         self.submitted.emit(data)
 
     def show_error(self, error):
@@ -188,3 +192,4 @@ class View_sim(qtw.QWidget):
 
     # TODO: multimerisation as a checkbox option, if chosen: option to state number of molecules, proportion multimers,
     # import stored sim_parameters.txt
+

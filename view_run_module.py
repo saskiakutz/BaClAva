@@ -11,12 +11,13 @@ from model_table import TableModel
 
 class View_run(qtw.QWidget):
     submitted = qtc.pyqtSignal(object, object)
-    status = True
+    startsim = qtc.pyqtSignal()
 
     # noinspection PyArgumentList
     def __init__(self):
         super().__init__()
 
+        self.model = None
         main_layout = qtw.QVBoxLayout()
 
         parameter_layout = qtw.QFormLayout()
@@ -105,7 +106,6 @@ class View_run(qtw.QWidget):
         radius_layout.layout().addWidget(self.r_max)
         radius_layout.layout().addWidget(self.r_step)
 
-        # TODO: parameters
         self.b_inputs = {
             "model": qtw.QComboBox(),
             "datasource": qtw.QComboBox(),
@@ -143,6 +143,7 @@ class View_run(qtw.QWidget):
 
         datasources = ('simulation', 'experiment')
         self.b_inputs["datasource"].addItems(datasources)
+        # TODO: adjust import for experimental data
 
         clustermethods = ("Ripley' K based", "DBSCAN", "ToMATo")
         self.b_inputs["clustermethod"].addItems(clustermethods)
@@ -224,7 +225,7 @@ class View_run(qtw.QWidget):
             clicked=self.start_run
             # TODO: grey out start button after starting run
         )
-        self.start_btn.setDisabled(self.status)
+        self.start_btn.setDisabled(True)
         self.dir_line.textChanged.connect(lambda x: self.start_btn.setDisabled(x == ''))
 
         self.cancel_btn = qtw.QPushButton(
@@ -317,6 +318,9 @@ class View_run(qtw.QWidget):
             'alpha': self.b_inputs['Dirichlet process: \u03B1'].value(),
             'background': self.b_inputs['background proportion'].value()
         }
+
+        self.start_btn.setDisabled(True)
+        self.startsim.emit()
         self.submitted.emit(data, parallel)
 
     def show_error(self, error):

@@ -3,8 +3,8 @@ from os import path, mkdir
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
-from Python_to_R import r_bayesian_run
-from Python_to_R import r_test
+# from Python_to_R import r_bayesian_run
+# from Python_to_R import r_test
 import csv
 
 
