@@ -6,6 +6,7 @@ from PyQt5 import QtCore as qtc
 # from Python_to_R import r_bayesian_run
 # from Python_to_R import r_test
 import csv
+import pandas as pd
 
 
 class TableModel(qtc.QAbstractTableModel):
@@ -13,9 +14,13 @@ class TableModel(qtc.QAbstractTableModel):
         super().__init__()
         self.filename = file
         with open(self.filename) as fh:
-            reader = csv.reader(fh)
-            self._headers = next(reader)
-            self._data = list(reader)
+            # reader = csv.reader(fh)
+            # self._headers = next(reader)
+            # self._data = list(reader)
+            self._headers = list(pd.read_csv(self.filename, nrows=1))
+            self._data = list(pd.read_csv(self.filename, skiprows=1, nrows=5))
+            print(self._data)
+            print(self._headers)
 
     def rowCount(self, parent):
         # return len(self._data)

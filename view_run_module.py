@@ -7,6 +7,7 @@ import time
 import csv
 import multiprocessing
 from model_table import TableModel
+from model_table_pd import DataFrameModel
 
 
 class View_run(qtw.QWidget):
@@ -240,6 +241,8 @@ class View_run(qtw.QWidget):
         self.setLayout(main_layout)
 
     def on_currentIndexChanged(self):
+        self.dir_line.setText("select data directory")
+        self.start_btn.setDisabled(True)
         if self.b_inputs["datasource"].currentText() == "experiment":
             self.roi_x_min.setDisabled(True)
             self.roi_x_max.setDisabled(True)
@@ -259,37 +262,32 @@ class View_run(qtw.QWidget):
             'txt files (*.txt);; csv files (*.csv) ;; All files (*)'
         )
         if filename:
-            self.model = TableModel(filename)
+            # self.model = TableModel(filename)
+            self.model = DataFrameModel(filename)
             self.tableview.setModel(self.model)
-            self.dir_line.setText(os.path.dirname(os.path.dirname(filename)))
+            if self.b_inputs['datasource'].currentText() == "simulation":
+                self.dir_line.setText(os.path.dirname(os.path.dirname(filename)))
+            else:
+                self.dir_line.setText(os.path.dirname(filename))
 
-    def btnstate(self, change_status):
-        print("here")
-        print(change_status)
-        if not change_status:
-            self.status = change_status
-            self.start_btn.setDisabled(self.status)
-            print(self.status)
-
-    def disableButton(self):
-        self.start_btn.setDisabled(self.status)
-        self.start_btn.repaint()
-
-    def toggleStateAndButton(self):
-        self.start_btn.setDisabled(self.status)
-        self.status = not self.status
-        self.start_btn.repaint()
+    # def btnstate(self, change_status):
+    #     print("here")
+    #     print(change_status)
+    #     if not change_status:
+    #         self.status = change_status
+    #         self.start_btn.setDisabled(self.status)
+    #         print(self.status)
+    #
+    # def disableButton(self):
+    #     self.start_btn.setDisabled(self.status)
+    #     self.start_btn.repaint()
+    #
+    # def toggleStateAndButton(self):
+    #     self.start_btn.setDisabled(self.status)
+    #     self.status = not self.status
+    #     self.start_btn.repaint()
 
     def start_run(self):
-        # if self.start_btn.isChecked():
-        # self.disableButton()
-        # self.toggleStateAndButton()
-        # # self.status = not self.status
-        # print("button pressed")
-        #
-        # time.sleep(5)
-        #
-        # self.toggleStateAndButton()
 
         if self.b_inputs['parallelization'].isChecked():
             parallel = {
