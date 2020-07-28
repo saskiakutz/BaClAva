@@ -65,6 +65,14 @@ class PythonToR():
         numpy2ri.deactivate()
         print("done")
 
+    def r_post_processing(self, input_dic):
+        r = r_objects.r
+        r.source("postprocessing.R")
+        numpy2ri.activate()
+        r.post_fun()
+        numpy2ri.deactivate()
+        print("done")
+
     def r_test(self, input_test):
         input_test = 4
         print("Length of parameter: ", input_test)

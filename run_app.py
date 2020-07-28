@@ -31,7 +31,7 @@ class MainWindow(qtw.QMainWindow):
         self.run_thread.start()
 
         self.run_view.submitted.connect(self.run_model.set_data)
-        self.run_view.startsim.connect(self.run_thread.start)
+        self.run_view.startrun.connect(self.run_thread.start)
         self.run_view.submitted.connect(self.run_model.check_income)
         self.run_model.error.connect(self.run_view.show_error)
 

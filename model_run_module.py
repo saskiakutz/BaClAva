@@ -28,7 +28,7 @@ class Model_run(qtc.QObject):
         error = ''
         dir_ = self.inputs.get('directory')
 
-        if dir_ == "select directory":
+        if dir_ == "select data directory":
             error = f'You need to choose a directory'
         elif not path.isdir(dir_.rsplit('/', 1)[0]):
             error = f'You need to choose a valid directory'
@@ -50,8 +50,8 @@ class Model_run(qtc.QObject):
                 error = f'Cannot store parameters: {e}'
 
             try:
-                test = PythonToR()
-                test.r_bayesian_run(self.inputs, self.parallel)
+                ptor = PythonToR()
+                ptor.r_bayesian_run(self.inputs, self.parallel)
 
                 # test.r_test(inputs)
 

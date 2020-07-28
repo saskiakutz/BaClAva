@@ -12,7 +12,7 @@ from model_table_pd import DataFrameModel
 
 class View_run(qtw.QWidget):
     submitted = qtc.pyqtSignal(object, object)
-    startsim = qtc.pyqtSignal()
+    startrun = qtc.pyqtSignal()
 
     # noinspection PyArgumentList
     def __init__(self):
@@ -144,7 +144,6 @@ class View_run(qtw.QWidget):
 
         datasources = ('simulation', 'experiment')
         self.b_inputs["datasource"].addItems(datasources)
-        # TODO: adjust import for experimental data
 
         clustermethods = ("Ripley' K based", "DBSCAN", "ToMATo")
         self.b_inputs["clustermethod"].addItems(clustermethods)
@@ -224,13 +223,12 @@ class View_run(qtw.QWidget):
             "start",
             # checkable=True,
             clicked=self.start_run
-            # TODO: grey out start button after starting run
         )
         self.start_btn.setDisabled(True)
         self.dir_line.textChanged.connect(lambda x: self.start_btn.setDisabled(x == ''))
 
         self.cancel_btn = qtw.QPushButton(
-            "cancel"
+            "cancel"  # TODO: cancel action
         )
 
         button_layout.addWidget(self.start_btn)
@@ -318,7 +316,7 @@ class View_run(qtw.QWidget):
         }
 
         self.start_btn.setDisabled(True)
-        self.startsim.emit()
+        self.startrun.emit()
         self.submitted.emit(data, parallel)
 
     def show_error(self, error):
