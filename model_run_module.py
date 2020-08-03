@@ -52,8 +52,7 @@ class Model_run(qtc.QObject):
             try:
                 ptor = PythonToR()
                 ptor.r_bayesian_run(self.inputs, self.parallel)
-
-                # test.r_test(inputs)
+                # ptor.r_test(self.inputs)
 
             except Exception as e:
                 error = f'Cannot do the Bayesian analysis: {e}'

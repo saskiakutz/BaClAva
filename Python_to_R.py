@@ -4,6 +4,7 @@ from rpy2.robjects import numpy2ri
 import rpy2.robjects.packages as rpackages
 from rpy2.robjects.vectors import StrVector
 import numpy as np
+import os
 
 
 class PythonToR():
@@ -43,25 +44,43 @@ class PythonToR():
         else:
             ncores = 0
         numpy2ri.activate()
-        xlim = np.array([input_dic.get('roixmin'), input_dic.get('roixmax')])
-        ylim = np.array([input_dic.get('roiymin'), input_dic.get('roiymax')])
+        if input_dic.get('datasource') == 'simulation':
+            xlim = np.array([input_dic.get('roixmin'), input_dic.get('roixmax')])
+            ylim = np.array([input_dic.get('roiymin'), input_dic.get('roiymax')])
         rseq = np.array([input_dic.get('rmin'), input_dic.get('rmax'), input_dic.get('rstep')])
         thseq = np.array([input_dic.get('thmin'), input_dic.get('thmax'), input_dic.get('thstep')])
+        cols = np.array([input_dic.get('xcol'), input_dic.get('ycol'), input_dic.get('sdcol')])
 
-        r.run_fun(
-            newfolder=input_dic.get('directory'),
-            bayes_model=input_dic.get('model'),
-            datasource=input_dic.get('datasource'),
-            clustermethod=input_dic.get('clustermethod'),
-            parallel=status.get('parallel'),
-            cores=ncores,
-            xlim=xlim,
-            ylim=ylim,
-            rpar=rseq,
-            thpar=thseq,
-            dirichlet_alpha=input_dic.get('alpha'),
-            bayes_background=input_dic.get('background')
-        )
+        if input_dic.get('datasource') == 'simulation':
+            r.run_fun(
+                newfolder=input_dic.get('directory'),
+                bayes_model=input_dic.get('model'),
+                datasource=input_dic.get('datasource'),
+                clustermethod=input_dic.get('clustermethod'),
+                parallel=status.get('parallel'),
+                cores=ncores,
+                xlim=xlim,
+                ylim=ylim,
+                rpar=rseq,
+                thpar=thseq,
+                datacol=cols,
+                dirichlet_alpha=input_dic.get('alpha'),
+                bayes_background=input_dic.get('background')
+            )
+        else:
+            r.run_fun(
+                newfolder=input_dic.get('directory'),
+                bayes_model=input_dic.get('model'),
+                datasource=input_dic.get('datasource'),
+                clustermethod=input_dic.get('clustermethod'),
+                parallel=status.get('parallel'),
+                cores=ncores,
+                rpar=rseq,
+                thpar=thseq,
+                datacol=cols,
+                dirichlet_alpha=input_dic.get('alpha'),
+                bayes_background=input_dic.get('background')
+            )
         numpy2ri.deactivate()
         print("done")
 
@@ -69,7 +88,14 @@ class PythonToR():
         r = r_objects.r
         r.source("postprocessing.R")
         numpy2ri.activate()
-        r.post_fun()
+        r.post_fun(
+            newfolder=input_dic.get('directory'),
+            datasource=input_dic.get('datasource'),
+            process=input_dic.get('computation'),
+            makeplot=input_dic.get('storeplots'),
+            superplot=input_dic.get('superplot'),
+            separateplots=input_dic.get('separateplots')
+        )
         numpy2ri.deactivate()
         print("done")
 
@@ -77,9 +103,9 @@ class PythonToR():
         input_test = 4
         print("Length of parameter: ", input_test)
         r = r_objects.r
+        print(os.getcwd())
         r.source("run.R")
-        packnames = [
-            'devtools', "dplyr", "pryr", "ggpubr", "splancs", "igraph", "RSMLM", "tictoc", "geometry", "doParallel",
-            "data.table", "plyr"]
-        temp = r.test_function(input_test, packnames)
+        numpy2ri.activate()
+        temp = r.test_function(input_test)
         print(temp)
+        numpy2ri.deactivate()

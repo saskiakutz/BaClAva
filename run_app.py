@@ -32,6 +32,7 @@ class MainWindow(qtw.QMainWindow):
 
         self.run_view.submitted.connect(self.run_model.set_data)
         self.run_view.startrun.connect(self.run_thread.start)
+        self.run_view.startrun.connect(self.on_start)
         self.run_view.submitted.connect(self.run_model.check_income)
         self.run_model.error.connect(self.run_view.show_error)
 
@@ -44,6 +45,9 @@ class MainWindow(qtw.QMainWindow):
 
         # End main UI code
         self.show()
+
+    def on_start(self):
+        self.statusBar().showMessage('Bayesian clustering running.')
 
     def on_finished(self):
         self.statusBar().showMessage('Bayesian clustering finished.')

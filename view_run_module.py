@@ -173,7 +173,7 @@ class View_run(qtw.QWidget):
         col_layout = qtw.QHBoxLayout()
         name_layout = qtw.QHBoxLayout()
 
-        col_inputs = {
+        self.col_inputs = {
             'x column': qtw.QSpinBox(
                 self,
                 minimum=1,
@@ -197,7 +197,7 @@ class View_run(qtw.QWidget):
             )
         }
 
-        for label, widget in col_inputs.items():
+        for label, widget in self.col_inputs.items():
             name_layout.addWidget(qtw.QLabel(label))
             col_layout.addWidget(widget)
 
@@ -266,7 +266,11 @@ class View_run(qtw.QWidget):
             if self.b_inputs['datasource'].currentText() == "simulation":
                 self.dir_line.setText(os.path.dirname(os.path.dirname(filename)))
             else:
-                self.dir_line.setText(os.path.dirname(filename))
+                text_files = [f for f in os.listdir(os.path.dirname(filename)) if f == 'r_vs_thresh.txt']
+                if len(text_files) == 0:
+                    self.dir_line.setText(os.path.dirname(filename))
+                else:
+                    self.dir_line.setText(os.path.dirname(os.path.dirname(filename)))
 
     # def btnstate(self, change_status):
     #     print("here")
@@ -296,24 +300,46 @@ class View_run(qtw.QWidget):
             parallel = {
                 "parallel": 0
             }
-        data = {
-            'directory': self.dir_line.text(),
-            'model': self.b_inputs['model'].currentText(),
-            'datasource': self.b_inputs['datasource'].currentText(),
-            'clustermethod': self.b_inputs['clustermethod'].currentText(),
-            'rmin': self.r_min.value(),
-            'rmax': self.r_max.value(),
-            'rstep': self.r_step.value(),
-            'thmin': self.th_min.value(),
-            'thmax': self.th_max.value(),
-            'thstep': self.th_step.value(),
-            'roixmin': self.roi_x_min.value(),
-            'roixmax': self.roi_x_max.value(),
-            'roiymin': self.roi_y_min.value(),
-            'roiymax': self.roi_y_max.value(),
-            'alpha': self.b_inputs['Dirichlet process: \u03B1'].value(),
-            'background': self.b_inputs['background proportion'].value()
-        }
+        if self.b_inputs["datasource"].currentText() == "simulation":
+            data = {
+                'directory': self.dir_line.text(),
+                'model': self.b_inputs['model'].currentText(),
+                'datasource': self.b_inputs['datasource'].currentText(),
+                'clustermethod': self.b_inputs['clustermethod'].currentText(),
+                'rmin': self.r_min.value(),
+                'rmax': self.r_max.value(),
+                'rstep': self.r_step.value(),
+                'thmin': self.th_min.value(),
+                'thmax': self.th_max.value(),
+                'thstep': self.th_step.value(),
+                'roixmin': self.roi_x_min.value(),
+                'roixmax': self.roi_x_max.value(),
+                'roiymin': self.roi_y_min.value(),
+                'roiymax': self.roi_y_max.value(),
+                'xcol': self.col_inputs['x column'].value(),
+                'ycol': self.col_inputs['y column'].value(),
+                'sdcol': self.col_inputs['SD column'].value(),
+                'alpha': self.b_inputs['Dirichlet process: \u03B1'].value(),
+                'background': self.b_inputs['background proportion'].value()
+            }
+        else:
+            data = {
+                'directory': self.dir_line.text(),
+                'model': self.b_inputs['model'].currentText(),
+                'datasource': self.b_inputs['datasource'].currentText(),
+                'clustermethod': self.b_inputs['clustermethod'].currentText(),
+                'rmin': self.r_min.value(),
+                'rmax': self.r_max.value(),
+                'rstep': self.r_step.value(),
+                'thmin': self.th_min.value(),
+                'thmax': self.th_max.value(),
+                'thstep': self.th_step.value(),
+                'xcol': self.col_inputs['x column'].value(),
+                'ycol': self.col_inputs['y column'].value(),
+                'sdcol': self.col_inputs['SD column'].value(),
+                'alpha': self.b_inputs['Dirichlet process: \u03B1'].value(),
+                'background': self.b_inputs['background proportion'].value()
+            }
 
         self.start_btn.setDisabled(True)
         self.startrun.emit()

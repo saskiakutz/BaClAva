@@ -40,8 +40,7 @@ class View_post(qtw.QWidget):
             "Bayesian computation": qtw.QComboBox(),
             "store plots": qtw.QCheckBox(),
             "superplot": qtw.QCheckBox(),
-            "separate plots": qtw.QCheckBox(),
-            "single plot": qtw.QCheckBox()  # TODO: difference single plot vs superplot?
+            "separate plots": qtw.QCheckBox()
         }
 
         datasource = ('simulation', 'experiment')
@@ -52,7 +51,6 @@ class View_post(qtw.QWidget):
 
         self.p_inputs["superplot"].setDisabled(True)
         self.p_inputs["separate plots"].setDisabled(True)
-        self.p_inputs["single plot"].setDisabled(True)
         self.p_inputs["store plots"].toggled.connect(self.p_inputs["superplot"].setEnabled)
         self.p_inputs["store plots"].toggled.connect(self.change_plot_options)
         self.p_inputs["datasource"].currentIndexChanged.connect(self.change_plot_options)
@@ -94,15 +92,15 @@ class View_post(qtw.QWidget):
     def change_plot_options(self):
         if self.p_inputs["datasource"].currentText() == "simulation" and self.p_inputs["store plots"].isChecked():
             self.p_inputs["separate plots"].setEnabled(True)
-            self.p_inputs["single plot"].setDisabled(True)
+            self.p_inputs["separate plots"].setChecked(False)
 
         elif self.p_inputs["datasource"].currentText() == "experiment" and self.p_inputs["store plots"].isChecked():
-            self.p_inputs["single plot"].setEnabled(True)
-            self.p_inputs["separate plots"].setDisabled(True)
+            self.p_inputs["separate plots"].setChecked(True)
 
         else:
-            self.p_inputs["single plot"].setDisabled(True)
             self.p_inputs["separate plots"].setDisabled(True)
+            self.p_inputs["separate plots"].setChecked(False)
+            self.p_inputs["superplot"].setChecked(False)
 
     def start_post(self):
         data = {
@@ -111,8 +109,7 @@ class View_post(qtw.QWidget):
             'computation': self.p_inputs["Bayesian computation"].currentText(),
             'storeplots': self.p_inputs["store plots"].isChecked(),
             'superplot': self.p_inputs["superplot"].isChecked(),
-            'separateplots': self.p_inputs["separate plots"].isChecked(),
-            'singleplot': self.p_inputs['single plot'].isChecked()
+            'separateplots': self.p_inputs["separate plots"].isChecked()
         }
 
         self.start_btn.setDisabled(True)

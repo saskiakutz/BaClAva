@@ -5,10 +5,11 @@ run_fun <- function(
   clustermethod,
   parallel,
   cores,
-  xlim,
-  ylim,
+  xlim = c(0, 3000),
+  ylim = c(0, 3000),
   rpar,
   thpar,
+  datacol,
   dirichlet_alpha,
   bayes_background) {
   source("internal.R")
@@ -62,6 +63,7 @@ run_fun <- function(
 
       datasets = list.files(file.path(foldername), pattern = "*.txt")
       datasets = datasets[datasets != "run_config.txt"]
+      # datasets = datasets[datasets != "run_config.txt"]
 
       if (!length(datasets) == 0) {
 
@@ -89,17 +91,17 @@ run_fun <- function(
       if (datasource == "simulation") {
         data = read.csv(file.path(paste0(foldername, "/data.txt", sep = "")))
         # columns in simulation dataset
-        pts = data[, 1:2]
-        sds = data[, 3]
+        pts = data[, datacol[1]:datacol[2]]
+        sds = data[, datacol[3]]
       }else {
         data <- import_data(foldername)
 
         # columns in SMAP dataset TODO: let user choose the columns for other localistion implementations
-        pts = data[, 1:2]
-        sds = data[, 4]
+        pts = data[, datacol[1]:datacol[2]]
+        sds = data[, datacol[3]]
         # limits of dataset set by the min/max of the localisations
-        xlim = c(min(pts[, 1]), max(pts[, 1]))
-        ylim = c(min(pts[, 2]), max(pts[, 2]))
+        xlim = c(min(pts[, datacol[1]]), max(pts[, datacol[1]]))
+        ylim = c(min(pts[, datacol[2]]), max(pts[, datacol[2]]))
       }
 
       if (process == "sequential") {
@@ -164,10 +166,10 @@ run_fun <- function(
 
 
 test_function <- function(input_para, my_packages) {
-  source("internal.R")
-  tic("test_run")
+  # source("internal.R")
+  # tic("test_run")
   #lapply(my_packages, require(quietly = TRUE), character.only = TRUE)
   temp <- length(input_para)
-  toc()
+  # toc()
   return(temp)
 }

@@ -34,7 +34,7 @@ class Model_post(qtc.QObject):
         else:
             try:
                 ptor = PythonToR()
-                ptor.r_test(self.inputs)
+                ptor.r_post_processing(self.inputs)
             except Exception as e:
                 error = f'Cannot do the post processing: {e}'
 
