@@ -90,8 +90,8 @@ class PythonToR():
         numpy2ri.activate()
         r.post_fun(
             newfolder=input_dic.get('directory'),
-            datasource=input_dic.get('datasource'),
-            process=input_dic.get('computation'),
+            # datasource=input_dic.get('datasource'),
+            # process=input_dic.get('computation'),
             makeplot=input_dic.get('storeplots'),
             superplot=input_dic.get('superplot'),
             separateplots=input_dic.get('separateplots')

@@ -666,6 +666,7 @@ cluster_area_density <-
         # cluster coordinates
         cluster_par <- clusterIndicesUnique[i]
         coordsCluster <- coords[clusterIndices == cluster_par,]
+
         if (var(coordsCluster$x) == 0 ||
           var(coordsCluster$y) == 0 ||
           length(coordsCluster$x) < 3) {

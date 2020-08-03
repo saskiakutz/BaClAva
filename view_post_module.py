@@ -36,24 +36,25 @@ class View_post(qtw.QWidget):
         parameter_layout.addRow(self.dir_btn, self.dir_line)
 
         self.p_inputs = {
-            "datasource": qtw.QComboBox(),
-            "Bayesian computation": qtw.QComboBox(),
+            # "datasource": qtw.QComboBox(),
+            # "Bayesian computation": qtw.QComboBox(),
             "store plots": qtw.QCheckBox(),
             "superplot": qtw.QCheckBox(),
             "separate plots": qtw.QCheckBox()
         }
 
-        datasource = ('simulation', 'experiment')
-        self.p_inputs["datasource"].addItems(datasource)
+        # datasource = ('simulation', 'experiment')
+        # self.p_inputs["datasource"].addItems(datasource)
 
-        computation = ('sequential', 'parallel')
-        self.p_inputs["Bayesian computation"].addItems(computation)
+        # computation = ('sequential', 'parallel')
+        # self.p_inputs["Bayesian computation"].addItems(computation)
 
         self.p_inputs["superplot"].setDisabled(True)
         self.p_inputs["separate plots"].setDisabled(True)
         self.p_inputs["store plots"].toggled.connect(self.p_inputs["superplot"].setEnabled)
-        self.p_inputs["store plots"].toggled.connect(self.change_plot_options)
-        self.p_inputs["datasource"].currentIndexChanged.connect(self.change_plot_options)
+        self.p_inputs["store plots"].toggled.connect(self.p_inputs["separate plots"].setEnabled)
+        # self.p_inputs["store plots"].toggled.connect(self.change_plot_options)
+        # self.p_inputs["datasource"].currentIndexChanged.connect(self.change_plot_options)
 
         for label, widget in self.p_inputs.items():
             parameter_layout.addRow(label, widget)
@@ -89,24 +90,24 @@ class View_post(qtw.QWidget):
         )
         self.dir_line.setText(os.path.dirname(os.path.dirname(filename)))
 
-    def change_plot_options(self):
-        if self.p_inputs["datasource"].currentText() == "simulation" and self.p_inputs["store plots"].isChecked():
-            self.p_inputs["separate plots"].setEnabled(True)
-            self.p_inputs["separate plots"].setChecked(False)
-
-        elif self.p_inputs["datasource"].currentText() == "experiment" and self.p_inputs["store plots"].isChecked():
-            self.p_inputs["separate plots"].setChecked(True)
-
-        else:
-            self.p_inputs["separate plots"].setDisabled(True)
-            self.p_inputs["separate plots"].setChecked(False)
-            self.p_inputs["superplot"].setChecked(False)
+    # def change_plot_options(self):
+    #     if self.p_inputs["datasource"].currentText() == "simulation" and self.p_inputs["store plots"].isChecked():
+    #         self.p_inputs["separate plots"].setEnabled(True)
+    #         self.p_inputs["separate plots"].setChecked(False)
+    #
+    #     elif self.p_inputs["datasource"].currentText() == "experiment" and self.p_inputs["store plots"].isChecked():
+    #         self.p_inputs["separate plots"].setChecked(True)
+    #
+    #     else:
+    #         self.p_inputs["separate plots"].setDisabled(True)
+    #         self.p_inputs["separate plots"].setChecked(False)
+    #         self.p_inputs["superplot"].setChecked(False)
 
     def start_post(self):
         data = {
             'directory': self.dir_line.text(),
-            'datasource': self.p_inputs["datasource"].currentText(),
-            'computation': self.p_inputs["Bayesian computation"].currentText(),
+            # 'datasource': self.p_inputs["datasource"].currentText(),
+            # 'computation': self.p_inputs["Bayesian computation"].currentText(),
             'storeplots': self.p_inputs["store plots"].isChecked(),
             'superplot': self.p_inputs["superplot"].isChecked(),
             'separateplots': self.p_inputs["separate plots"].isChecked()

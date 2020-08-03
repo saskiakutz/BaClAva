@@ -3,7 +3,7 @@
 # Created by: Saskia Kutz
 # Created on: 2020-07-30
 
-post_fun <- function(newfolder, datasource, process, makeplot, superplot, separateplots) {
+post_fun <- function(newfolder, makeplot, superplot, separateplots) {
   source("internal.R")
   source("plot_functions.R")
   l_ply(newfolder, function(expname) {
@@ -16,6 +16,8 @@ post_fun <- function(newfolder, datasource, process, makeplot, superplot, separa
       strsplit(r[i], "=")[[1]][2]
     }
 
+    datasource <- get("datasource")
+
     if (datasource == 'simulation') {
       xlim <- c(as.numeric(get("roixmin")), as.numeric(get("roixmax")))
       ylim <- c(as.numeric(get("roiymin")), as.numeric(get("roiymax")))
@@ -23,6 +25,13 @@ post_fun <- function(newfolder, datasource, process, makeplot, superplot, separa
     xcol <- as.numeric(get("xcol"))
     ycol <- as.numeric(get("ycol"))
     sdcol <- as.numeric(get("sdcol"))
+
+    computation <- as.numeric(get("parallel"))
+    if (computation == 0) {
+      process <- "sequential"
+    } else {
+      process <- "parallel"
+    }
 
     postprocessing_folder <- file.path(paste0(expname, "/postprocessing", sep =
       ""))
@@ -47,7 +56,7 @@ post_fun <- function(newfolder, datasource, process, makeplot, superplot, separa
         sds <- data[, sdcol]
         sds <- sds / 1000
         names(pts)[1] <- "x"
-        names(pts) <- "y"
+        names(pts)[2] <- "y"
         xlim <- c(min(pts[, 1]), max(pts[, 1]))
         ylim <- c(min(pts[, 2]), max(pts[, 2]))
       }
