@@ -35,6 +35,7 @@ class MainWindow(qtw.QMainWindow):
         self.post_model.error.connect(self.post_view.show_error)
 
         self.post_model.finished.connect(self.on_finished)
+        self.post_model.finished.connect(self.post_view.show_data)
 
         status_bar = qtw.QStatusBar()
         self.setStatusBar(status_bar)
