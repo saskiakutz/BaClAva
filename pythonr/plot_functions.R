@@ -198,10 +198,43 @@ cluster_plot <-
   function(pts,
            colourlabels,
            title,
-           pointsize = 0.5,
+           pointsize = 0.03,
            datatype = "simulation") {
-    clusterplot = ggplot(pts, aes(x, y)) +
-      geom_point(color = mkcols(colourlabels), size = pointsize) +
+    #   clusterplot = ggplot(pts, aes(x, y)) +
+    #     geom_point(color = mkcols(colourlabels), size = pointsize) +
+    #     labs(x = "x [µm]", y = "y [µm]") +
+    #     ggtitle(title) +
+    #     theme_bw() +
+    #     theme(
+    #       axis.text = element_text(size = 8),
+    #       plot.title = element_text(size = 8),
+    #       axis.title = element_text(size = 8),
+    #       panel.border = element_rect(size = 1),
+    #       panel.grid.major = element_line(size = 0),
+    #       panel.grid.minor = element_line(size = 0),
+    #       panel.background = element_rect(fill = "white") #
+    #     )
+    #
+    #   if (datatype == "experiment") {
+    #     clusterplot +
+    #       scale_y_reverse() +
+    #       labs(x = "x [µm]", y = "y [µm]")
+    #   }
+    #
+    #   clusterplot
+    #
+    # }
+    dataset <- as_tibble(pts)
+    data <- dataset %>%
+      mutate(radius_SD = pointsize) %>%
+      mutate(labels = colourlabels) %>%
+      mutate(colour = mkcols(labels))
+
+    clusterplot = ggplot() +
+      geom_circle(aes(x0 = x, y0 = y, r = radius_SD, fill = colour, color = colour), n = 10, data = data, show.legend = FALSE, linetype = 0.5) +
+      coord_fixed() +
+      scale_colour_identity() +
+      scale_fill_identity() +
       labs(x = "x [µm]", y = "y [µm]") +
       ggtitle(title) +
       theme_bw() +
@@ -210,10 +243,11 @@ cluster_plot <-
         plot.title = element_text(size = 8),
         axis.title = element_text(size = 8),
         panel.border = element_rect(size = 1),
-        panel.grid.major = element_line(size = 0),
-        panel.grid.minor = element_line(size = 0),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
         panel.background = element_rect(fill = "white") #
       )
+
 
     if (datatype == "experiment") {
       clusterplot +

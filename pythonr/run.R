@@ -95,7 +95,7 @@ run_fun <- function(
       }else {
         data <- import_data(foldername)
 
-        # columns in SMAP dataset TODO: let user choose the columns for other localistion implementations
+        # columns in SMAP dataset
         pts = data[, datacol[1]:datacol[2]]
         sds = data[, datacol[3]]
         # limits of dataset set by the min/max of the localisations

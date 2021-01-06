@@ -17,7 +17,9 @@ pacman::p_load(
   "doParallel",
   "beepr",
   "data.table",
-  "plyr"
+  "plyr",
+  "ggforce",
+  "tidyverse"
 )
 pacman::p_load_gh("jeremypike/RSMLM")
 
