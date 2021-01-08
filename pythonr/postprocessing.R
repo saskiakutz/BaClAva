@@ -87,7 +87,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
       best <- which.maxm(m)
       bestcs <- cs[best[2]]
       bestthr <- thr[best[1]]
-      bfile <- file.path(paste0(foldername, "/labels/clusterscale", bestcs, " thresh", bestthr, "labels.txt", sep = ""))
+      bfile <- file.path(paste0(foldername, "/labels/clusterscale", bestcs, "_thresh", bestthr, "labels.txt", sep = ""))
       nbfile <- bfile
 
       labelsbest <- strsplit(readLines(nbfile), ",")[[1]]
@@ -154,7 +154,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
         }
       }
 
-      if (makeplot) {
+      if (makeplot == TRUE) {
         if ("clusterID" %in% colnames(data) & !superplot) {
           labelstrue <- sapply(as.numeric(data[, 4]), function(n) {
             if (n == 0)
@@ -212,7 +212,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
     if (makeplot & superplot)
       cluster_superplot(res, dirnames, postprocessing_folder, "ROIs_together")
 
-    hist_plot(res, postprocessing_folder)
+    hist_plot(res, postprocessing_folder, makeplot)
 
   })
 }

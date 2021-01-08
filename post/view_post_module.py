@@ -213,9 +213,10 @@ class View_post(qtw.QWidget):
                        os.path.isdir(self.dir_line.text() + "/" + name) and name != 'postprocessing']
         folder_os = self.dir_line.text() + "/" + random.choice(folder_list)
         file_name = [f for f in os.listdir(folder_os) if f.endswith('.png')]
-        pixmap = qtg.QPixmap(folder_os + "/" + file_name[0])
-        pixmap1 = pixmap.scaled(370, 370, qtc.Qt.KeepAspectRatioByExpanding)
-        self.text.setPixmap(pixmap1)
+        if file_name:
+            pixmap = qtg.QPixmap(folder_os + "/" + file_name[0])
+            pixmap1 = pixmap.scaled(370, 370, qtc.Qt.KeepAspectRatioByExpanding)
+            self.text.setPixmap(pixmap1)
         # self.text.resize(pixmap.width(), pixmap.height())
 
     # TODO: import option for stored config file

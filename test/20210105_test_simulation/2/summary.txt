@@ -1,0 +1,7 @@
+The best: clusterscale40 thresh5labels.txt
+Number of clusters: 10
+Percentage in clusters: 52.6455%
+Mean number of molecules per cluster: 99.5
+Mean area per cluster: 0.04834235 nm²
+Mean density per cluster: 2083.442
+Mean radius: 0.05857882 nm (simulation)

@@ -83,8 +83,8 @@ run_fun <- function(
 
     ld = list.dirs(foldername, recursive = FALSE)
     ld = ld[ld != foldername]
-    ld = ld[ld != paste0(ld, "postprocessing")]
-    ld = ld[ld != paste0(ld, "postprocessing_ground_truth")]
+    ld = ld[ld != paste0(foldername, "/postprocessing")]
+    ld = ld[ld != paste0(foldername, "/postprocessing_ground_truth")]
 
     l_ply(file.path(ld), function(foldername) {
       if (datasource == "simulation") {

@@ -446,7 +446,7 @@ writeRes <- function(res, rfile, labdir, bestonly = FALSE) {
         labdir,
         "/clusterscale",
         res[["scale"]][i],
-        "\ thresh",
+        "_thresh",
         res[["thresh"]][i],
         "labels.txt"
       )
@@ -484,7 +484,7 @@ writeRes_labels <- function(res, rseq, thseq, labdir) {
           labdir,
           "/clusterscale",
           res[[para1]][[para2]][["scale"]],
-          "\ thresh",
+          "_thresh",
           res[[para1]][[para2]][["thresh"]],
           "labels.txt",
           sep = ""

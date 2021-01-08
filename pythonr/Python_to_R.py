@@ -2,7 +2,7 @@ import rpy2.robjects as r_objects
 from rpy2.robjects.packages import importr
 from rpy2.robjects import numpy2ri
 import rpy2.robjects.packages as rpackages
-from rpy2.robjects.vectors import StrVector
+from rpy2.robjects.vectors import BoolVector
 import numpy as np
 import os
 
@@ -92,9 +92,9 @@ class PythonToR():
             newfolder=input_dic.get('directory'),
             # datasource=input_dic.get('datasource'),
             # process=input_dic.get('computation'),
-            makeplot=input_dic.get('storeplots'),
-            superplot=input_dic.get('superplot'),
-            separateplots=input_dic.get('separateplots')
+            makeplot=BoolVector([input_dic.get('storeplots')]),
+            superplot=BoolVector([input_dic.get('superplot')]),
+            separateplots=BoolVector([input_dic.get('separateplots')])
         )
         numpy2ri.deactivate()
         print("done")
