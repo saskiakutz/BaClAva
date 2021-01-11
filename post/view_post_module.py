@@ -4,6 +4,8 @@ from PyQt5 import QtCore as qtc
 import os
 import matplotlib
 import random
+import pandas as pd
+import seaborn as sns
 
 matplotlib.use('Qt5Agg')
 import numpy as np
@@ -14,9 +16,9 @@ from matplotlib.figure import Figure
 
 class MplCanvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=5, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(111)
-        super(MplCanvas, self).__init__(fig)
+        self.fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = self.fig.add_subplot(111)
+        super(MplCanvas, self).__init__(self.fig)
 
         FigureCanvas.setMinimumSize(self, 200, 370)
         FigureCanvas.setSizePolicy(self,
@@ -100,8 +102,12 @@ class View_post(qtw.QWidget):
         # plot_layout.addLayout(area_number_layout)
         # plot_layout.addLayout(percentage_ratio_layout)
 
-        self.text = qtw.QLabel('cluster plot')
-        plot_layout.addWidget(self.text, 1, 0)
+        # self.text = qtw.QLabel('cluster plot')
+        # plot_layout.addWidget(self.text, 1, 0)
+        self.scatter_canvas = MplCanvas(self, width=5, height=6, dpi=100)
+        scatter_tb = NavigationToolbar(self.scatter_canvas, self)
+        plot_layout.addWidget(scatter_tb, 0, 0)
+        plot_layout.addWidget(self.scatter_canvas, 1, 0)
 
         self.area_canvas = MplCanvas(self, width=5, height=6, dpi=100)
         # area_number_layout.addWidget(self.area_canvas)
@@ -178,19 +184,19 @@ class View_post(qtw.QWidget):
 
     def show_data(self):
         self.area_canvas.axes.cla()
-        self.show_pixmap()
-        self.draw_data(self.area_canvas, 'area', 'cluster area [µm²]', 'number of clusters')
-        self.draw_data(self.number_canvas, 'nclusters', 'number of cluster', 'number of regions')
-        self.draw_data(self.density_canvas, 'density', 'cluster density [µm⁻²]', 'number of clusters')
-        self.draw_data(self.percentage_canvas, 'pclustered', 'percentage clustered',
+        self.draw_scatterplot(self.scatter_canvas, 'x [µm]', 'y [µm]')
+        self.draw_hist(self.area_canvas, 'area', 'cluster area [µm²]', 'number of clusters')
+        self.draw_hist(self.number_canvas, 'nclusters', 'number of cluster', 'number of regions')
+        self.draw_hist(self.density_canvas, 'density', 'cluster density [µm⁻²]', 'number of clusters')
+        self.draw_hist(self.percentage_canvas, 'pclustered', 'percentage clustered',
                        'number of regions')
-        self.draw_data(self.ratio_canvas, 'reldensity', 'relative density clusters/background',
+        self.draw_hist(self.ratio_canvas, 'reldensity', 'relative density clusters/background',
                        'number of regions')
 
-    def draw_data(self, canvas, data_type, x_label, y_label):
+    def draw_hist(self, canvas, data_type, x_label, y_label):
 
         canvas.axes.cla()
-        data_in = self.import_data(data_type)
+        data_in = self.import_postdata(data_type)
         # data_ax = canvas.figure.subplots()
 
         if len(data_in) > 1:
@@ -202,21 +208,70 @@ class View_post(qtw.QWidget):
         canvas.axes.set_xlabel(x_label, fontsize='10')
         canvas.draw()
 
-    def import_data(self, info_type):
+    def import_postdata(self, info_type):
         data_dir = self.dir_line.text() + "/postprocessing/" + info_type + ".txt"
         with open(data_dir, 'r') as file_in:
             x = [float(y) for y in file_in.read().split(",")]
         return x
 
-    def show_pixmap(self):
+    def draw_scatterplot(self, canvas, x_label, y_label):
+
+        canvas.axes.cla()
+        data_scatter = self.import_scatterdata()
+
+        canvas.axes.scatter(x=data_scatter['x'], y=data_scatter['y'], s=0, clip_on=False)
+        canvas.axes.set_ylabel(y_label, fontsize='10')
+        canvas.axes.set_xlabel(x_label, fontsize='10')
+        canvas.draw()
+
+        # Calculate radius in pixels :
+        rr_pix = (canvas.axes.transData.transform(np.vstack([data_scatter['sd'], data_scatter['sd']]).T) -
+                  canvas.axes.transData.transform(
+                      np.vstack([np.zeros(len(data_scatter)), np.zeros(len(data_scatter))]).T))
+        rpix, _ = rr_pix.T
+
+        # Calculate and update size in points:
+        size_pt = (2 * rpix / canvas.fig.dpi * 72) ** 2
+        canvas.axes.scatter(x=data_scatter['x'], y=data_scatter['y'], s=size_pt)
+        canvas.draw()
+        print(self.scatterplot_colour(data_scatter['labels']))
+
+    def scatterplot_colour(self, labels):
+        # cnames = [[x, labels.count(x)] for x in set(str(labels))]
+        # colors = sns.color_palette("viridis", len(cnames))
+
+        return cnames  # TODO: get colour table right
+
+    def import_scatterdata(self):
+        names = ["summary.txt", "labels", "data.txt"]
         folder_list = [name for name in os.listdir(self.dir_line.text() + "/") if
                        os.path.isdir(self.dir_line.text() + "/" + name) and name != 'postprocessing']
-        folder_os = self.dir_line.text() + "/" + random.choice(folder_list)
-        file_name = [f for f in os.listdir(folder_os) if f.endswith('.png')]
-        if file_name:
-            pixmap = qtg.QPixmap(folder_os + "/" + file_name[0])
-            pixmap1 = pixmap.scaled(370, 370, qtc.Qt.KeepAspectRatioByExpanding)
-            self.text.setPixmap(pixmap1)
-        # self.text.resize(pixmap.width(), pixmap.height())
+
+        folder_os = os.path.join(self.dir_line.text(), random.choice(folder_list))
+
+        file_os = os.path.join(folder_os, names[0])
+        with open(file_os, 'r') as file_in:
+            best_label = file_in.readline().strip().split(": ")[1]
+
+        labels_os = os.path.join(folder_os, names[1], best_label)
+        with open(labels_os, 'r') as file_in:
+            cluster_labels = [int(lab) for lab in file_in.read().split(",")]
+
+        data_os = os.path.join(folder_os, names[2])
+        data = pd.read_csv(data_os, sep=',', header=0, usecols=["x", "y", "sd"])
+        data["labels"] = cluster_labels
+
+        return data
+
+    # def show_pixmap(self):
+    #     folder_list = [name for name in os.listdir(self.dir_line.text() + "/") if
+    #                    os.path.isdir(self.dir_line.text() + "/" + name) and name != 'postprocessing']
+    #     folder_os = self.dir_line.text() + "/" + random.choice(folder_list)
+    #     file_name = [f for f in os.listdir(folder_os) if f.endswith('.png')]
+    #     if file_name:
+    #         pixmap = qtg.QPixmap(folder_os + "/" + file_name[0])
+    #         pixmap1 = pixmap.scaled(370, 370, qtc.Qt.KeepAspectRatioByExpanding)
+    #         self.text.setPixmap(pixmap1)
+    #     # self.text.resize(pixmap.width(), pixmap.height())
 
     # TODO: import option for stored config file

@@ -104,7 +104,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
       wfile <- file.path(paste0(nfoldername, "/summary.txt", sep = ""))
       if (datasource == "simulation") {
         cat(
-          "The best: clusterscale", bestcs, " thresh", bestthr,
+          "The best: clusterscale", bestcs, "_thresh", bestthr,
           "labels.txt\nNumber of clusters: ", nClusters(labelsbest),
           "\nPercentage in clusters: ", percentageInCluster(labelsbest),
           "%\nMean number of molecules per cluster: ", nMolsPerCluster(labelsbest),

@@ -1,4 +1,4 @@
-The best: clusterscale40 thresh5labels.txt
+The best: clusterscale40_thresh5labels.txt
 Number of clusters: 10
 Percentage in clusters: 52.6455%
 Mean number of molecules per cluster: 99.5
