@@ -232,15 +232,17 @@ class View_post(qtw.QWidget):
 
         # Calculate and update size in points:
         size_pt = (2 * rpix / canvas.fig.dpi * 72) ** 2
-        canvas.axes.scatter(x=data_scatter['x'], y=data_scatter['y'], s=size_pt)
+        colour = self.scatterplot_colour((data_scatter['labels']))
+        canvas.axes.scatter(x=data_scatter['x'], y=data_scatter['y'], s=size_pt, color=colour, alpha=0.9,
+                            edgecolors="none")
         canvas.draw()
-        print(self.scatterplot_colour(data_scatter['labels']))
 
     def scatterplot_colour(self, labels):
-        # cnames = [[x, labels.count(x)] for x in set(str(labels))]
-        # colors = sns.color_palette("viridis", len(cnames))
-
-        return cnames  # TODO: get colour table right
+        label_counts = labels.value_counts()
+        cnames = label_counts[label_counts > 1]
+        colors = sns.color_palette("CMRmap_r", n_colors=len(cnames))
+        scale = ['silver' if label_counts[label] == 1 else colors[label - 1] for label in labels]
+        return scale
 
     def import_scatterdata(self):
         names = ["summary.txt", "labels", "data.txt"]
@@ -259,6 +261,7 @@ class View_post(qtw.QWidget):
 
         data_os = os.path.join(folder_os, names[2])
         data = pd.read_csv(data_os, sep=',', header=0, usecols=["x", "y", "sd"])
+        data = data.divide(1000)
         data["labels"] = cluster_labels
 
         return data
