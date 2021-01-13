@@ -45,7 +45,7 @@ class View_post(qtw.QWidget):
         heading.setFont(heading_font)
 
         self.dir_btn = qtw.QPushButton("Select data directory")
-        self.dir_btn.clicked.connect(self.chooseFile)
+        self.dir_btn.clicked.connect(self.choose_file)
         self.dir_line = qtw.QLineEdit("select data directory")
         self.dir_line.setReadOnly(True)
         self.dir_line.textChanged.connect(lambda x: self.dir_line.setReadOnly(x == ''))
@@ -143,7 +143,7 @@ class View_post(qtw.QWidget):
         # show final layout
         self.setLayout(main_layout)
 
-    def chooseFile(self):
+    def choose_file(self):
         filename, _ = qtw.QFileDialog.getOpenFileName(
             self,
             "Select data file",
@@ -265,16 +265,5 @@ class View_post(qtw.QWidget):
         data["labels"] = cluster_labels
 
         return data
-
-    # def show_pixmap(self):
-    #     folder_list = [name for name in os.listdir(self.dir_line.text() + "/") if
-    #                    os.path.isdir(self.dir_line.text() + "/" + name) and name != 'postprocessing']
-    #     folder_os = self.dir_line.text() + "/" + random.choice(folder_list)
-    #     file_name = [f for f in os.listdir(folder_os) if f.endswith('.png')]
-    #     if file_name:
-    #         pixmap = qtg.QPixmap(folder_os + "/" + file_name[0])
-    #         pixmap1 = pixmap.scaled(370, 370, qtc.Qt.KeepAspectRatioByExpanding)
-    #         self.text.setPixmap(pixmap1)
-    #     # self.text.resize(pixmap.width(), pixmap.height())
 
     # TODO: import option for stored config file
