@@ -1,10 +1,9 @@
 import sys
 from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 
-from view_post_module import View_post
-from model_post_module import Model_post
+from post.view_post_module import View_post
+from post.model_post_module import Model_post
 
 
 class MainWindow(qtw.QMainWindow):
@@ -19,7 +18,7 @@ class MainWindow(qtw.QMainWindow):
         help_action = help_menu.addAction('Help')
         quit_action = file_menu.addAction('Quit', self.close)
 
-        self.setWindowTitle("Post Processing 1.0")
+        self.setWindowTitle("Post Processing 2.0")
         self.post_model = Model_post()
         self.post_view = View_post()
         self.setCentralWidget(self.post_view)

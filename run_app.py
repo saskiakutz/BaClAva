@@ -1,11 +1,9 @@
 import sys
 from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 
-from view_run_module import View_run
-from model_run_module import Model_run
-from model_table import TableModel
+from run.view_run_module import View_run
+from run.model_run_module import Model_run
 
 
 class MainWindow(qtw.QMainWindow):
@@ -20,7 +18,7 @@ class MainWindow(qtw.QMainWindow):
         help_action = help_menu.addAction('Help')
         quit_action = file_menu.addAction('Quit', self.close)
 
-        self.setWindowTitle("Bayesian clustering 1.0")
+        self.setWindowTitle("Bayesian clustering 2.0")
         self.run_model = Model_run()
         self.run_view = View_run()
         self.setCentralWidget(self.run_view)

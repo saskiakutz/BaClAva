@@ -1,16 +1,14 @@
 import sys
-from os import path, mkdir
 from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 
-from view_simulation_module import View_sim
-from model_simulation_module import Model_sim
+from sim.view_simulation_module import View_sim
+from sim.model_simulation_module import Model_sim
 
 
 class MainWindow(qtw.QMainWindow):
 
-    # noinspection PyArgumentList
+    # noinspection PyArgumentList,PyTypeChecker
     def __init__(self):
         """MainWindow constructor"""
         super().__init__()
@@ -22,7 +20,7 @@ class MainWindow(qtw.QMainWindow):
         help_action = help_menu.addAction("Help")
         quit_action = file_menu.addAction("Quit", self.close)
 
-        self.setWindowTitle("Simulation 1.0")
+        self.setWindowTitle("Simulation 2.0")
         self.model = Model_sim()
         self.view = View_sim()
         self.setCentralWidget(self.view)
