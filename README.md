@@ -11,9 +11,9 @@ will get non-user-biased clustering results in a reasonable amount of time.
 
 - [Installation](#Installation)
 - [Usage](#Usage)
-  - [Module 1: Simulation tool](##Module-1:-Simulation-tool)
-  - [Module 2: Bayesian calculations](##Module-2:-Bayesian-calculations)
-  - [Module 3: Bayesian postprocessing](##Module-3:-Bayesian-postprocessing)
+  - [Module 1: Simulation tool](#Module-1:-Simulation-tool)
+  - [Module 2: Bayesian calculations](#Module-2:-Bayesian-calculations)
+  - [Module 3: Bayesian postprocessing](#Module-3:-Bayesian-postprocessing)
 - [Literature](#Literature)
 - [Acknowledgement](#Acknowledgment)
 - [Licencing](#Licencing)
