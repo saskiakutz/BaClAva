@@ -20,6 +20,8 @@ will get non-user-biased clustering results in a reasonable amount of time.
 
 # Installation:
 
+**This part needs to be written soon**
+
 # Usage:
 
 The software offers three analysis modules. With the first module allows to simulated datasets. By uploading
@@ -60,6 +62,8 @@ create and store the corresponding scatterplots and histograms. Nonetheless, the
 user can adjust by hand and store individually.
 
 # Acknowledgement
+
+**I need to write this part soon**
 
 # Literature:
 
