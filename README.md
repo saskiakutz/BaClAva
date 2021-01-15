@@ -11,9 +11,9 @@ will get non-user-biased clustering results in a reasonable amount of time.
 
 - [Installation](#Installation)
 - [Usage](#Usage)
-  - [Module 1: Simulation tool](#Module-1:-Simulation-tool)
-  - [Module 2: Bayesian calculations](#Module-2:-Bayesian-calculations)
-  - [Module 3: Bayesian postprocessing](#Module-3:-Bayesian-postprocessing)
+  - [Module 1: Simulation tool](#Module-1-Simulation-tool)
+  - [Module 2: Bayesian calculations](#Module-2-Bayesian-calculations)
+  - [Module 3: Bayesian postprocessing](#Module-3-Bayesian-postprocessing)
 - [Literature](#Literature)
 - [Acknowledgement](#Acknowledgment)
 - [Licencing](#Licencing)
@@ -58,6 +58,8 @@ of datasets with the same experimental conditions, therefore offers histograms s
 can automatically store the data for these plots, but the user must tell the software whether it should automatically
 create and store the corresponding scatterplots and histograms. Nonetheless, the GUI displays the plotted data which the
 user can adjust by hand and store individually.
+
+# Acknowledgement
 
 # Literature:
 
