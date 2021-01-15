@@ -11,9 +11,9 @@ will get non-user-biased clustering results in a reasonable amount of time.
 
 - [Installation](#Installation)
 - [Usage](#Usage)
-  - [Module 1: Simulation tool](#Module-1:-Simulation-tool)
-  - [Module 2: Bayesian calculations](#Module-2:-Bayesian-calculations)
-  - [Module 3: Bayesian postprocessing](#Module-3:-Bayesian-postprocessing)
+  - [Module 1: Simulation tool](##Module-1:-Simulation-tool)
+  - [Module 2: Bayesian calculations](##Module-2:-Bayesian-calculations)
+  - [Module 3: Bayesian postprocessing](##Module-3:-Bayesian-postprocessing)
 - [Literature](#Literature)
 - [Acknowledgement](#Acknowledgment)
 - [Licencing](#Licencing)
@@ -51,9 +51,24 @@ clustering calculations. Note here that this option is not available on Windows 
 
 ## Module 3: Bayesian postprocessing
 
+In the third module of this software for Bayesian clustering, various clustering parameters, e.i. the area of the
+clusters or their density, are calculated for the best cluster parameter set. The GUI displays a scatter plot of the
+clustered localisations and histograms for the different cluster parameters. This application can analyse a whole folder
+of datasets with the same experimental conditions, therefore offers histograms summarising this condition. The software
+can automatically store the data for these plots, but the user must tell the software whether it should automatically
+create and store the corresponding scatterplots and histograms. Nonetheless, the GUI displays the plotted data which the
+user can adjust by hand and store individually.
+
 # Literature:
 
-- Griffié
-- Pike
+- Rubin-Delanchy, P., Burn, G., Griffié, J. et al. Bayesian cluster identification in single-molecule localization
+  microscopy data. Nat Methods 12, 1072–1076 (2015). https://doi.org/10.1038/nmeth.3612
+- Jeremy A Pike, Abdullah O Khan, Chiara Pallini, Steven G Thomas, Markus Mund, Jonas Ries, Natalie S Poulter, Iain B
+  Styles, Topological data analysis quantifies biological nano-structure from single molecule localization microscopy,
+  Bioinformatics, Volume 36, Issue 5, March 2020, Pages 1614–1621, https://doi.org/10.1093/bioinformatics/btz788
 
 # Licencing:
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+This project is licensed under the MIT License - see the LICENSE.md file for details
