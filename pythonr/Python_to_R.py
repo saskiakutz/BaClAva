@@ -38,7 +38,7 @@ class PythonToR():
 
     def r_bayesian_run(self, input_dic, status):
         r = r_objects.r
-        r.source('./pythonr/run.R')
+        r.source('./pythonr/run_hdf5.R')
         if len(status) == 2:
             ncores = status.get('cores')
         else:

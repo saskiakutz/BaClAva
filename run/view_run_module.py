@@ -257,14 +257,17 @@ class View_run(qtw.QWidget):
             self,
             "Select data file",
             qtc.QDir.homePath(),
-            'txt files (*.txt);; csv files (*.csv) ;; All files (*)'
+            'hdf5 files (*.h5);; txt files (*.txt);; csv files (*.csv) ;; All files (*)'
         )
         if filename:
             # self.model = TableModel(filename)
             self.model = DataFrameModel(filename)
             self.tableview.setModel(self.model)
             if self.b_inputs['datasource'].currentText() == "simulation":
-                self.dir_line.setText(os.path.dirname(os.path.dirname(filename)))
+                if filename.split('.')[1] == 'h5':
+                    self.dir_line.setText(os.path.dirname(filename))
+                else:
+                    self.dir_line.setText(os.path.dirname(os.path.dirname(filename)))
             else:
                 text_files = [f for f in os.listdir(os.path.dirname(filename)) if f == 'r_vs_thresh.txt']
                 if len(text_files) == 0:

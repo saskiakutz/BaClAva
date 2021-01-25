@@ -19,9 +19,10 @@ pacman::p_load(
   "data.table",
   "plyr",
   "ggforce",
-  "tidyverse"
+  "tidyverse",
+  "rhdf5"
 )
-pacman::p_load_gh("jeremypike/RSMLM")
+pacman::p_load_gh("lucabaronti/RSMLM")
 
 
 mcgaussprec <- function(pts,
@@ -441,7 +442,7 @@ writeRes <- function(res, rfile, labdir, bestonly = FALSE) {
   else
     is = (1:dim(res[["labels"]])[1])
   for (i in is) {
-    fwrite(as.list(res[["labels"]][i,]), file.path(
+    fwrite(res[["labels"]][i,], file.path(
       paste0(
         labdir,
         "/clusterscale",
@@ -451,6 +452,50 @@ writeRes <- function(res, rfile, labdir, bestonly = FALSE) {
         "labels.txt"
       )
     ))
+  }
+}
+
+writeRes_seq <- function(res, datah5file, bestonly = FALSE) { # , rfile, labdir,
+  scale = unique(res[["scale"]])
+  scale = scale[order(as.numeric(scale))]
+  thresh = unique(res[["thresh"]])
+  thresh = thresh[order(as.numeric(thresh))]
+
+  tmp_matrix <- matrix(nrow = length(thresh), ncol = length(scale))
+  rownames(tmp_matrix) <- thresh
+  colnames(tmp_matrix) <- scale
+  for (th in seq(length(thresh))) {
+    for (i in seq(length(res[['scores']]))) {
+      tmp_matrix[toString(res[['thresh']][i]), toString(res[['scale']][i])] <- res[['scores']][i]
+    }
+  }
+  tryCatch({
+    h5write(tmp_matrix, datah5file, 'r_vs_thresh') },
+    error = function(e) {
+      h5delete(datah5file, 'r_vs_thresh')
+      h5write(tmp_matrix, datah5file, 'r_vs_thresh')
+    }
+  )
+  tryCatch({
+    h5createGroup(datah5file, 'labels') },
+    error = function(e) {
+      h5delete(datah5file, 'labels')
+      h5createGroup(datah5file, 'labels') },
+    warning = function(w) { w }
+  )
+
+  if (bestonly)
+    is = which.max(res[["scores"]])
+  else
+    is = (1:dim(res[["labels"]])[1])
+  for (i in is) {
+    c <- res[['labels']][i,]
+    h5write(c,
+            datah5file,
+            paste0('labels/clusterscale',
+                   res[['scale']][i],
+                   '_thresh',
+                   res[["thresh"]][i]))
   }
 }
 

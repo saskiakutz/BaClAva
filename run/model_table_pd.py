@@ -6,6 +6,7 @@ from PyQt5 import QtCore as qtc
 # from Python_to_R import r_bayesian_run
 # from Python_to_R import r_test
 import csv
+import h5py
 import pandas as pd
 
 
@@ -15,7 +16,17 @@ class DataFrameModel(qtc.QAbstractTableModel):
 
     def __init__(self, file, parent=None):
         super(DataFrameModel, self).__init__(parent)
-        self._dataframe = pd.read_csv(file, nrows=5)
+        if file.split(".")[1] == "txt" or file.split(".")[1] == "csv":
+            self._dataframe = pd.read_csv(file, nrows=5)
+        else:
+            with h5py.File(file, "r") as f:
+                print("Keys: %s" % f.keys())
+                for key in f.keys():
+                    if key not in {'labels', 'r_vs_thresh'}:
+                        a_group_key = key
+                        break
+                print(a_group_key)
+                self._dataframe = pd.DataFrame(f[a_group_key][1:6])
 
     def setDataFrame(self, dataframe):
         self.beginResetModel()
