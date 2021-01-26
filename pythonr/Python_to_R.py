@@ -4,7 +4,8 @@ from rpy2.robjects import numpy2ri
 import rpy2.robjects.packages as rpackages
 from rpy2.robjects.vectors import BoolVector
 import numpy as np
-import os
+from os import getcwd, listdir
+from os.path import isfile, join
 
 
 class PythonToR():
@@ -103,9 +104,20 @@ class PythonToR():
         input_test = 4
         print("Length of parameter: ", input_test)
         r = r_objects.r
-        print(os.getcwd())
+        print(getcwd())
         r.source("run.R")
         numpy2ri.activate()
         temp = r.test_function(input_test)
         print(temp)
         numpy2ri.deactivate()
+
+    def check_dataset_type(self, directory):
+        onlyfiles = [f for f in listdir(directory) if
+                     isfile(join(directory, f)) and f not in ['sim_parameters.txt', 'run_config.txt']]
+        convertfiles = [f for f in onlyfiles if f.endswith('.txt') or f.endswith('.csv')]
+        if convertfiles:
+            r = r_objects.r
+            r.source('./pythonr/convert.R')
+            numpy2ri.activate()
+            r.convert_hdf5(directory, convertfiles)
+            numpy2ri.deactivate()

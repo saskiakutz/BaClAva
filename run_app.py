@@ -26,6 +26,7 @@ class MainWindow(qtw.QMainWindow):
         self.run_thread = qtc.QThread()
         self.run_model.moveToThread(self.run_thread)
         self.run_model.finished.connect(self.run_thread.quit)
+        self.run_model.finished.connect(self.on_finished)
         self.run_thread.start()
 
         self.run_view.submitted.connect(self.run_model.set_data)

@@ -70,11 +70,11 @@ run_fun <- function(
         pts = datah5$simulation[, c(datacol[1], datacol[2])]
         sds = datah5$simulation[, datacol[3]]
       }else {
-        datah5 <- import_data(foldername)
+        datah5 <- H5Fopen(file.path(foldername, filename))
 
         # columns in SMAP dataset
-        pts = datah5[, datacol[1]:datacol[2]]
-        sds = datah5[, datacol[3]]
+        pts = datah5$data[, datacol[1]:datacol[2]]
+        sds = datah5$data[, datacol[3]]
         # limits of dataset set by the min/max of the localisations
         xlim = c(min(pts[, datacol[1]]), max(pts[, datacol[1]]))
         ylim = c(min(pts[, datacol[2]]), max(pts[, datacol[2]]))
@@ -123,15 +123,13 @@ run_fun <- function(
           res = res,
           rseq = rseq,
           thseq = thseq,
-          file.path(paste0(
-            foldername, "/r_vs_thresh.txt", sep = ""
-          ))
+          datah5
         )
         writeRes_labels(
           res = res,
           rseq = rseq,
           thseq = thseq,
-          file.path(paste0(foldername, "/labels"))
+          datah5
         )
       }
       H5Fclose(datah5)
