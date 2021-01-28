@@ -523,8 +523,8 @@ writeRes_r_vs_th <- function(res, rseq, thseq, datah5file) {
     }
   )
   did <- H5Dopen(datah5file, 'r_vs_thresh')
-  h5writeAttribute(did, attr = rseq, 'colnames')
-  h5writeAttribute(did, attr = thseq, 'rownames')
+  h5writeAttribute(did, attr = rseq, 'scales')
+  h5writeAttribute(did, attr = thseq, 'thresholds')
   H5Dclose(did)
   # write.table(
   #   tmp_matrix,
