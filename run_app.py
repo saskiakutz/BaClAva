@@ -18,7 +18,7 @@ class MainWindow(qtw.QMainWindow):
         help_action = help_menu.addAction('Help')
         quit_action = file_menu.addAction('Quit', self.close)
 
-        self.setWindowTitle("Bayesian clustering 2.0")
+        self.setWindowTitle("Bayesian clustering 3.0")
         self.run_model = Model_run()
         self.run_view = View_run()
         self.setCentralWidget(self.run_view)

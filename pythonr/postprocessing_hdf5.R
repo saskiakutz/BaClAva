@@ -64,22 +64,22 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
         ylim <- c(min(pts[, 2]), max(pts[, 2]))
       }
 
-      if (process == "sequential") {
-        r <- h5read(file, 'r_vs_thresh')
-        r_attr <- h5readAttributes(file, 'r_vs_thresh')
-        colnames(r) <- r_attr$colnames
-        rownames(r) <- r_attr$rownames
-        m <- as.matrix(r)
-        cs <- (m[1,])[-1]
-        thr <- (m[, 1])[-1]
-        m <- as.matrix(m[2:length(m[, 1]), 2:length(m[1,])])
-      } else {
-        r <- read.delim(file.path(paste0(nfoldername, "/r_vs_thresh.txt", sep = "")), header = T, sep = "\t")
-        colnames(r) <- sub("X*", "", colnames(r))
-        m <- as.matrix(r)
-        cs <- colnames(m)
-        thr <- rownames(m)
-      }
+      #if (process == "sequential") {
+      r <- h5read(file, 'r_vs_thresh')
+      r_attr <- h5readAttributes(file, 'r_vs_thresh')
+      colnames(r) <- r_attr$colnames
+      rownames(r) <- r_attr$rownames
+      m <- as.matrix(r)
+      cs <- colnames(r)
+      thr <- rownames(r)
+
+      # } else {
+      #   r <- read.delim(file.path(paste0(nfoldername, "/r_vs_thresh.txt", sep = "")), header = T, sep = "\t")
+      #   colnames(r) <- sub("X*", "", colnames(r))
+      #   m <- as.matrix(r)
+      #   cs <- colnames(m)
+      #   thr <- rownames(m)
+      # }
 
       which.maxm <- function(mat) {
         indcol <- rep(seq_len(ncol(mat)), each = nrow(mat))[which.max(mat)]
@@ -88,8 +88,8 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
       }
 
       best <- which.maxm(m)
-      bestcs <- names(cs[best[2]])
-      bestthr <- names(thr[best[1]])
+      bestcs <- cs[best[2]]
+      bestthr <- thr[best[1]]
 
       labelsbest <- h5read(file, paste0("labels/clusterscale", bestcs, "_thresh", bestthr, sep = ''))
       r_thresh <- H5Dopen(file, 'r_vs_thresh')

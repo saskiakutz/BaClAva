@@ -1,7 +1,7 @@
 directory=/home/saskia-admin/PycharmProjects/Bayesian_analysis_GUI/test/20210128_two_clusters
 model=Gaussian(prec)
 datasource=simulation
-clustermethod=DBSCAN
+clustermethod=ToMATo
 rmin=5
 rmax=300
 rstep=5
