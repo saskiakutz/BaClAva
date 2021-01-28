@@ -20,7 +20,7 @@ class MainWindow(qtw.QMainWindow):
         help_action = help_menu.addAction("Help")
         quit_action = file_menu.addAction("Quit", self.close)
 
-        self.setWindowTitle("Simulation 2.0")
+        self.setWindowTitle("Simulation 3.0")
         self.model = Model_sim()
         self.view = View_sim()
         self.setCentralWidget(self.view)

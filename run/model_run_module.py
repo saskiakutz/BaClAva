@@ -48,6 +48,7 @@ class Model_run(qtc.QObject):
 
             try:
                 ptor = PythonToR()
+                ptor.check_dataset_type(dir_)
                 ptor.r_bayesian_run(self.inputs, self.parallel)
                 # ptor.r_test(self.inputs)
 

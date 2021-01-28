@@ -90,7 +90,7 @@ run_fun <- function(
       if (datasource == "simulation") {
         data = read.csv(file.path(paste0(foldername, "/data.txt", sep = "")))
         # columns in simulation dataset
-        pts = data[, datacol[1]:datacol[2]]
+        pts = data[, c(datacol[1], datacol[2])]
         sds = data[, datacol[3]]
       }else {
         data <- import_data(foldername)

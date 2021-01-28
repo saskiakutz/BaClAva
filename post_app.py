@@ -18,7 +18,7 @@ class MainWindow(qtw.QMainWindow):
         help_action = help_menu.addAction('Help')
         quit_action = file_menu.addAction('Quit', self.close)
 
-        self.setWindowTitle("Post Processing 2.0")
+        self.setWindowTitle("Post Processing 3.0")
         self.post_model = Model_post()
         self.post_view = View_post()
         self.setCentralWidget(self.post_view)

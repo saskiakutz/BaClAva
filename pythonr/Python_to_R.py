@@ -4,7 +4,8 @@ from rpy2.robjects import numpy2ri
 import rpy2.robjects.packages as rpackages
 from rpy2.robjects.vectors import BoolVector
 import numpy as np
-import os
+from os import getcwd, listdir
+from os.path import isfile, join
 
 
 class PythonToR():
@@ -38,7 +39,7 @@ class PythonToR():
 
     def r_bayesian_run(self, input_dic, status):
         r = r_objects.r
-        r.source('./pythonr/run.R')
+        r.source('./pythonr/run_hdf5.R')
         if len(status) == 2:
             ncores = status.get('cores')
         else:
@@ -86,7 +87,7 @@ class PythonToR():
 
     def r_post_processing(self, input_dic):
         r = r_objects.r
-        r.source("./pythonr/postprocessing.R")
+        r.source("./pythonr/postprocessing_hdf5.R")
         numpy2ri.activate()
         r.post_fun(
             newfolder=input_dic.get('directory'),
@@ -103,9 +104,21 @@ class PythonToR():
         input_test = 4
         print("Length of parameter: ", input_test)
         r = r_objects.r
-        print(os.getcwd())
+        print(getcwd())
         r.source("run.R")
         numpy2ri.activate()
         temp = r.test_function(input_test)
         print(temp)
         numpy2ri.deactivate()
+
+    def check_dataset_type(self, directory):
+        onlyfiles = [f for f in listdir(directory) if
+                     isfile(join(directory, f)) and f not in ['sim_parameters.txt', 'run_config.txt', ]]
+        convertfiles = [f for f in onlyfiles if
+                        (f.endswith('.txt') or f.endswith('.csv')) and not f.endswith('summary.txt')]
+        if convertfiles:
+            r = r_objects.r
+            r.source('./pythonr/convert.R')
+            numpy2ri.activate()
+            r.convert_hdf5(directory, convertfiles)
+            numpy2ri.deactivate()

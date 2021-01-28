@@ -6,6 +6,7 @@ import matplotlib
 import random
 import pandas as pd
 import seaborn as sns
+import h5py
 
 matplotlib.use('Qt5Agg')
 import numpy as np
@@ -148,9 +149,9 @@ class View_post(qtw.QWidget):
             self,
             "Select data file",
             qtc.QDir.homePath(),
-            'txt files (*.txt)'
+            'hdf5 files (*.h5)'
         )
-        self.dir_line.setText(os.path.dirname(os.path.dirname(filename)))
+        self.dir_line.setText(os.path.dirname(filename))
 
     # def change_plot_options(self):
     #     if self.p_inputs["datasource"].currentText() == "simulation" and self.p_inputs["store plots"].isChecked():
@@ -244,7 +245,7 @@ class View_post(qtw.QWidget):
         scale = ['silver' if label_counts[label] == 1 else colors[label - 1] for label in labels]
         return scale
 
-    def import_scatterdata(self):
+    def import_scatterdata_old(self):
         names = ["summary.txt", "labels", "data.txt"]
         folder_list = [name for name in os.listdir(self.dir_line.text() + "/") if
                        os.path.isdir(self.dir_line.text() + "/" + name) and name != 'postprocessing']
@@ -265,5 +266,24 @@ class View_post(qtw.QWidget):
         data["labels"] = cluster_labels
 
         return data
+
+    def import_scatterdata(self):
+        datalist = [name for name in os.listdir(self.dir_line.text()) if
+                    os.path.isfile(os.path.join(self.dir_line.text(), name)) and name.endswith('.h5')]
+
+        data_os = os.path.join(self.dir_line.text(), random.choice(datalist))
+        with h5py.File(data_os, 'r') as f:
+            labelset = f['r_vs_thresh'].attrs['best'][0].decode()
+            labels = pd.array(f['labels/' + labelset][()]).astype(int)
+            columns = f['data'].attrs['datacolumns'] - 1
+            columns = columns.tolist()
+            dataset = pd.DataFrame(f['data'][()]).iloc[:, columns]
+        dataset = dataset.divide(1000)
+        dataset['labels'] = labels
+
+        return dataset
+
+        # TODO: extract information
+        # TODO: implement a way to rotate over all datafiles
 
     # TODO: import option for stored config file

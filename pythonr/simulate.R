@@ -1,5 +1,7 @@
 # BiocManager::install("rhdf5")
-pacman::p_load(rhdf5)
+if (!require(pacman, quietly = TRUE))
+  install.packages("pacman")
+pacman::p_load("rhdf5")
 
 simulation_fun <- function(newfolder, nclusters, molspercluster, background, xlim, ylim, gammaparams, nsim, sdcluster, ab = NA) {
 
@@ -86,18 +88,36 @@ simulation_fun <- function(newfolder, nclusters, molspercluster, background, xli
     sdsb <- rgamma(dim(pts)[1] - length(lc), gammaparams[1], gammaparams[2])
     sds <- c(sds, sdsb)
 
-    data <- cbind(pts, sds, labels)
+    data <- data.frame(pts, sds, labels)
     colnames(data) <- c("x", "y", "sd", "clusterID")
 
-    dir.create(file.path(paste0(newfolder, "/", expi, sep = "")), showWarnings = F)
-    write.csv(data, file = file.path(paste0(newfolder, "/", expi, "/data.txt", sep = "")), row.names = FALSE, quote = FALSE)
+    # dir.create(file.path(paste0(newfolder, "/", expi, sep = "")), showWarnings = F)
+    # write.csv(data, file = file.path(paste0(newfolder, "/", expi, "/data.txt", sep = "")), row.names = FALSE, quote = FALSE)
 
-    filename <- file.path(paste0(newfolder, "/simulation_", expi, ".h5", sep = ""))
+    filename <- file.path(newfolder, paste0("simulation_", expi, ".h5", sep = ""))
+
     h5createFile(filename)
-    attr(data, "columns") <- colnames(data)
-    h5write(data, filename, "simulation")
+
+    tryCatch(
+    {
+      h5write(data, filename, "data")
+    },
+      error = function(e) {
+        h5delete(filename, "data")
+        h5write(data, filename, "data") },
+      warning = function(w) {
+        h5delete(filename, "data")
+        h5write(data, filename, "data")
+      }
+    )
+
+    file = H5Fopen(filename)
+    did <- H5Dopen(file, "data")
+    h5writeAttribute(did, attr = names(data), name = "colnames")
+
+    H5Dclose(did)
+    H5close()
     h5closeAll()
   })
-
 }
 
