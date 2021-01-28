@@ -145,7 +145,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
         wfile <- file.path(paste0(nfoldername, "/cluster-statistics.txt", sep = ""))
         cat("x,y,sd,nmol\n", file = wfile)
         for (i in 1:dim(s)[2]) {
-          cat(s[, 1],
+          cat(s[, i],
               sep = ",",
               append = TRUE,
               file = wfile

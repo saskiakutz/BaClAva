@@ -67,8 +67,9 @@ run_fun <- function(
       if (datasource == "simulation") {
         datah5 <- H5Fopen(file.path(foldername, filename))
         # columns in simulation dataset
-        pts = datah5$simulation[, c(datacol[1], datacol[2])]
-        sds = datah5$simulation[, datacol[3]]
+        pts = datah5$data[, c(datacol[1], datacol[2])]
+        sds = datah5$data[, datacol[3]]
+
       }else {
         datah5 <- H5Fopen(file.path(foldername, filename))
 
@@ -79,6 +80,9 @@ run_fun <- function(
         xlim = c(min(pts[, datacol[1]]), max(pts[, datacol[1]]))
         ylim = c(min(pts[, datacol[2]]), max(pts[, datacol[2]]))
       }
+      did <- H5Dopen(datah5, 'data')
+      h5writeAttribute(did, attr = datacol, name = 'datacolumns')
+      H5Dclose(did)
 
       if (process == "sequential") {
         res = Kclust_sequential(

@@ -87,7 +87,7 @@ class PythonToR():
 
     def r_post_processing(self, input_dic):
         r = r_objects.r
-        r.source("./pythonr/postprocessing.R")
+        r.source("./pythonr/postprocessing_hdf5.R")
         numpy2ri.activate()
         r.post_fun(
             newfolder=input_dic.get('directory'),
@@ -113,8 +113,9 @@ class PythonToR():
 
     def check_dataset_type(self, directory):
         onlyfiles = [f for f in listdir(directory) if
-                     isfile(join(directory, f)) and f not in ['sim_parameters.txt', 'run_config.txt']]
-        convertfiles = [f for f in onlyfiles if f.endswith('.txt') or f.endswith('.csv')]
+                     isfile(join(directory, f)) and f not in ['sim_parameters.txt', 'run_config.txt', ]]
+        convertfiles = [f for f in onlyfiles if
+                        (f.endswith('.txt') or f.endswith('.csv')) and not f.endswith('summary.txt')]
         if convertfiles:
             r = r_objects.r
             r.source('./pythonr/convert.R')

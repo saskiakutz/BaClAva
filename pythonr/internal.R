@@ -476,6 +476,11 @@ writeRes_seq <- function(res, datah5file, bestonly = FALSE) { # , rfile, labdir,
       h5write(tmp_matrix, datah5file, 'r_vs_thresh')
     }
   )
+  did <- H5Dopen(datah5file, 'r_vs_thresh')
+  h5writeAttribute(did, attr = colnames(tmp_matrix), name = 'colnames')
+  h5writeAttribute(did, attr = rownames(tmp_matrix), name = 'rownames')
+  H5Dclose(did)
+
   tryCatch({
     h5createGroup(datah5file, 'labels') },
     error = function(e) {

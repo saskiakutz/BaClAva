@@ -22,7 +22,7 @@ class DataFrameModel(qtc.QAbstractTableModel):
             with h5py.File(file, "r") as f:
                 print("Keys: %s" % f.keys())
                 for key in f.keys():
-                    if key not in {'labels', 'r_vs_thresh'}:
+                    if key not in {'labels', 'r_vs_thresh', 'cluster-statistics', 'summary'}:
                         a_group_key = key
                         break
                 print(a_group_key)

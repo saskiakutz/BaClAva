@@ -100,19 +100,19 @@ simulation_fun <- function(newfolder, nclusters, molspercluster, background, xli
 
     tryCatch(
     {
-      h5write(data, filename, "simulation")
+      h5write(data, filename, "data")
     },
       error = function(e) {
-        h5delete(filename, "simulation")
-        h5write(data, filename, "simulation") },
+        h5delete(filename, "data")
+        h5write(data, filename, "data") },
       warning = function(w) {
-        h5delete(filename, "simulation")
-        h5write(data, filename, "simulation")
+        h5delete(filename, "data")
+        h5write(data, filename, "data")
       }
     )
 
     file = H5Fopen(filename)
-    did <- H5Dopen(file, "simulation")
+    did <- H5Dopen(file, "data")
     h5writeAttribute(did, attr = names(data), name = "colnames")
 
     H5Dclose(did)
