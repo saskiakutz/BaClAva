@@ -482,12 +482,16 @@ writeRes_seq <- function(res, datah5file, bestonly = FALSE) { # , rfile, labdir,
   H5Dclose(did)
 
   tryCatch({
-    h5createGroup(datah5file, 'labels') },
+    handle = h5createGroup(datah5file, 'labels') },
     error = function(e) {
       h5delete(datah5file, 'labels')
       h5createGroup(datah5file, 'labels') },
     warning = function(w) { w }
   )
+  if (handle == FALSE) {
+    h5delete(datah5file, 'labels')
+    h5createGroup(datah5file, 'labels')
+  }
 
   if (bestonly)
     is = which.max(res[["scores"]])
