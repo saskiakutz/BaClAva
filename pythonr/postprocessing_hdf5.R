@@ -67,8 +67,8 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
       #if (process == "sequential") {
       r <- h5read(file, 'r_vs_thresh')
       r_attr <- h5readAttributes(file, 'r_vs_thresh')
-      colnames(r) <- r_attr$colnames
-      rownames(r) <- r_attr$rownames
+      colnames(r) <- r_attr$scales
+      rownames(r) <- r_attr$thresholds
       m <- as.matrix(r)
       cs <- colnames(r)
       thr <- rownames(r)
