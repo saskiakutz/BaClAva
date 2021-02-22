@@ -3,10 +3,10 @@
 ## About Bayesian software:
 
 Bayesian software **need a proper name!** is a software tool with a grafic user interface for clustering data from
-single-molecule localisation microscopy (SMLM) with a Bayesian model based on the code published in Rubin-Delaunchy et
-al. [[1]](#1). This tool offers the option to simulate SMLM-like localisations, do the clustering of the localisation
-with a Bayesian model, and post-process single and multiple experiments. Hence, the user will get non-user-biased
-clustering results in a reasonable amount of time.
+single-molecule localisation microscopy (SMLM). It uses a Bayesian engine for user-independent clustering based on the
+code published in Rubin-Delaunchy et al. [[1]](#1). This tool offers the option to simulate SMLM-like localisations, do
+the clustering of the localisation with a Bayesian model, and post-process single and multiple experiments. Hence, the
+user will get non-user-biased clustering results in a reasonable amount of time.
 
 ## Table of content:
 
@@ -26,12 +26,15 @@ clustering results in a reasonable amount of time.
 
 # Software overview:
 
-The software offers three analysis modules. With the first module allows to simulated datasets. By uploading
-localisation tables of these simulations or SMLM experiments, the second module calculates their cluster memberships and
-Bayesian scores for the parameters' chosen range of the parameters. The calculations for the cluster plots and
-additional cluster parameters take place in the third module. Each module can be used independently.
+The software offers three analysis modules all in a single GUI. The first module allows to simulated datasets. By
+uploading localisation tables of these simulations or SMLM experiments, the second module calculates their cluster
+memberships and Bayesian scores them for the input parameters' chosen ranges. The calculations for the cluster plots and
+additional cluster parameters, i.e. the cluster area or cluster density, take place in the third module. Each module can
+be used independently.
 
 ## Module 1: Simulation tool
+
+![alt text](readme_images/simulation.png "Screenshot of the simulation module")
 
 The first module of the Bayesian software, the simulation tool, enables the user to simulate simple Gaussian-like
 clusters. Upon starting the simulation tool, the user can adjust various simulation parameters, the number of datasets,
@@ -42,19 +45,21 @@ sd') and its label ('clusterID') are stored as a dataset ('data') in a hdf5 file
 
 ## Module 2: Bayesian calculations
 
+![alt text](readme_images/run.png "Screenshot of the Bayesian module")
+
 The clustering of either simulated or experimental data happens in the second module. The input data for this module
 needs to be a localisation table. For experimental data and simulation run in other programs, this table can come from
-any localisation application ( e.g. SMAP or ?)  as long as the table contains the 2D coordinates and the localisations'
-standard deviations. The software can read in data from CSV and text files, but the program copies the data to a hdf5
-file for further use.
+any localisation application ( e.g. SMAP or Thunderstorm)  as long as the table contains the 2D coordinates and the
+localisations' standard deviations. The software can read in data from CSV and text files, however the program copies
+the data to a hdf5 file for further use.
 
-In the GUI, the user can choose their preferred clustering algorithm (Ripley's K based clustering, DBSCAN,
+In the GUI, the user can choose their preferred clustering algorithm (Ripley's-K-based clustering, DBSCAN,
 ToMATo [[2]](#2)) and other parameters. The radius and threshold sequences, and their step width are essential because
-they determine the Bayesian engine's parameter space. Note here that it has been shown that Ripley's K based clustering
+they determine the Bayesian engine's parameter space. Note here that it has been shown that Ripley's-K-based clustering
 and DBSCAN clustering are more sensitive to the parameter selection compared to ToMATo [[2]](#2). Instead of choosing
 single datasets for the analysis, the user chooses an entire folder of datasets by picking a random dataset within this
-folder. The GUI then helps the user select the correct columns for the analysis by displaying the selected dataset's
-top. The program loops through the given radius and threshold sequences after the user presses the start button. For
+folder. The GUI then helps the user select the correct columns for the analysis by displaying the selected dataset's top
+part. The program loops through the given radius and threshold sequences after the user presses the start button. For
 each set of parameters, the program clusters the localisations and assigns to each localisation a (cluster) label. Then,
 the software scores each calculated cluster result against a Gaussian model. The scores ('r_vs_thresh') and labels are
 stored in the hdf5 file along with the dataset information.
@@ -64,13 +69,15 @@ clustering calculations. Note here that this option is not available on Windows 
 
 ## Module 3: Bayesian postprocessing
 
+![alt text](readme_images/post.png "Screenshot of the postprocessing module")
+
 In the third module of this software for Bayesian clustering, various clustering parameters, e.i. the area of the
 clusters or their density, are calculated for the best cluster parameter set. This application can analyse a whole
 folder of datasets with the same experimental conditions, therefore offers histograms summarising this condition. The
-GUI displays a scatter plot clustered localisations of a random dataset in the folder and histograms for the different
-cluster parameters. The software automatically stores the data for these plots in the hdf5 file. However, the user must
-tell the software whether it should automatically create and store the corresponding scatterplots and histograms as png,
-eps and pdf files. Since the GUI displays the plotted data, the user can adjust and store them themself.
+GUI displays the clustered localisations of a random dataset in the folder as a scatter plot and histograms for the
+different cluster parameters. The software automatically stores the data for these plots in the hdf5 file. However, the
+user must tell the software whether it should automatically create and store the corresponding scatterplots and
+histograms as png, eps and pdf files. Since the GUI displays the plotted data, the user can also adjust and store them.
 
 ## Data format
 
