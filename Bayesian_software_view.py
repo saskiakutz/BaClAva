@@ -41,6 +41,3 @@ class View_software(qtw.QWidget):
         self.main_layout.addLayout(tab_layout)
 
         self.setLayout(self.main_layout)
-
-    # TODO: multimerisation as a checkbox option, if chosen: option to state number of molecules, proportion multimers,
-    # import stored sim_parameters.txt
