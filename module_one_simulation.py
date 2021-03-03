@@ -8,6 +8,7 @@ from sim.model_simulation_module import Model_sim
 
 class MainWindow_simulation(qtw.QWidget):
     finished_sim = qtc.pyqtSignal(str)
+    start_sim = qtc.pyqtSignal(str)
 
     # noinspection PyArgumentList,PyTypeChecker
     def __init__(self):
@@ -27,6 +28,7 @@ class MainWindow_simulation(qtw.QWidget):
 
         self.view.submitted.connect(self.model.set_data)
         self.view.startsim.connect(self.sim_thread.start)
+        self.view.startsim.connect(self.on_started)
         self.view.submitted.connect(self.model.print_income)
         self.model.error.connect(self.view.show_error)
 
@@ -39,6 +41,10 @@ class MainWindow_simulation(qtw.QWidget):
         #
         # End main UI code
         self.show()
+
+    def on_started(self):
+        # self.view.start_btn.setEnabled(False)
+        self.start_sim.emit('Simulating clusters.')
 
     def on_finished(self):
         # self.statusBar().showMessage('Simulation finished.')

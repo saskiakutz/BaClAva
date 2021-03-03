@@ -7,7 +7,8 @@ from run.model_run_module import Model_run
 
 
 class MainWindow_Bayesian(qtw.QWidget):
-    statusbar = qtc.pyqtSignal(str)
+    start_bayesian = qtc.pyqtSignal(str)
+    finished_bayesian = qtc.pyqtSignal(str)
 
     def __init__(self):
         """MainWindow constructor"""
@@ -36,16 +37,12 @@ class MainWindow_Bayesian(qtw.QWidget):
         self.show()
 
     def on_start(self):
-        self.statusbar.emit('Bayesian clustering running.')
+        self.start_bayesian.emit('Bayesian clustering running.')
 
     def on_finished(self):
-        self.run_model.finished.connect(self.on_finished)
-        self.statusbar.emit('Bayesian clustering finished.')
-        # status_bar = qtw.QStatusBar()
-        # self.setStatusBar(status_bar)
-        # status_bar.showMessage('Bayesian clustering')
-        # self.statusBar().showMessage('Bayesian clustering finished.')
-        # self.run_view.start_btn.setEnabled(True)
+        # self.run_model.finished.connect(self.on_finished)
+        self.run_view.start_btn.setEnabled(True)
+        self.finished_bayesian.emit('Bayesian clustering finished.')
 
 
 if __name__ == '__main__':
