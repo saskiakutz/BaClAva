@@ -18,7 +18,6 @@ class Main_Window(qtw.QMainWindow):
         menubar = self.menuBar()
         file_menu = menubar.addMenu('File')
         help_menu = menubar.addMenu('Help')
-        help_action = help_menu.addAction("Help")
         quit_action = file_menu.addAction("Quit", self.close)
 
         self.main_view = View_software()
@@ -58,7 +57,9 @@ class Main_Window(qtw.QMainWindow):
         self.status_bar = qtw.QStatusBar()
         self.setStatusBar(self.status_bar)
         self.status_bar.showMessage('Select a module.')
-        # TODO: status_bar update messages
+
+        help_action = qtw.QAction('Help', self, triggered=lambda: self.statusBar().showMessage('Sorry, no help'))
+        help_menu.addAction(help_action)
 
         # End main UI code
         self.show()
