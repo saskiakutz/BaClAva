@@ -52,8 +52,7 @@ class MainWindow_post(qtw.QWidget):
         self.post_view.start_btn.setEnabled(True)
         self.finished_post.emit('Post processing finished.')
 
-
-if __name__ == '__main__':
-    app = qtw.QApplication(sys.argv)
-    mw = MainWindow()
-    sys.exit(app.exec())
+# if __name__ == '__main__':
+#     app = qtw.QApplication(sys.argv)
+#     mw = MainWindow_post()
+#     sys.exit(app.exec())
