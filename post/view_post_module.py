@@ -17,7 +17,7 @@ from matplotlib.figure import Figure
 
 class MplCanvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=5, dpi=100):
-        self.fig = Figure(figsize=(width, height), dpi=dpi)
+        self.fig = Figure(figsize=(width, height), dpi=dpi, tight_layout=True)
         self.axes = self.fig.add_subplot(111)
         super(MplCanvas, self).__init__(self.fig)
 
@@ -238,6 +238,7 @@ class View_post(qtw.QWidget):
         colour = self.scatterplot_colour((data_scatter['labels']))
         canvas.axes.scatter(x=data_scatter['x'], y=data_scatter['y'], s=size_pt, color=colour, alpha=0.9,
                             edgecolors="none")
+
         canvas.draw()
 
     def scatterplot_colour(self, labels):
