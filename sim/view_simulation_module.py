@@ -13,11 +13,11 @@ class View_sim(qtw.QWidget):
         super().__init__()
         self.setLayout(qtw.QFormLayout())
 
-        heading = qtw.QLabel("Simulation")
-        self.layout().addRow(heading)
-        heading_font = qtg.QFont('Arial', 32, qtg.QFont.Bold)
-        heading_font.setStretch(qtg.QFont.ExtraExpanded)
-        heading.setFont(heading_font)
+        # heading = qtw.QLabel("Simulation")
+        # self.layout().addRow(heading)
+        # heading_font = qtg.QFont('Arial', 20, qtg.QFont.Bold)
+        # heading_font.setStretch(qtg.QFont.ExtraExpanded)
+        # heading.setFont(heading_font)
 
         self.roi_x_min = qtw.QSpinBox(
             self,

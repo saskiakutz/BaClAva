@@ -39,11 +39,11 @@ class View_post(qtw.QWidget):
         main_layout = qtw.QVBoxLayout()
 
         parameter_layout = qtw.QFormLayout()
-        heading = qtw.QLabel("Post Processing")
-        parameter_layout.addRow(heading)
-        heading_font = qtg.QFont('Arial', 32, qtg.QFont.Bold)
-        heading_font.setStretch(qtg.QFont.ExtraExpanded)
-        heading.setFont(heading_font)
+        # heading = qtw.QLabel("Post Processing")
+        # parameter_layout.addRow(heading)
+        # heading_font = qtg.QFont('Arial', 32, qtg.QFont.Bold)
+        # heading_font.setStretch(qtg.QFont.ExtraExpanded)
+        # heading.setFont(heading_font)
 
         self.dir_btn = qtw.QPushButton("Select data directory")
         self.dir_btn.clicked.connect(self.choose_file)
@@ -202,6 +202,8 @@ class View_post(qtw.QWidget):
 
         if len(data_in) > 1:
             bw = 2 * np.subtract.reduce(np.percentile(data_in, [75, 25])) / len(data_in) ** (1 / 3)
+            if bw == 0:
+                bw = 1
             canvas.axes.hist(data_in, bins=np.arange(min(data_in), max(data_in) + bw, bw))
         else:
             canvas.axes.hist(data_in, bins=1)
