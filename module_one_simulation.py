@@ -53,8 +53,7 @@ class MainWindow_simulation(qtw.QWidget):
         self.view.start_btn.setEnabled(True)
         self.finished_sim.emit('Simulation finished.')
 
-
-if __name__ == '__main__':
-    app = qtw.QApplication(sys.argv)
-    mw = MainWindow_simulation()
-    sys.exit(app.exec())
+# if __name__ == '__main__':
+#     app = qtw.QApplication(sys.argv)
+#     mw = MainWindow_simulation()
+#     sys.exit(app.exec())
