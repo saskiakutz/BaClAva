@@ -39,7 +39,7 @@ using parallel computing. For ease of use, each module can also be used independ
 
 ## Module 1: Simulation tool
 
-![alt text](readme_images/simulation.png "Screenshot of the simulation module")
+![alt text](readme_images/sim_20.png "Screenshot of the simulation module")
 
 The first module of the Bayesian software, the simulation tool, enables the user to simulate simple Gaussian-like
 clusters. Upon starting the simulation tool, the user is prompted to adjust several simulation parameters, the number of
@@ -50,7 +50,7 @@ simulation, the final table of localisations with the 2D coordinates (‘x’, �
 
 ## Module 2: Bayesian calculations
 
-![alt text](readme_images/run.png "Screenshot of the Bayesian module")
+![alt text](readme_images/run_20.png "Screenshot of the Bayesian module")
 
 The clustering of either simulated or experimental data takes place in the second module. The input data for this module
 must be a localisation table of appropriate format. For experimental data and simulations run in other programs, this
@@ -74,7 +74,7 @@ the clustering calculations. Note here that this option is not available on Wind
 
 ## Module 3: Bayesian postprocessing
 
-![alt text](readme_images/post.png "Screenshot of the postprocessing module")
+![alt text](readme_images/post_20.png "Screenshot of the postprocessing module")
 
 In the third module of this software for Bayesian clustering, various clustering parameters, e.i. the area of the
 clusters or their density, are calculated for the best cluster parameter set. This application can analyse an entire
