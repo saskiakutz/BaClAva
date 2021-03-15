@@ -17,7 +17,7 @@ from matplotlib.figure import Figure
 
 class MplCanvas(FigureCanvas):
     def __init__(self, parent=None, width=5, height=5, dpi=100):
-        self.fig = Figure(figsize=(width, height), dpi=dpi)
+        self.fig = Figure(figsize=(width, height), dpi=dpi, tight_layout=True)
         self.axes = self.fig.add_subplot(111)
         super(MplCanvas, self).__init__(self.fig)
 
@@ -31,6 +31,7 @@ class MplCanvas(FigureCanvas):
 class View_post(qtw.QWidget):
     submitted = qtc.pyqtSignal(object)
     startpost = qtc.pyqtSignal()
+    cancel_signal = qtc.pyqtSignal()
 
     # noinspection PyArgumentList
     def __init__(self):
@@ -39,11 +40,11 @@ class View_post(qtw.QWidget):
         main_layout = qtw.QVBoxLayout()
 
         parameter_layout = qtw.QFormLayout()
-        heading = qtw.QLabel("Post Processing")
-        parameter_layout.addRow(heading)
-        heading_font = qtg.QFont('Arial', 32, qtg.QFont.Bold)
-        heading_font.setStretch(qtg.QFont.ExtraExpanded)
-        heading.setFont(heading_font)
+        # heading = qtw.QLabel("Post Processing")
+        # parameter_layout.addRow(heading)
+        # heading_font = qtg.QFont('Arial', 32, qtg.QFont.Bold)
+        # heading_font.setStretch(qtg.QFont.ExtraExpanded)
+        # heading.setFont(heading_font)
 
         self.dir_btn = qtw.QPushButton("Select data directory")
         self.dir_btn.clicked.connect(self.choose_file)
@@ -88,7 +89,8 @@ class View_post(qtw.QWidget):
         self.start_btn.setDisabled(True)
         self.dir_line.textChanged.connect(lambda x: self.start_btn.setDisabled(x == ''))
         self.cancel_btn = qtw.QPushButton(
-            "cancel"  # TODO: cancel action
+            "cancel",
+            clicked=self.cancel_signal.emit
         )
 
         button_layout.addWidget(self.start_btn)
@@ -202,6 +204,8 @@ class View_post(qtw.QWidget):
 
         if len(data_in) > 1:
             bw = 2 * np.subtract.reduce(np.percentile(data_in, [75, 25])) / len(data_in) ** (1 / 3)
+            if bw == 0:
+                bw = 1
             canvas.axes.hist(data_in, bins=np.arange(min(data_in), max(data_in) + bw, bw))
         else:
             canvas.axes.hist(data_in, bins=1)
@@ -236,6 +240,7 @@ class View_post(qtw.QWidget):
         colour = self.scatterplot_colour((data_scatter['labels']))
         canvas.axes.scatter(x=data_scatter['x'], y=data_scatter['y'], s=size_pt, color=colour, alpha=0.9,
                             edgecolors="none")
+
         canvas.draw()
 
     def scatterplot_colour(self, labels):

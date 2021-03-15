@@ -137,9 +137,11 @@ run_fun <- function(
         )
       }
       H5Fclose(datah5)
+      gc()
     })
   })
   h5closeAll()
+  return(print("done"))
 }
 
 

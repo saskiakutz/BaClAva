@@ -49,7 +49,7 @@ hist_plot <- function(res, nexpname, plotcreation) {
                    height = 5)
         },
           warning = function(w) {
-            bw <- 5
+            bw <- 1
             ggplot() +
               aes(datavec) +
               geom_histogram(binwidth = bw) +

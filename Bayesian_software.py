@@ -18,11 +18,19 @@ class Main_Window(qtw.QMainWindow):
         menubar = self.menuBar()
         file_menu = menubar.addMenu('File')
         help_menu = menubar.addMenu('Help')
-        help_action = help_menu.addAction("Help")
         quit_action = file_menu.addAction("Quit", self.close)
 
         self.main_view = View_software()
         self.setCentralWidget(self.main_view)
+        # self.simulation = MainWindow_simulation()
+        # self.simulation.finished_sim.connect(self.set_statusbar)
+        self.main_view.main_simulation.start_sim.connect(self.set_statusbar)
+        self.main_view.main_simulation.finished_sim.connect(self.set_statusbar)
+        self.main_view.main_run.start_bayesian.connect(self.set_statusbar)
+        self.main_view.main_run.finished_bayesian.connect(self.set_statusbar)
+        self.main_view.main_post.started_post.connect(self.set_statusbar)
+        self.main_view.main_post.finished_post.connect(self.set_statusbar)
+
         # self.tab_widget = qtw.QTabWidget()
         # self.setCentralWidget(self.tab_widget)
 
@@ -46,18 +54,19 @@ class Main_Window(qtw.QMainWindow):
         # self.subwidget_3.layout().addWidget(self.main_post)
         # # self.tab_widget.currentChanged(self.set_statusbar)
 
-        status_bar = qtw.QStatusBar()
-        self.setStatusBar(status_bar)
-        status_bar.showMessage('cluster simulation')
-        # TODO: status_bar update messages
+        self.status_bar = qtw.QStatusBar()
+        self.setStatusBar(self.status_bar)
+        self.status_bar.showMessage('Select a module.')
+
+        help_action = qtw.QAction('Help', self, triggered=lambda: self.statusBar().showMessage('Sorry, no help'))
+        help_menu.addAction(help_action)
 
         # End main UI code
         self.show()
 
     @qtc.pyqtSlot(str)
     def set_statusbar(self, message):
-        self.message = message
-        self.statusBar().showMessage(self.message)
+        self.status_bar.showMessage(message)
 
     # def on_finished(self):
     #     self.statusBar().showMessage('Simulation finished.')
@@ -73,8 +82,14 @@ class MainWindow(qtw.QMainWindow):
         self.view = Main_Window()
         self.setWindowTitle('Bayesian Software')
         self.setCentralWidget(self.view)
+
         # End main UI code
         self.show()
+
+    # def set_statusbar(self):
+    #     # self.message = message
+    #     print('Simulation finished')
+    #     self.view.status_bar.showMessage('Simulation finished')
 
 
 if __name__ == '__main__':

@@ -7,6 +7,8 @@ from post.model_post_module import Model_post
 
 
 class MainWindow_post(qtw.QWidget):
+    started_post = qtc.pyqtSignal(str)
+    finished_post = qtc.pyqtSignal(str)
 
     def __init__(self):
         """MainWindow constructor"""
@@ -25,12 +27,14 @@ class MainWindow_post(qtw.QWidget):
 
         self.post_view.submitted.connect(self.post_model.set_data)
         self.post_view.startpost.connect(self.post_thread.start)
+        self.post_view.startpost.connect(self.on_started)
         self.post_view.submitted.connect(self.post_model.check_income)
         self.post_model.error.connect(self.post_view.show_error)
 
         self.post_model.finished.connect(self.on_finished)
         self.post_model.finished.connect(self.post_view.show_data)
 
+        self.post_view.cancel_signal.connect(self.on_cancel)
         # status_bar = qtw.QStatusBar()
         # self.setStatusBar(status_bar)
         # status_bar.showMessage('Post processing')
@@ -39,12 +43,23 @@ class MainWindow_post(qtw.QWidget):
         # End main UI code
         self.show()
 
-    def on_finished(self):
-        # self.statusBar().showMessage('Post processing finished')
+    def on_started(self):
+        self.started_post.emit('Post processing.')
+
+    def on_cancel(self):
+        self.post_thread.quit()
+        self.post_thread.deleteLater()
         self.post_view.start_btn.setEnabled(True)
+        self.finished_post.emit('Post processing cancelled.')
 
+    def on_finished(self):
+        # self.post_model.exit()
+        self.post_thread.quit()
+        self.post_thread.deleteLater()
+        self.post_view.start_btn.setEnabled(True)
+        self.finished_post.emit('Post processing finished.')
 
-if __name__ == '__main__':
-    app = qtw.QApplication(sys.argv)
-    mw = MainWindow()
-    sys.exit(app.exec())
+# if __name__ == '__main__':
+#     app = qtw.QApplication(sys.argv)
+#     mw = MainWindow_post()
+#     sys.exit(app.exec())

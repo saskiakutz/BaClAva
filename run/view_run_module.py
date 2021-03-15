@@ -22,11 +22,11 @@ class View_run(qtw.QWidget):
         main_layout = qtw.QVBoxLayout()
 
         parameter_layout = qtw.QFormLayout()
-        heading = qtw.QLabel("Bayesian Clustering")
-        parameter_layout.addRow(heading)
-        heading_font = qtg.QFont('Arial', 32, qtg.QFont.Bold)
-        heading_font.setStretch(qtg.QFont.ExtraExpanded)
-        heading.setFont(heading_font)
+        # heading = qtw.QLabel("Bayesian Clustering")
+        # parameter_layout.addRow(heading)
+        # heading_font = qtg.QFont('Arial', 32, qtg.QFont.Bold)
+        # heading_font.setStretch(qtg.QFont.ExtraExpanded)
+        # heading.setFont(heading_font)
 
         self.roi_x_min = qtw.QSpinBox(
             self,
@@ -145,7 +145,7 @@ class View_run(qtw.QWidget):
         datasources = ('simulation', 'experiment')
         self.b_inputs["datasource"].addItems(datasources)
 
-        clustermethods = ("Ripley' K based", "DBSCAN", "ToMATo")
+        clustermethods = ("ToMATo", "DBSCAN", "Ripley' K based")
         self.b_inputs["clustermethod"].addItems(clustermethods)
 
         if os.name == 'nt':
