@@ -31,6 +31,7 @@ class MplCanvas(FigureCanvas):
 class View_post(qtw.QWidget):
     submitted = qtc.pyqtSignal(object)
     startpost = qtc.pyqtSignal()
+    cancel_signal = qtc.pyqtSignal()
 
     # noinspection PyArgumentList
     def __init__(self):
@@ -88,7 +89,8 @@ class View_post(qtw.QWidget):
         self.start_btn.setDisabled(True)
         self.dir_line.textChanged.connect(lambda x: self.start_btn.setDisabled(x == ''))
         self.cancel_btn = qtw.QPushButton(
-            "cancel"  # TODO: cancel action
+            "cancel",
+            clicked=self.cancel_signal.emit
         )
 
         button_layout.addWidget(self.start_btn)

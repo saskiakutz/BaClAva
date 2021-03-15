@@ -34,7 +34,7 @@ class MainWindow_post(qtw.QWidget):
         self.post_model.finished.connect(self.on_finished)
         self.post_model.finished.connect(self.post_view.show_data)
 
-
+        self.post_view.cancel_signal.connect(self.on_cancel)
         # status_bar = qtw.QStatusBar()
         # self.setStatusBar(status_bar)
         # status_bar.showMessage('Post processing')
@@ -46,7 +46,14 @@ class MainWindow_post(qtw.QWidget):
     def on_started(self):
         self.started_post.emit('Post processing.')
 
+    def on_cancel(self):
+        self.post_thread.quit()
+        self.post_thread.deleteLater()
+        self.post_view.start_btn.setEnabled(True)
+        self.finished_post.emit('Post processing cancelled.')
+
     def on_finished(self):
+        # self.post_model.exit()
         self.post_thread.quit()
         self.post_thread.deleteLater()
         self.post_view.start_btn.setEnabled(True)
