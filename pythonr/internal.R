@@ -1,4 +1,4 @@
-package_required <- function() {
+
   if (!require(pacman, quietly = TRUE))
     install.packages("pacman")
   # if (!require(devtools))
@@ -24,7 +24,6 @@ package_required <- function() {
     "rhdf5"
   )
   pacman::p_load_gh("lucabaronti/RSMLM")
-}
 
 mcgaussprec <- function(pts,
                         sds,

@@ -21,7 +21,7 @@ class MplCanvas(FigureCanvas):
         self.axes = self.fig.add_subplot(111)
         super(MplCanvas, self).__init__(self.fig)
 
-        FigureCanvas.setMinimumSize(self, 200, 370)
+        FigureCanvas.setMinimumSize(self, 100, 185)
         FigureCanvas.setSizePolicy(self,
                                    qtw.QSizePolicy.MinimumExpanding,
                                    qtw.QSizePolicy.MinimumExpanding)
