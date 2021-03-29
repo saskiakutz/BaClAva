@@ -161,7 +161,6 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
         ds <- H5Dopen(file, 'cluster-statistics')
         h5writeAttribute(ds, attr = names(trans_s), name = 'colnames')
         H5Dclose(ds)
-        wfile <- file.path(paste0(expname, "/cluster-statistics.txt", sep = ""))
       }
 
       if (makeplot == TRUE) {
