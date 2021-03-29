@@ -20,72 +20,72 @@ run_fun <- function(
   source("./pythonr/internal.R")
   l_ply(newfolder, function(foldername) {
     if (bayes_model == "Gaussian(prec)") {
-      model = bayes_model
-      histbins = c(10, 30, 50, 70, 90, 110, 130, 150, 170, 190, 210, 230, 250, 270, 290, 310, 330, 350, 370, 390, 410, 430, 450, 470, 490, 510, 530, 550, 570, 590)
-      histvalues = c(8, 57, 104, 130, 155, 168, 197, 205, 216, 175, 123, 91, 74, 32, 24, 22, 12, 11, 6, 5, 3, 5, 1, 3, 0, 4, 0, 1, 1, 1)
-      rseq = seq(rpar[1], rpar[2], by = rpar[3])
-      thseq = seq(thpar[1], thpar[2], by = thpar[3])
+      model <- bayes_model
+      histbins <- c(10, 30, 50, 70, 90, 110, 130, 150, 170, 190, 210, 230, 250, 270, 290, 310, 330, 350, 370, 390, 410, 430, 450, 470, 490, 510, 530, 550, 570, 590)
+      histvalues <- c(8, 57, 104, 130, 155, 168, 197, 205, 216, 175, 123, 91, 74, 32, 24, 22, 12, 11, 6, 5, 3, 5, 1, 3, 0, 4, 0, 1, 1, 1)
+      rseq <- seq(rpar[1], rpar[2], by = rpar[3])
+      thseq <- seq(thpar[1], thpar[2], by = thpar[3])
       if (length(bayes_background) == 0 |
         length(dirichlet_alpha) == 0) {
-        useplabel = FALSE
-        bayes_background = NULL
-        dirichlet_alpha = NULL
+        useplabel <- FALSE
+        bayes_background <- NULL
+        dirichlet_alpha <- NULL
       }
       else {
-        useplabel = TRUE
+        useplabel <- TRUE
       }
       if (parallel == 0) {
-        process = "sequential"
+        process <- "sequential"
       }
       else {
-        process = "parallel"
+        process <- "parallel"
       }
     }
     else {
       stop("Haven't implemented anything else!")
     }
 
-    o = order(histbins)
-    histbins = histbins[o]
-    histvalues = histvalues[o]
-    f = approxfun(histbins, histvalues, yleft = histvalues[1],
-                  yright = histvalues[length(histvalues)])
-    cst = integrate(f, lower = histbins[o[1]], upper = histbins[length(histbins)])$value
+    o <- order(histbins)
+    histbins <- histbins[o]
+    histvalues <- histvalues[o]
+    f <- approxfun(histbins, histvalues, yleft = histvalues[1],
+                   yright = histvalues[length(histvalues)])
+    cst <- integrate(f, lower = histbins[o[1]], upper = histbins[length(histbins)])$value
 
     psd <- function(sd) {
       log(f(sd)) - log(cst)
     }
 
-    minsd = histbins[1]
-    maxsd = histbins[length(histbins)]
+    minsd <- histbins[1]
+    maxsd <- histbins[length(histbins)]
 
-    datasets = list.files(file.path(foldername), pattern = "*.h5")
-    datasets = datasets[datasets != "../run_config.txt"]
+    datasets <- list.files(file.path(foldername), pattern = "*.h5")
+    datasets <- datasets[datasets != "../run_config.txt"]
     # datasets = datasets[datasets != "run_config.txt"]
 
     l_ply(file.path(datasets), function(filename) {
       if (datasource == "simulation") {
         datah5 <- H5Fopen(file.path(foldername, filename))
         # columns in simulation dataset
-        pts = datah5$data[, c(datacol[1], datacol[2])]
-        sds = datah5$data[, datacol[3]]
+        pts <- datah5$data[, c(datacol[1], datacol[2])]
+        sds <- datah5$data[, datacol[3]]
 
       }else {
         datah5 <- H5Fopen(file.path(foldername, filename))
 
         # columns in SMAP dataset
-        pts = datah5$data[, datacol[1]:datacol[2]]
-        sds = datah5$data[, datacol[3]]
+        pts <- datah5$data[, datacol[1]:datacol[2]]
+        sds <- datah5$data[, datacol[3]]
         # limits of dataset set by the min/max of the localisations
-        xlim = c(min(pts[, datacol[1]]), max(pts[, datacol[1]]))
-        ylim = c(min(pts[, datacol[2]]), max(pts[, datacol[2]]))
+        xlim <- c(min(pts[, datacol[1]]), max(pts[, datacol[1]]))
+        ylim <- c(min(pts[, datacol[2]]), max(pts[, datacol[2]]))
       }
       did <- H5Dopen(datah5, 'data')
       h5writeAttribute(did, attr = datacol, name = 'datacolumns')
       H5Dclose(did)
 
       if (process == "sequential") {
-        res = Kclust_sequential(
+        res <- Kclust_sequential(
           pts = pts,
           sds = sds,
           xlim = xlim,
@@ -105,7 +105,7 @@ run_fun <- function(
         writeRes_seq(res, datah5)
       }
       else {
-        res = Kclust_parallel(
+        res <- Kclust_parallel(
           pts = pts,
           sds = sds,
           xlim = xlim,
@@ -137,19 +137,19 @@ run_fun <- function(
         )
       }
       H5Fclose(datah5)
-      gc()
     })
   })
   h5closeAll()
   return(print("done"))
+  gc()
 }
 
 
-test_function <- function(input_para, my_packages) {
-  # source("internal.R")
-  # tic("test_run")
-  #lapply(my_packages, require(quietly = TRUE), character.only = TRUE)
-  temp <- length(input_para)
-  # toc()
-  return(temp)
-}
+# test_function <- function(input_para, my_packages) {
+#   # source("internal.R")
+#   # tic("test_run")
+#   #lapply(my_packages, require(quietly = TRUE), character.only = TRUE)
+#   temp <- length(input_para)
+#   # toc()
+#   return(temp)
+# }
