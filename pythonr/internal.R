@@ -35,12 +35,12 @@ mcgaussprec <- function(pts,
                         minsd = 0.1,
                         maxsd = 100,
                         grid = 100) {
-  N = dim(pts)[1]
+  N <- dim(pts)[1]
   fsd <- Vectorize(function(sd) {
-    wts = 1 / (sd^2 + sds^2)
-    tildeN = sum(wts)
-    mu = c(sum(wts * pts[, 1]) / tildeN, sum(wts * pts[, 2]) / tildeN)
-    totdist = sum(c(wts * (pts[, 1] - mu[1])^2, wts * (pts[, 2] - mu[2])^
+    wts <- 1 / (sd^2 + sds^2)
+    tildeN <- sum(wts)
+    mu <- c(sum(wts * pts[, 1]) / tildeN, sum(wts * pts[, 2]) / tildeN)
+    totdist <- sum(c(wts * (pts[, 1] - mu[1])^2, wts * (pts[, 2] - mu[2])^
       2))
 
     ##x-axis
@@ -58,23 +58,23 @@ mcgaussprec <- function(pts,
       psd(sd)
   })
   ##discrete prior:
-  x = seq(minsd, maxsd, length = grid)[-1]
+  x <- seq(minsd, maxsd, length = grid)[-1]
 
-  values = fsd(x)
-  dx = x[2] - x[1]
-  m = max(values)
-  int = sum(exp(values - m)) * dx
+  values <- fsd(x)
+  dx <- x[2] - x[1]
+  m <- max(values)
+  int <- sum(exp(values - m)) * dx
 
   log(int) + m #return argument
 }
 
 
 mkcols <- function(labels) {
-  t = table(labels)
-  cnames = names(t[t > 1])
-  colors = sample(rainbow(length(cnames)))
-  s = sapply(labels, function(l) {
-    i = which(names(t) == l)
+  t <- table(labels)
+  cnames <- names(t[t > 1])
+  colors <- sample(rainbow(length(cnames)))
+  s <- sapply(labels, function(l) {
+    i <- which(names(t) == l)
 
     if (t[i] == 1) {
       "grey"
@@ -87,61 +87,61 @@ mkcols <- function(labels) {
 }
 
 toroid <- function(pts, xlim, ylim, range) {
-  xd = xlim[2] - xlim[1]
-  yd = ylim[2] - ylim[1]
-  R = pts[pts[, 1] >= (xlim[2] - range), , drop = FALSE]
-  Rshift = t(apply(R, 1, function(v) {
+  xd <- xlim[2] - xlim[1]
+  yd <- ylim[2] - ylim[1]
+  R <- pts[pts[, 1] >= (xlim[2] - range), , drop = FALSE]
+  Rshift <- t(apply(R, 1, function(v) {
     v - c(xd, 0)
   }))
-  L = pts[pts[, 1] <= range, , drop = FALSE]
-  Lshift = t(apply(L, 1, function(v) {
+  L <- pts[pts[, 1] <= range, , drop = FALSE]
+  Lshift <- t(apply(L, 1, function(v) {
     v + c(xd, 0)
   }))
-  U = pts[pts[, 2] >= ylim[2] - range, , drop = FALSE]
-  Ushift = t(apply(U, 1, function(v) {
+  U <- pts[pts[, 2] >= ylim[2] - range, , drop = FALSE]
+  Ushift <- t(apply(U, 1, function(v) {
     v - c(0, yd)
   }))
-  D = pts[pts[, 2] <= range, , drop = FALSE]
-  Dshift = t(apply(D, 1, function(v) {
+  D <- pts[pts[, 2] <= range, , drop = FALSE]
+  Dshift <- t(apply(D, 1, function(v) {
     v + c(0, yd)
   }))
 
-  LU = pts[(pts[, 1] <= range) &
-             (pts[, 2] >= ylim[2] - range), , drop = FALSE]
-  LUshift = t(apply(LU, 1, function(v) {
+  LU <- pts[(pts[, 1] <= range) &
+              (pts[, 2] >= ylim[2] - range), , drop = FALSE]
+  LUshift <- t(apply(LU, 1, function(v) {
     v + c(xd, -yd)
   }))
-  RU = pts[(pts[, 1] >= xlim[2] - range) &
-             (pts[, 2] >= ylim[2] - range), , drop = FALSE]
-  RUshift = t(apply(RU, 1, function(v) {
+  RU <- pts[(pts[, 1] >= xlim[2] - range) &
+              (pts[, 2] >= ylim[2] - range), , drop = FALSE]
+  RUshift <- t(apply(RU, 1, function(v) {
     v + c(-xd, -yd)
   }))
-  RD = pts[(pts[, 1] >= xlim[2] - range) &
-             (pts[, 2] <= range), , drop = FALSE]
-  RDshift = t(apply(RD, 1, function(v) {
+  RD <- pts[(pts[, 1] >= xlim[2] - range) &
+              (pts[, 2] <= range), , drop = FALSE]
+  RDshift <- t(apply(RD, 1, function(v) {
     v + c(-xd, yd)
   }))
-  LD = pts[(pts[, 1] <= range) &
-             (pts[, 2] <= range), , drop = FALSE]
-  LDshift = t(apply(LD, 1, function(v) {
+  LD <- pts[(pts[, 1] <= range) &
+              (pts[, 2] <= range), , drop = FALSE]
+  LDshift <- t(apply(LD, 1, function(v) {
     v + c(xd, yd)
   }))
   if (length(Rshift) > 0)
-    pts = rbind(pts, Rshift)
+    pts <- rbind(pts, Rshift)
   if (length(Lshift) > 0)
-    pts = rbind(pts, Lshift)
+    pts <- rbind(pts, Lshift)
   if (length(Ushift) > 0)
-    pts = rbind(pts, Ushift)
+    pts <- rbind(pts, Ushift)
   if (length(Dshift) > 0)
-    pts = rbind(pts, Dshift)
+    pts <- rbind(pts, Dshift)
   if (length(LUshift) > 0)
-    pts = rbind(pts, LUshift)
+    pts <- rbind(pts, LUshift)
   if (length(RUshift) > 0)
-    pts = rbind(pts, RUshift)
+    pts <- rbind(pts, RUshift)
   if (length(RDshift) > 0)
-    pts = rbind(pts, RDshift)
+    pts <- rbind(pts, RDshift)
   if (length(LDshift) > 0)
-    pts = rbind(pts, LDshift)
+    pts <- rbind(pts, LDshift)
   pts
 }
 
@@ -162,18 +162,18 @@ Kclust_parallel <- function(pts,
                             report = F,
                             clustermethod = "Ripley' K based",
                             numCores = 1) {
-  N = dim(pts)[1]
+  N <- dim(pts)[1]
   if (N == 1) {
-    rs = c()
-    ths = c()
+    rs <- c()
+    ths <- c()
     for (r in rseq) {
       for (th in thseq) {
-        rs = c(rs, r)
-        ths = c(ths, th)
+        rs <- c(rs, r)
+        ths <- c(ths, th)
       }
     }
-    labels = rep(1, length(rs))
-    dim(labels) = c(length(rs), 1)
+    labels <- rep(1, length(rs))
+    dim(labels) <- c(length(rs), 1)
     return(list(
       scores = rep(0, length(rs)),
       scale = rs,
@@ -183,67 +183,67 @@ Kclust_parallel <- function(pts,
   }
 
   if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN2") {
-    tor = toroid(pts, xlim, ylim, max(rseq))
-    D = as.matrix(dist(tor))
-    D = D[1:N, 1:N]
+    tor <- toroid(pts, xlim, ylim, max(rseq))
+    D <- as.matrix(dist(tor))
+    D <- D[1:N, 1:N]
   }
   registerDoParallel(cores = numCores)
   foreach(r = rseq) %:%
     foreach(th = thseq) %dopar% {
 
     if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN2") {
-      K = apply(D, 1, function(v) {
+      K <- apply(D, 1, function(v) {
         sum(v <= r) - 1
       })
-      L = sqrt((diff(xlim) + 2 * max(rseq)) *
-                 (diff(ylim) + 2 * max(rseq)) *
-                 K /
-                 (pi * (dim(tor)[1] - 1)))
-      C = which(L >= th)
+      L <- sqrt((diff(xlim) + 2 * max(rseq)) *
+                  (diff(ylim) + 2 * max(rseq)) *
+                  K /
+                  (pi * (dim(tor)[1] - 1)))
+      C <- which(L >= th)
     }
 
     if (clustermethod == "Ripley' K based") {
       if (length(C) > 0) {
-        G = graph.adjacency(D[C, C] < 2 * r)
-        lab = clusters(G, "weak") #graph theory
-        labels = (N + 1):(2 * N)
-        labels[C] = lab$membership #numeric vector giving the cluster id to which each vertex belongs
+        G <- graph.adjacency(D[C, C] < 2 * r)
+        lab <- clusters(G, "weak") #graph theory
+        labels <- (N + 1):(2 * N)
+        labels[C] <- lab$membership #numeric vector giving the cluster id to which each vertex belongs
       }
       else
-        labels = 1:N
+        labels <- 1:N
     }
 
     if (clustermethod == "DBSCAN") {
       if (length(C) > 0) {
-        G = graph.adjacency(D[C, C] < r)
-        lab = clusters(G, "weak")
-        labels = (N + 1):(2 * N)
-        labels[C] = lab$membership
+        G <- graph.adjacency(D[C, C] < r)
+        lab <- clusters(G, "weak")
+        labels <- (N + 1):(2 * N)
+        labels[C] <- lab$membership
         ##hoovering up boundary points by (arbitrarily) assigning to the first clustered
         for (i in (1:N)[-C]) {
-          closeto = which(D[C, i] < r)
+          closeto <- which(D[C, i] < r)
           if (length(closeto) > 0)
-            labels[i] = labels[C[closeto[1]]]
+            labels[i] <- labels[C[closeto[1]]]
         }
       }
       else
-        labels = 1:N
+        labels <- 1:N
     }
 
     if (clustermethod == "ToMATo") {
-      labels = clusterTomato(pts, r, th)
-      labels = label_correction(labels)
+      labels <- clusterTomato(pts, r, th)
+      labels <- label_correction(labels)
     }
 
     if (clustermethod == "DBSCAN2") {
-      labels = clusterDBSCAN(pts, r, th)
-      labels = label_correction(labels)
+      labels <- clusterDBSCAN(pts, r, th)
+      labels <- label_correction(labels)
     }
 
-    s = 0
+    s <- 0
     if (score) {
-      s = mean(labels)
-      s = scorewprec(
+      s <- mean(labels)
+      s <- scorewprec(
         labels = labels,
         pts = pts,
         sds = sds,
@@ -258,13 +258,13 @@ Kclust_parallel <- function(pts,
       )
     }
     else
-      scores = s
+      scores <- s
 
     if (report) {
       cat("Scale:", r, "Thr:", th, "Score: ", s, "\n")
     }
     if (rlabel) {
-      retlabels = labels
+      retlabels <- labels
     }
     # data.frame(scores=scores, scale=rs, thresh=ths, labels=retlabels) #return argument
     list(
@@ -293,18 +293,18 @@ Kclust_sequential <- function(pts,
                               rlabel = FALSE,
                               report = FALSE,
                               clustermethod = "Ripley' K based") {
-  N = dim(pts)[1]
+  N <- dim(pts)[1]
   if (N == 1) {
-    rs = c()
-    ths = c()
+    rs <- c()
+    ths <- c()
     for (r in rseq) {
       for (th in thseq) {
-        rs = c(rs, r)
-        ths = c(ths, th)
+        rs <- c(rs, r)
+        ths <- c(ths, th)
       }
     }
-    labels = rep(1, length(rs))
-    dim(labels) = c(length(rs), 1)
+    labels <- rep(1, length(rs))
+    dim(labels) <- c(length(rs), 1)
     return(list(
       scores = rep(0, length(rs)),
       scale = rs,
@@ -313,23 +313,23 @@ Kclust_sequential <- function(pts,
     ))
   }
   if (!clustermethod == "ToMATo") {
-    tor = toroid(pts, xlim, ylim, max(rseq))
-    D = as.matrix(dist(tor))
-    D = D[1:N, 1:N]
+    tor <- toroid(pts, xlim, ylim, max(rseq))
+    D <- as.matrix(dist(tor))
+    D <- D[1:N, 1:N]
   }
-  scores = c()
-  retlabels = c()
-  rs = c()
-  ths = c()
+  scores <- c()
+  retlabels <- c()
+  rs <- c()
+  ths <- c()
   for (r in rseq) {
     if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN2") {
-      K = apply(D, 1, function(v) {
+      K <- apply(D, 1, function(v) {
         sum(v <= r) - 1
       })
-      L = sqrt((diff(xlim) + 2 * max(rseq)) *
-                 (diff(ylim) + 2 * max(rseq)) *
-                 K /
-                 (pi * (dim(tor)[1] - 1)))
+      L <- sqrt((diff(xlim) + 2 * max(rseq)) *
+                  (diff(ylim) + 2 * max(rseq)) *
+                  K /
+                  (pi * (dim(tor)[1] - 1)))
     }
     for (th in thseq) {
 
@@ -340,32 +340,32 @@ Kclust_sequential <- function(pts,
       # }
 
       if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN2")
-        C = which(L >= th)
+        C <- which(L >= th)
       if (clustermethod == "Ripley' K based") {
         if (length(C) > 0) {
-          G = graph.adjacency(D[C, C] < 2 * r)
-          lab = clusters(G, "weak") #graph theory
-          labels = (N + 1):(2 * N)
-          labels[C] = lab$membership #numeric vector giving the cluster id to which each vertex belongs
+          G <- graph.adjacency(D[C, C] < 2 * r)
+          lab <- clusters(G, "weak") #graph theory
+          labels <- (N + 1):(2 * N)
+          labels[C] <- lab$membership #numeric vector giving the cluster id to which each vertex belongs
         }
         else
-          labels = 1:N
+          labels <- 1:N
       }
       if (clustermethod == "DBSCAN") {
         if (length(C) > 0) {
-          G = graph.adjacency(D[C, C] < r)
-          lab = clusters(G, "weak")
-          labels = (N + 1):(2 * N)
-          labels[C] = lab$membership
+          G <- graph.adjacency(D[C, C] < r)
+          lab <- clusters(G, "weak")
+          labels <- (N + 1):(2 * N)
+          labels[C] <- lab$membership
           ##hoovering up boundary points by (arbitrarily) assigning to the first clustered
           for (i in (1:N)[-C]) {
-            closeto = which(D[C, i] < r)
+            closeto <- which(D[C, i] < r)
             if (length(closeto) > 0)
-              labels[i] = labels[C[closeto[1]]]
+              labels[i] <- labels[C[closeto[1]]]
           }
         }
         else
-          labels = 1:N
+          labels <- 1:N
       }
       if (clustermethod == "ToMATo") {
         labels <- clusterTomato(pts, r, th)
@@ -375,9 +375,9 @@ Kclust_sequential <- function(pts,
         labels <- clusterDBSCAN(pts, r, th)
         labels <- label_correction(labels)
       }
-      s = 0
+      s <- 0
       if (score) {
-        s = scorewprec(
+        s <- scorewprec(
           labels = labels,
           pts = pts,
           sds = sds,
@@ -390,16 +390,16 @@ Kclust_sequential <- function(pts,
           alpha = alpha,
           pb = pb
         )
-        scores = c(scores, s)
+        scores <- c(scores, s)
       }
-      rs = c(rs, r)
-      ths = c(ths, th)
+      rs <- c(rs, r)
+      ths <- c(ths, th)
 
       if (report) {
         cat("Scale:", r, "Thr:", th, "Score: ", s, "\n")
       }
       if (rlabel) {
-        retlabels = rbind(retlabels, labels)
+        retlabels <- rbind(retlabels, labels)
       }
     }
   }
@@ -413,18 +413,18 @@ Kclust_sequential <- function(pts,
 
 
 writeRes <- function(res, rfile, labdir, bestonly = FALSE) {
-  scale = unique(res[["scale"]])
-  scale = scale[order(as.numeric(scale))]
-  thresh = unique(res[["thresh"]])
-  thresh = thresh[order(as.numeric(thresh))]
+  scale <- unique(res[["scale"]])
+  scale <- scale[order(as.numeric(scale))]
+  thresh <- unique(res[["thresh"]])
+  thresh <- thresh[order(as.numeric(thresh))]
   cat("0", scale, sep = "\t", file = rfile)
   cat("\n", file = rfile, append = TRUE)
   for (line in thresh) {
-    scales = res[["scale"]][res[["thresh"]] == line]
-    o = order(scales)
-    scales = scales[o]
-    scores = res[["scores"]][res[["thresh"]] == line]
-    scores = scores[o]
+    scales <- res[["scale"]][res[["thresh"]] == line]
+    o <- order(scales)
+    scales <- scales[o]
+    scores <- res[["scores"]][res[["thresh"]] == line]
+    scores <- scores[o]
     cat(line,
         "\t",
         sep = "",
@@ -438,9 +438,9 @@ writeRes <- function(res, rfile, labdir, bestonly = FALSE) {
   }
   dir.create(labdir, showWarnings = F)
   if (bestonly)
-    is = which.max(res[["scores"]])
+    is <- which.max(res[["scores"]])
   else
-    is = (1:dim(res[["labels"]])[1])
+    is <- (1:dim(res[["labels"]])[1])
   for (i in is) {
     fwrite(res[["labels"]][i,], file.path(
       paste0(
@@ -456,10 +456,10 @@ writeRes <- function(res, rfile, labdir, bestonly = FALSE) {
 }
 
 writeRes_seq <- function(res, datah5file, bestonly = FALSE) { # , rfile, labdir,
-  scale = unique(res[["scale"]])
-  scale = scale[order(as.numeric(scale))]
-  thresh = unique(res[["thresh"]])
-  thresh = thresh[order(as.numeric(thresh))]
+  scale <- unique(res[["scale"]])
+  scale <- scale[order(as.numeric(scale))]
+  thresh <- unique(res[["thresh"]])
+  thresh <- thresh[order(as.numeric(thresh))]
 
   tmp_matrix <- matrix(nrow = length(thresh), ncol = length(scale))
   rownames(tmp_matrix) <- thresh
@@ -482,7 +482,7 @@ writeRes_seq <- function(res, datah5file, bestonly = FALSE) { # , rfile, labdir,
   H5Dclose(did)
 
   tryCatch({
-    handle = h5createGroup(datah5file, 'labels') },
+    handle <- h5createGroup(datah5file, 'labels') },
     error = function(e) {
       h5delete(datah5file, 'labels')
       h5createGroup(datah5file, 'labels') },
@@ -494,9 +494,9 @@ writeRes_seq <- function(res, datah5file, bestonly = FALSE) { # , rfile, labdir,
   }
 
   if (bestonly)
-    is = which.max(res[["scores"]])
+    is <- which.max(res[["scores"]])
   else
-    is = (1:dim(res[["labels"]])[1])
+    is <- (1:dim(res[["labels"]])[1])
   for (i in is) {
     c <- res[['labels']][i,]
     h5write(c,
@@ -577,12 +577,12 @@ nClusters <- function(labels) {
 }
 
 percentageInCluster <- function(labels) {
-  Nb = sum(table(labels) == 1)
+  Nb <- sum(table(labels) == 1)
   (length(labels) - Nb) / length(labels) * 100
 }
 
 molsPerCluster <- function(labels) {
-  ta = table(labels)
+  ta <- table(labels)
   ta[ta > 1]
 }
 
@@ -591,8 +591,8 @@ nMolsPerCluster <- function(labels) {
 }
 
 histnMols <- function(labels) {
-  ta = table(labels)[table(labels) > 1]
-  h = hist(ta, plot = FALSE)
+  ta <- table(labels)[table(labels) > 1]
+  h <- hist(ta, plot = FALSE)
   plot(h,
        xlab = "Number of molecules",
        ylab = "Number of clusters",
@@ -600,7 +600,7 @@ histnMols <- function(labels) {
 }
 
 clusterRadii <- function(pts, labels) {
-  radii = tapply(1:(dim(pts)[1]), labels, function(v) {
+  radii <- tapply(1:(dim(pts)[1]), labels, function(v) {
     if (length(v) == 1)
       -1
     else {
@@ -611,20 +611,20 @@ clusterRadii <- function(pts, labels) {
 }
 
 clusterStatistics <- function(pts, labels) {
-  iscluster = table(labels) > 1
+  iscluster <- table(labels) > 1
   if (sum(iscluster) == 0)
     return(-1)
-  clusters = names(which(iscluster))
+  clusters <- names(which(iscluster))
   sapply(clusters, function(l) {
-    ptsl = pts[labels == l,]
-    v = c(colMeans(ptsl[, 1:2]), mean(c(sd(ptsl[, 1]), sd(ptsl[, 2]))), dim(ptsl)[1])
-    dim(v) = c(4, 1)
+    ptsl <- pts[labels == l,]
+    v <- c(colMeans(ptsl[, 1:2]), mean(c(sd(ptsl[, 1]), sd(ptsl[, 2]))), dim(ptsl)[1])
+    dim(v) <- c(4, 1)
     v
   })
 }
 
 convexHullAreas <- function(pts, labels) {
-  areas = tapply(1:(dim(pts)[1]), labels, function(v) {
+  areas <- tapply(1:(dim(pts)[1]), labels, function(v) {
     if (length(v) == 1)
       -1
     else {
@@ -637,23 +637,23 @@ convexHullAreas <- function(pts, labels) {
 
 
 reldensity <- function(pts, labels, areaclustered, xlim, ylim) {
-  rs = clusterRadii(pts, labels)
-  tb = table(labels)
-  nclustered = sum(tb[tb >= 2])
-  nb = length(labels) - nclustered
+  rs <- clusterRadii(pts, labels)
+  tb <- table(labels)
+  nclustered <- sum(tb[tb >= 2])
+  nb <- length(labels) - nclustered
   # areaclustered = unlist(cluster_area_density(pts, labels)[2], use.names = F)
   (nclustered / sum(areaclustered)) / (nb / (diff(xlim) * diff(ylim) - sum(areaclustered)))
 }
 
 plabel <- function(labels, alpha, pb) {
   cnt <- tapply(1:length(labels), labels, length)
-  cl = cnt[cnt != 1]
-  B = length(labels) - sum(cl)
-  Bcont = B * log(pb) + (1 - B) * log(1 - pb)
+  cl <- cnt[cnt != 1]
+  B <- length(labels) - sum(cl)
+  Bcont <- B * log(pb) + (1 - B) * log(1 - pb)
   ## Green 2001 p.357, Scand J Statist 28
-  partcont = 0
+  partcont <- 0
   if (length(cl) > 0)
-    partcont = length(cl) * log(alpha) +
+    partcont <- length(cl) * log(alpha) +
       lgamma(alpha) +
       sum(lgamma(cl)) -
       lgamma(alpha + sum(cl))
@@ -671,7 +671,7 @@ scorewprec <- function(labels,
                        useplabel = TRUE,
                        alpha = NULL,
                        pb = .5) {
-  s = sum(tapply(1:(dim(pts)[1]), labels, function(v) {
+  s <- sum(tapply(1:(dim(pts)[1]), labels, function(v) {
     if (length(v) > 1)
       mcgaussprec(
         pts[v,],
@@ -685,14 +685,14 @@ scorewprec <- function(labels,
     else
       -log(diff(xlim) * diff(ylim))
   }))
-  prlab = 0
+  prlab <- 0
   if (useplabel) {
     if (is.null(alpha)) {
       cnt <- tapply(1:length(labels), labels, length)
-      n = sum(cnt[cnt != 1])
-      alpha = 20
+      n <- sum(cnt[cnt != 1])
+      alpha <- 20
     }
-    prlab = plabel(labels, alpha, pb)
+    prlab <- plabel(labels, alpha, pb)
   }
   s + prlab
 }
@@ -811,12 +811,12 @@ cluster_area_density <-
   }
 
 import_data <- function(foldername) {
-  dataset_locs = list.files(file.path(foldername), pattern = "*.txt")
-  dataset_locs = dataset_locs[dataset_locs != "r_vs_thresh.txt" &
-                                dataset_locs != "../config.txt" &
-                                dataset_locs != "summary.txt" &
-                                dataset_locs != "cluster-statistics.txt" &
-                                dataset_locs != "summary_ground_truth.txt"]
-  data_locs = read.csv(file.path(paste0(foldername, "/", dataset_locs, sep = "")))
+  dataset_locs <- list.files(file.path(foldername), pattern = "*.txt")
+  dataset_locs <- dataset_locs[dataset_locs != "r_vs_thresh.txt" &
+                                 dataset_locs != "../config.txt" &
+                                 dataset_locs != "summary.txt" &
+                                 dataset_locs != "cluster-statistics.txt" &
+                                 dataset_locs != "summary_ground_truth.txt"]
+  data_locs <- read.csv(file.path(paste0(foldername, "/", dataset_locs, sep = "")))
   data_locs
 }
