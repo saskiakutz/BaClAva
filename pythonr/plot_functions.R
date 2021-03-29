@@ -113,7 +113,7 @@ hist_plot <- function(res, nexpname, plotcreation) {
       }
 
 
-      f <- file.path(paste(nexpname, "/", names(res[[1]][j]), ".txt", sep = ""))
+      f <- file.path(paste0(nexpname, "/", names(res[[1]][j]), ".txt", sep = ""))
       cat(datavec, file = f, sep = ", ")
       cat("\n", file = f, append = TRUE)
     }
