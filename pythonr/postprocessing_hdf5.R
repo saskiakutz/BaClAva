@@ -180,8 +180,8 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
           plot_estimatedlabels <- cluster_plot(pts, labelsbest, "Estimated labels")
 
           if (separateplots) {
-            plot_save(plot_truelabels, expname, "truelabels")
-            plot_save(plot_estimatedlabels, expname, "estimatedlabels")
+            plot_save(plot_truelabels, expname, paste0(filename_base, "truelabels"))
+            plot_save(plot_estimatedlabels, expname, paste0(filename_base, "estimatedlabels"))
           }
 
           plots_arrange(plot_truelabels, plot_estimatedlabels, 1, expname, "true_estimate_plot")
