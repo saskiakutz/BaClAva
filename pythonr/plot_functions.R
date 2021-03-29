@@ -253,11 +253,11 @@ cluster_plot <-
       )
 
 
-    if (datatype == "experiment") {
-      clusterplot +
-        scale_y_reverse() +
-        labs(x = "x [µm]", y = "y [µm]")
-    }
+    # if (datatype == "experiment") {
+    #   clusterplot +
+    #     scale_y_reverse() +
+    #     labs(x = "x [µm]", y = "y [µm]")
+    # }
 
     clusterplot
 
