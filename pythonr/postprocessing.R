@@ -4,7 +4,7 @@
 # Created on: 2020-07-30
 
 post_fun <- function(newfolder, makeplot, superplot, separateplots) {
-  source("./pythonr/internal.R")
+  source("internal_bayesian.R")
   source("./pythonr/plot_functions.R")
   l_ply(newfolder, function(expname) {
     nexpname <- expname

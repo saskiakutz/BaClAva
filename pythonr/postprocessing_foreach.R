@@ -7,7 +7,7 @@ while (dev.cur() != 1) {
 }   # closes all graphs
 # set working directory
 setwd("~/Documents/bayesian/bayesian_tomato")
-source("internal.R")
+source("internal_bayesian.R")
 source("plot_functions.R")
 
 

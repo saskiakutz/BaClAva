@@ -17,7 +17,7 @@ run_fun <- function(
   datacol,
   dirichlet_alpha,
   bayes_background) {
-  source("./pythonr/internal.R")
+  source("internal_bayesian.R")
   l_ply(newfolder, function(foldername) {
     if (bayes_model == "Gaussian(prec)") {
       model <- bayes_model
@@ -146,7 +146,7 @@ run_fun <- function(
 
 
 # test_function <- function(input_para, my_packages) {
-#   # source("internal.R")
+#   # source("internal_bayesian.R")
 #   # tic("test_run")
 #   #lapply(my_packages, require(quietly = TRUE), character.only = TRUE)
 #   temp <- length(input_para)

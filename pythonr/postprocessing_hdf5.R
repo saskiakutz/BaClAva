@@ -4,7 +4,7 @@
 # Created on: 2021-01-27
 
 post_fun <- function(newfolder, makeplot, superplot, separateplots) {
-  source("./pythonr/internal.R")
+  source("internal_postporcessing.R")
   source("./pythonr/plot_functions.R")
   l_ply(newfolder, function(expname) {
     nexpname <- expname
@@ -99,11 +99,25 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
       # summaries
       cluster_area_density_labelcorr <- cluster_area_density(pts, labelsbest)
       summarytable <- cluster_area_density_labelcorr[[1]]
+
+      tryCatch(
+      {
+        h5write(summarytable, file, "summarytable") },
+        error = function(e) {
+          h5delete(file, "cluster-statistics")
+          h5write(summarytable, file, "cluster-statistics")
+        }
+      )
+      ds <- H5Dopen(file, 'summarytable')
+      h5writeAttribute(ds, attr = names(summarytable), name = 'colnames')
+      H5Dclose(ds)
+
       if (length(labelsbest) == length(cluster_area_density_labelcorr[[2]])) {
         labelsbest <- cluster_area_density_labelcorr[[2]]
       }else {
         print("Corrected labels do not have the same length as the Bayesian labels!")
       }
+      # TODO: propoer error message in software
 
       # TODO: summary export to hdf5 file
       filename_base <- str_split(filename, "\\.")[[1]][1]
@@ -194,7 +208,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
       if (makeplot & superplot) {
         list(
           radii = clusterRadii(pts, labelsbest),
-          nmols = molsPerCluster(labelsbest),
+          nmols = summarytable$numDetectionsCluster,
           nclusters = nClusters(labelsbest),
           pclustered = percentageInCluster(labelsbest),
           totalmols = length(labelsbest),
@@ -206,7 +220,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
       }else {
         list(
           radii = clusterRadii(pts, labelsbest),
-          nmols = molsPerCluster(labelsbest),
+          nmols = summarytable$numDetectionsCluster,
           nclusters = nClusters(labelsbest),
           pclustered = percentageInCluster(labelsbest),
           totalmols = length(labelsbest),
