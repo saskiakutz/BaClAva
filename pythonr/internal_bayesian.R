@@ -384,50 +384,6 @@ Kclust_sequential <- function(pts,
   ) #return argument
 }
 
-
-writeRes <- function(res, rfile, labdir, bestonly = FALSE) {
-  scale <- unique(res[["scale"]])
-  scale <- scale[order(as.numeric(scale))]
-  thresh <- unique(res[["thresh"]])
-  thresh <- thresh[order(as.numeric(thresh))]
-  cat("0", scale, sep = "\t", file = rfile)
-  cat("\n", file = rfile, append = TRUE)
-  for (line in thresh) {
-    scales <- res[["scale"]][res[["thresh"]] == line]
-    o <- order(scales)
-    scales <- scales[o]
-    scores <- res[["scores"]][res[["thresh"]] == line]
-    scores <- scores[o]
-    cat(line,
-        "\t",
-        sep = "",
-        file = rfile,
-        append = TRUE)
-    cat(scores,
-        sep = "\t",
-        append = TRUE,
-        file = rfile)
-    cat("\n", file = rfile, append = TRUE)
-  }
-  dir.create(labdir, showWarnings = F)
-  if (bestonly)
-    is <- which.max(res[["scores"]])
-  else
-    is <- (1:dim(res[["labels"]])[1])
-  for (i in is) {
-    fwrite(res[["labels"]][i,], file.path(
-      paste0(
-        labdir,
-        "/clusterscale",
-        res[["scale"]][i],
-        "_thresh",
-        res[["thresh"]][i],
-        "labels.txt"
-      )
-    ))
-  }
-}
-
 writeRes_seq <- function(res, datah5file, bestonly = FALSE) { # , rfile, labdir,
   scale <- unique(res[["scale"]])
   scale <- scale[order(as.numeric(scale))]
