@@ -23,7 +23,7 @@
     "tidyverse",
     "rhdf5"
   )
-  pacman::p_load_gh("lucabaronti/RSMLM")
+  pacman::p_load_gh("saskiakutz/RSMLM")
 
 mcgaussprec <- function(pts,
                         sds,
