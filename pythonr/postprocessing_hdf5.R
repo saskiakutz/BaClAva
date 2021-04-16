@@ -34,10 +34,6 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
       process <- "parallel"
     }
 
-    # all <- list.files(expname)
-    # dirnames <- all[file.info(file.path(paste0(expname, "/", all, sep = "")))$isdir]
-    # dirnames <- dirnames[dirnames != "postprocessing"]
-    # dirnames <- dirnames[dirnames != "postprocessing_ground_truth"]
     filenames <- list.files(expname, pattern = '*.h5')
 
 
