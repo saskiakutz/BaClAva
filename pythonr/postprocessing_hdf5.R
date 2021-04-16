@@ -5,6 +5,7 @@
 
 post_fun <- function(newfolder, makeplot, superplot, separateplots) {
   source("./pythonr/package_list.R")
+  source("./pythonr/exporting_hdf5.R")
   source("./pythonr/internal_postporcessing.R")
   source("./pythonr/plot_functions.R")
   l_ply(newfolder, function(expname) {
@@ -36,15 +37,14 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
 
     filenames <- list.files(expname, pattern = '*.h5')
 
-
     res <- lapply(filenames, function(filename) {
 
       file <- H5Fopen(file.path(expname, filename))
       datafile <- h5read(file, 'data')
       pts <- datafile[, xcol:ycol]
-        pts <- pts / 1000
-        sds <- datafile[, sdcol]
-        sds <- sds / 1000
+      pts <- pts / 1000
+      sds <- datafile[, sdcol]
+      sds <- sds / 1000
       if (datasource == 'experiment') {
         names(pts)[1] <- "x"
         names(pts)[2] <- "y"
@@ -72,25 +72,28 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
       bestthr <- thr[best[1]]
 
       labelsbest <- h5read(file, paste0("labels/clusterscale", bestcs, "_thresh", bestthr, sep = ''))
-      r_thresh <- H5Dopen(file, 'r_vs_thresh')
-      h5writeAttribute(r_thresh, attr = paste0("clusterscale", bestcs, "_thresh", bestthr, sep = ''), name = 'best')
-      H5Dclose(r_thresh)
+      write_metadata_df(file, paste0("clusterscale", bestcs, "_thresh", bestthr, sep = ''), 'r_vs_thresh', 'best')
+      # r_thresh <- H5Dopen(file, 'r_vs_thresh')
+      # h5writeAttribute(r_thresh, attr = paste0("clusterscale", bestcs, "_thresh", bestthr, sep = ''), name = 'best')
+      # H5Dclose(r_thresh)
 
       # summaries
       cluster_area_density_labelcorr <- cluster_area_density(pts, labelsbest)
       summarytable <- cluster_area_density_labelcorr[[1]]
 
-      tryCatch(
-      {
-        h5write(summarytable, file, "summarytable") },
-        error = function(e) {
-          h5delete(file, "cluster-statistics")
-          h5write(summarytable, file, "cluster-statistics")
-        }
-      )
-      ds <- H5Dopen(file, 'summarytable')
-      h5writeAttribute(ds, attr = names(summarytable), name = 'colnames')
-      H5Dclose(ds)
+      # tryCatch(
+      # {
+      #   h5write(summarytable, file, "summarytable") },
+      #   error = function(e) {
+      #     h5delete(file, "cluster-statistics")
+      #     h5write(summarytable, file, "cluster-statistics")
+      #   }
+      # )
+      write_df_hdf5(file, summarytable, "summarytable")
+      write_metadata_df(file, names(summarytable), 'summarytable', 'colnames')
+      # ds <- H5Dopen(file, 'summarytable')
+      # h5writeAttribute(ds, attr = names(summarytable), name = 'colnames')
+      # H5Dclose(ds)
 
       if (length(labelsbest) == length(cluster_area_density_labelcorr[[2]])) {
         labelsbest <- cluster_area_density_labelcorr[[2]]
@@ -144,17 +147,19 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
       trans_s <- t(s)
       colnames(trans_s) <- c("x", "y", "sd", "nmol")
       if (!is.null(s) & s[1] != -1) {
-        tryCatch(
-        {
-          h5write(trans_s, file, "cluster-statistics") },
-          error = function(e) {
-            h5delete(file, "cluster-statistics")
-            h5write(trans_s, file, "cluster-statistics")
-          }
-        )
-        ds <- H5Dopen(file, 'cluster-statistics')
-        h5writeAttribute(ds, attr = names(trans_s), name = 'colnames')
-        H5Dclose(ds)
+        write_df_hdf5(file, trans_s, 'cluster-statistics')
+        # tryCatch(
+        # {
+        #   h5write(trans_s, file, "cluster-statistics") },
+        #   error = function(e) {
+        #     h5delete(file, "cluster-statistics")
+        #     h5write(trans_s, file, "cluster-statistics")
+        #   }
+        # )
+        write_metadata_df(file, names(trans_s), 'cluster-statistics', 'colnames')
+        # ds <- H5Dopen(file, 'cluster-statistics')
+        # h5writeAttribute(ds, attr = names(trans_s), name = 'colnames')
+        # H5Dclose(ds)
       }
 
       if (makeplot == TRUE) {
