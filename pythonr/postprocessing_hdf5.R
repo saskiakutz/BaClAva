@@ -38,8 +38,6 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
 
 
     res <- lapply(filenames, function(filename) {
-      # foldername <- file.path(paste0(expname, "/", dirname, sep = ""))
-      # nfoldername <- file.path(paste0(nexpname, "/", dirname, sep = ""))
 
       file <- H5Fopen(file.path(expname, filename))
       datafile <- h5read(file, 'data')
