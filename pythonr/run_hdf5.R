@@ -65,22 +65,16 @@ run_fun <- function(
     # datasets = datasets[datasets != "run_config.txt"]
 
     l_ply(file.path(datasets), function(filename) {
-      if (datasource == "simulation") {
-        datah5 <- H5Fopen(file.path(foldername, filename))
-        # columns in simulation dataset
-        pts <- datah5$data[, c(datacol[1], datacol[2])]
-        sds <- datah5$data[, datacol[3]]
-
-      }else {
-        datah5 <- H5Fopen(file.path(foldername, filename))
-
-        # columns in SMAP dataset
-        pts <- datah5$data[, datacol[1]:datacol[2]]
-        sds <- datah5$data[, datacol[3]]
+      datah5 <- H5Fopen(file.path(foldername, filename))
+      # columns in data
+      pts <- datah5$data[, c(datacol[1], datacol[2])]
+      sds <- datah5$data[, datacol[3]]
+      if (datasource == "experiment") {
         # limits of dataset set by the min/max of the localisations
         xlim <- c(min(pts[, datacol[1]]), max(pts[, datacol[1]]))
         ylim <- c(min(pts[, datacol[2]]), max(pts[, datacol[2]]))
       }
+
       did <- H5Dopen(datah5, 'data')
       h5writeAttribute(did, attr = datacol, name = 'datacolumns')
       H5Dclose(did)
