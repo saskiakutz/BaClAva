@@ -404,17 +404,7 @@ writeRes_seq <- function(res, datah5file, bestonly = FALSE) { # , rfile, labdir,
   h5writeAttribute(did, attr = rownames(tmp_matrix), name = 'rownames')
   H5Dclose(did)
 
-  tryCatch({
-    handle <- h5createGroup(datah5file, 'labels') },
-    error = function(e) {
-      h5delete(datah5file, 'labels')
-      h5createGroup(datah5file, 'labels') },
-    warning = function(w) { w }
-  )
-  if (handle == FALSE) {
-    h5delete(datah5file, 'labels')
-    h5createGroup(datah5file, 'labels')
-  }
+  create_hdf5group(datah5file, 'labels')
 
   if (bestonly)
     is <- which.max(res[["scores"]])
