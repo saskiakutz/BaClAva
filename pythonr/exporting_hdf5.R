@@ -16,8 +16,8 @@ write_df_hdf5 <- function(hdf5_file, dataset, dataset_name) {
 }
 
 # write metadata to dataset (which is not part of a group)
-write_metadata_df <- function(hdf5_file, dataset, dataset_name, metadata_name) {
+write_metadata_df <- function(hdf5_file, dataset_attr, dataset_name, metadata_name) {
   ds <- H5Dopen(hdf5_file, dataset_name)
-  h5writeAttribute(ds, attr = names(dataset), name = metadata_name)
+  h5writeAttribute(ds, attr = dataset_attr, name = metadata_name)
   H5Dclose(ds)
 }
