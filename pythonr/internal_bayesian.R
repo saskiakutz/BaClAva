@@ -399,10 +399,8 @@ writeRes_seq <- function(res, datah5file, bestonly = FALSE) { # , rfile, labdir,
     }
   }
   write_df_hdf5(datah5file, tmp_matrix, 'r_vs_thresh')
-  did <- H5Dopen(datah5file, 'r_vs_thresh')
-  h5writeAttribute(did, attr = colnames(tmp_matrix), name = 'colnames')
-  h5writeAttribute(did, attr = rownames(tmp_matrix), name = 'rownames')
-  H5Dclose(did)
+  write_metadata_df(datah5file, colnames(tmp_matrix), 'r_vs_thresh', 'scales')
+  write_metadata_df(datah5file, rownames(tmp_matrix), 'r_vs_thresh', 'thresholds')
 
   create_hdf5group(datah5file, 'labels')
 
@@ -433,10 +431,8 @@ writeRes_r_vs_th <- function(res, rseq, thseq, datah5file) {
     }
   }
   write_df_hdf5(datah5file, tmp_matrix, 'r_vs_thresh')
-  did <- H5Dopen(datah5file, 'r_vs_thresh')
-  h5writeAttribute(did, attr = rseq, 'scales')
-  h5writeAttribute(did, attr = thseq, 'thresholds')
-  H5Dclose(did)
+  write_metadata_df(datah5file, rseq, 'r_vs_thresh', 'scales')
+  write_metadata_df(datah5file, thseq, 'r_vs_thresh', 'thresholds')
 }
 
 writeRes_labels <- function(res, rseq, thseq, datah5file) {
