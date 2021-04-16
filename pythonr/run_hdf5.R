@@ -17,7 +17,7 @@ run_fun <- function(
   datacol,
   dirichlet_alpha,
   bayes_background) {
-  source("internal_bayesian.R")
+  source("./pythonr/internal_bayesian.R")
   l_ply(newfolder, function(foldername) {
     if (bayes_model == "Gaussian(prec)") {
       model <- bayes_model
