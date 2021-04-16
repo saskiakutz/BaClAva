@@ -18,6 +18,7 @@ run_fun <- function(
   dirichlet_alpha,
   bayes_background) {
   source("./pythonr/package_list.R")
+  source("./pythonr/exporting_hdf5.R")
   source("./pythonr/internal_bayesian.R")
   l_ply(newfolder, function(foldername) {
     if (bayes_model == "Gaussian(prec)") {
@@ -75,9 +76,10 @@ run_fun <- function(
         ylim <- c(min(pts[, datacol[2]]), max(pts[, datacol[2]]))
       }
 
-      did <- H5Dopen(datah5, 'data')
-      h5writeAttribute(did, attr = datacol, name = 'datacolumns')
-      H5Dclose(did)
+      write_metadata_df(datah5, datacol, 'data', 'datacolumns')
+      # did <- H5Dopen(datah5, 'data')
+      # h5writeAttribute(did, attr = datacol, name = 'datacolumns')
+      # H5Dclose(did)
 
       if (process == "sequential") {
         res <- Kclust_sequential(
@@ -138,13 +140,3 @@ run_fun <- function(
   return(print("done"))
   gc()
 }
-
-
-# test_function <- function(input_para, my_packages) {
-#   # source("internal_bayesian.R")
-#   # tic("test_run")
-#   #lapply(my_packages, require(quietly = TRUE), character.only = TRUE)
-#   temp <- length(input_para)
-#   # toc()
-#   return(temp)
-# }
