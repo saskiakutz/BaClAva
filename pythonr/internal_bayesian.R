@@ -398,13 +398,14 @@ writeRes_seq <- function(res, datah5file, bestonly = FALSE) { # , rfile, labdir,
       tmp_matrix[toString(res[['thresh']][i]), toString(res[['scale']][i])] <- res[['scores']][i]
     }
   }
-  tryCatch({
-    h5write(tmp_matrix, datah5file, 'r_vs_thresh') },
-    error = function(e) {
-      h5delete(datah5file, 'r_vs_thresh')
-      h5write(tmp_matrix, datah5file, 'r_vs_thresh')
-    }
-  )
+  # tryCatch({
+  #   h5write(tmp_matrix, datah5file, 'r_vs_thresh') },
+  #   error = function(e) {
+  #     h5delete(datah5file, 'r_vs_thresh')
+  #     h5write(tmp_matrix, datah5file, 'r_vs_thresh')
+  #   }
+  # )
+  write_df_hdf5(datah5file, tmp_matrix, 'r_vs_thresh')
   did <- H5Dopen(datah5file, 'r_vs_thresh')
   h5writeAttribute(did, attr = colnames(tmp_matrix), name = 'colnames')
   h5writeAttribute(did, attr = rownames(tmp_matrix), name = 'rownames')
@@ -588,13 +589,13 @@ label_correction <- function(labels) {
 }
 
 
-import_data <- function(foldername) {
-  dataset_locs <- list.files(file.path(foldername), pattern = "*.txt")
-  dataset_locs <- dataset_locs[dataset_locs != "r_vs_thresh.txt" &
-                                 dataset_locs != "../config.txt" &
-                                 dataset_locs != "summary.txt" &
-                                 dataset_locs != "cluster-statistics.txt" &
-                                 dataset_locs != "summary_ground_truth.txt"]
-  data_locs <- read.csv(file.path(paste0(foldername, "/", dataset_locs, sep = "")))
-  data_locs
-}
+# import_data <- function(foldername) {
+#   dataset_locs <- list.files(file.path(foldername), pattern = "*.txt")
+#   dataset_locs <- dataset_locs[dataset_locs != "r_vs_thresh.txt" &
+#                                  dataset_locs != "../config.txt" &
+#                                  dataset_locs != "summary.txt" &
+#                                  dataset_locs != "cluster-statistics.txt" &
+#                                  dataset_locs != "summary_ground_truth.txt"]
+#   data_locs <- read.csv(file.path(paste0(foldername, "/", dataset_locs, sep = "")))
+#   data_locs
+# }
