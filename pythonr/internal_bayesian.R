@@ -398,13 +398,6 @@ writeRes_seq <- function(res, datah5file, bestonly = FALSE) { # , rfile, labdir,
       tmp_matrix[toString(res[['thresh']][i]), toString(res[['scale']][i])] <- res[['scores']][i]
     }
   }
-  # tryCatch({
-  #   h5write(tmp_matrix, datah5file, 'r_vs_thresh') },
-  #   error = function(e) {
-  #     h5delete(datah5file, 'r_vs_thresh')
-  #     h5write(tmp_matrix, datah5file, 'r_vs_thresh')
-  #   }
-  # )
   write_df_hdf5(datah5file, tmp_matrix, 'r_vs_thresh')
   did <- H5Dopen(datah5file, 'r_vs_thresh')
   h5writeAttribute(did, attr = colnames(tmp_matrix), name = 'colnames')
@@ -449,28 +442,14 @@ writeRes_r_vs_th <- function(res, rseq, thseq, datah5file) {
         res[[para1]][[para2]][["scores"]]
     }
   }
-  tryCatch({
-    h5write(tmp_matrix, datah5file, 'r_vs_thresh') },
-    error = function(e) {
-      h5delete(datah5file, 'r_vs_thresh')
-      h5write(tmp_matrix, datah5file, 'r_vs_thresh')
-    }
-  )
+  write_df_hdf5(datah5file, tmp_matrix, 'r_vs_thresh')
   did <- H5Dopen(datah5file, 'r_vs_thresh')
   h5writeAttribute(did, attr = rseq, 'scales')
   h5writeAttribute(did, attr = thseq, 'thresholds')
   H5Dclose(did)
-  # write.table(
-  #   tmp_matrix,
-  #   file = rfile,
-  #   sep = "\t",
-  #   row.names = T,
-  #   col.names = T
-  # )
 }
 
 writeRes_labels <- function(res, rseq, thseq, datah5file) {
-  #dir.create(labdir, showWarnings = F)
   tryCatch({
     h5createGroup(datah5file, 'labels') },
     error = function(e) {
@@ -487,17 +466,6 @@ writeRes_labels <- function(res, rseq, thseq, datah5file) {
                      res[[para1]][[para2]][["scale"]],
                      '_thresh',
                      res[[para1]][[para2]][["thresh"]]))
-      # fwrite(as.list(res[[para1]][[para2]][["labels"]]), file.path(
-      #   paste0(
-      #     labdir,
-      #     "/clusterscale",
-      #     res[[para1]][[para2]][["scale"]],
-      #     "_thresh",
-      #     res[[para1]][[para2]][["thresh"]],
-      #     "labels.txt",
-      #     sep = ""
-      #   )
-      # ))
     }
   }
 }
