@@ -4,7 +4,8 @@
 # Created on: 2021-01-27
 
 post_fun <- function(newfolder, makeplot, superplot, separateplots) {
-  source("internal_postporcessing.R")
+  source("./pythonr/package_list.R")
+  source("./pythonr/internal_postporcessing.R")
   source("./pythonr/plot_functions.R")
   l_ply(newfolder, function(expname) {
     nexpname <- expname
