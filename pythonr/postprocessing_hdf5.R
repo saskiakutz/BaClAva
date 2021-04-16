@@ -46,19 +46,12 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
       # nfoldername <- file.path(paste0(nexpname, "/", dirname, sep = ""))
 
       file <- H5Fopen(file.path(expname, filename))
-
-      if (datasource == 'simulation') {
-        datafile <- h5read(file, 'data')
-        pts <- datafile[, xcol:ycol]
+      datafile <- h5read(file, 'data')
+      pts <- datafile[, xcol:ycol]
         pts <- pts / 1000
         sds <- datafile[, sdcol]
         sds <- sds / 1000
-      } else {
-        datafile <- h5read(file, 'data')
-        pts <- datafile[, xcol:ycol]
-        pts <- pts / 1000
-        sds <- datafile[, sdcol]
-        sds <- sds / 1000
+      if (datasource == 'experiment') {
         names(pts)[1] <- "x"
         names(pts)[2] <- "y"
         xlim <- c(min(pts[, 1]), max(pts[, 1]))
