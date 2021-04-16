@@ -21,7 +21,7 @@ class MplCanvas(FigureCanvas):
         self.axes = self.fig.add_subplot(111)
         super(MplCanvas, self).__init__(self.fig)
 
-        FigureCanvas.setMinimumSize(self, 200, 370)
+        FigureCanvas.setMinimumSize(self, 100, 185)
         FigureCanvas.setSizePolicy(self,
                                    qtw.QSizePolicy.MinimumExpanding,
                                    qtw.QSizePolicy.MinimumExpanding)
@@ -224,13 +224,13 @@ class View_post(qtw.QWidget):
         canvas.axes.cla()
         data_scatter = self.import_scatterdata()
 
-        canvas.axes.scatter(x=data_scatter['x'], y=data_scatter['y'], s=0, clip_on=False)
+        canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], s=0, clip_on=False)
         canvas.axes.set_ylabel(y_label, fontsize='10')
         canvas.axes.set_xlabel(x_label, fontsize='10')
         canvas.draw()
 
         # Calculate radius in pixels :
-        rr_pix = (canvas.axes.transData.transform(np.vstack([data_scatter['sd'], data_scatter['sd']]).T) -
+        rr_pix = (canvas.axes.transData.transform(np.vstack([data_scatter.iloc[:, 2], data_scatter.iloc[:, 2]]).T) -
                   canvas.axes.transData.transform(
                       np.vstack([np.zeros(len(data_scatter)), np.zeros(len(data_scatter))]).T))
         rpix, _ = rr_pix.T
@@ -238,7 +238,7 @@ class View_post(qtw.QWidget):
         # Calculate and update size in points:
         size_pt = (2 * rpix / canvas.fig.dpi * 72) ** 2
         colour = self.scatterplot_colour((data_scatter['labels']))
-        canvas.axes.scatter(x=data_scatter['x'], y=data_scatter['y'], s=size_pt, color=colour, alpha=0.9,
+        canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], s=size_pt, color=colour, alpha=0.9,
                             edgecolors="none")
 
         canvas.draw()

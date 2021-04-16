@@ -100,17 +100,6 @@ class PythonToR():
         numpy2ri.deactivate()
         print("done")
 
-    def r_test(self, input_test):
-        input_test = 4
-        print("Length of parameter: ", input_test)
-        r = r_objects.r
-        print(getcwd())
-        r.source("run.R")
-        numpy2ri.activate()
-        temp = r.test_function(input_test)
-        print(temp)
-        numpy2ri.deactivate()
-
     def check_dataset_type(self, directory):
         onlyfiles = [f for f in listdir(directory) if
                      isfile(join(directory, f)) and f not in ['sim_parameters.txt', 'run_config.txt', ]]
