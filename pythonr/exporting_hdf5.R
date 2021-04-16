@@ -21,3 +21,14 @@ write_metadata_df <- function(hdf5_file, dataset_attr, dataset_name, metadata_na
   h5writeAttribute(ds, attr = dataset_attr, name = metadata_name)
   H5Dclose(ds)
 }
+
+# create a group within a hdf5 file
+create_hdf5group <- function(hdf5_file, group_name) {
+  tryCatch({
+    h5createGroup(hdf5_file, group_name) },
+    error = function(e) {
+      h5delete(hdf5_file, group_name)
+      h5createGroup(hdf5_file, group_name) },
+    warning = function(w) { w }
+  )
+}
