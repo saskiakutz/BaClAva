@@ -65,7 +65,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
         ylim <- c(min(pts[, 2]), max(pts[, 2]))
       }
 
-      #if (process == "sequential") {
+      # read in r_vs_thresh
       r <- h5read(file, 'r_vs_thresh')
       r_attr <- h5readAttributes(file, 'r_vs_thresh')
       colnames(r) <- r_attr$scales
@@ -73,14 +73,6 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
       m <- as.matrix(r)
       cs <- colnames(r)
       thr <- rownames(r)
-
-      # } else {
-      #   r <- read.delim(file.path(paste0(nfoldername, "/r_vs_thresh.txt", sep = "")), header = T, sep = "\t")
-      #   colnames(r) <- sub("X*", "", colnames(r))
-      #   m <- as.matrix(r)
-      #   cs <- colnames(m)
-      #   thr <- rownames(m)
-      # }
 
       which.maxm <- function(mat) {
         indcol <- rep(seq_len(ncol(mat)), each = nrow(mat))[which.max(mat)]
