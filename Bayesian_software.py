@@ -80,7 +80,7 @@ class MainWindow(qtw.QMainWindow):
         super().__init__()
         # Main UI code goes here
         self.view = Main_Window()
-        self.setWindowTitle('Bayesian Software')
+        self.setWindowTitle('BaClAva')
         self.setCentralWidget(self.view)
 
         # End main UI code
