@@ -140,7 +140,7 @@ class ViewRun(qtw.QWidget):
         datasources = ('simulation', 'experiment')
         self.b_inputs["datasource"].addItems(datasources)
 
-        clustermethods = ("ToMATo", "DBSCAN", "Ripley' K based")
+        clustermethods = ("ToMATo", "DBSCAN", "Ripley' K based", "DMSCBAN 2")
         self.b_inputs["clustermethod"].addItems(clustermethods)
 
         if os.name == 'nt':
