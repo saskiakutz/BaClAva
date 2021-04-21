@@ -221,7 +221,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
           area = summarytable$areasCluster,
           density = summarytable$densitiesCluster)
       }
-      #H5Fclose(file)
+      H5Fclose(file)
     })
 
     # statistics over all datasets
