@@ -22,10 +22,9 @@ class DataFrameModel(qtc.QAbstractTableModel):
             with h5py.File(file, "r") as f:
                 print("Keys: %s" % f.keys())
                 for key in f.keys():
-                    if key not in {'labels', 'r_vs_thresh', 'cluster-statistics', 'summary'}:
+                    if key not in {'labels', 'r_vs_thresh', 'cluster-statistics', 'summary', 'summarytable'}:
                         a_group_key = key
                         break
-                print(a_group_key)
                 self._dataframe = pd.DataFrame(f[a_group_key][1:6])
 
     def setDataFrame(self, dataframe):
