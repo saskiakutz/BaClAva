@@ -304,3 +304,20 @@ ground_truth_plot <- function(pts, colourlabels, title) {
     )
   clusterplot
 }
+
+mkcols <- function(labels) {
+  t <- table(labels)
+  cnames <- names(t[t > 1])
+  colors <- sample(rainbow(length(cnames)))
+  s <- sapply(labels, function(l) {
+    i <- which(names(t) == l)
+
+    if (t[i] == 1) {
+      "grey"
+    }
+    else {
+      colors[which(cnames == l)]
+    }
+  })
+  s
+}
