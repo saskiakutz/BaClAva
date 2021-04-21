@@ -10,7 +10,7 @@ from model_table import TableModel
 from run.model_table_pd import DataFrameModel
 
 
-class View_run(qtw.QWidget):
+class ViewRun(qtw.QWidget):
     submitted = qtc.pyqtSignal(object, object)
     startrun = qtc.pyqtSignal()
 
