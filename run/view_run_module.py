@@ -22,11 +22,6 @@ class ViewRun(qtw.QWidget):
         main_layout = qtw.QVBoxLayout()
 
         parameter_layout = qtw.QFormLayout()
-        # heading = qtw.QLabel("Bayesian Clustering")
-        # parameter_layout.addRow(heading)
-        # heading_font = qtg.QFont('Arial', 32, qtg.QFont.Bold)
-        # heading_font.setStretch(qtg.QFont.ExtraExpanded)
-        # heading.setFont(heading_font)
 
         self.roi_x_min = qtw.QSpinBox(
             self,
@@ -201,16 +196,6 @@ class ViewRun(qtw.QWidget):
             name_layout.addWidget(qtw.QLabel(label))
             col_layout.addWidget(widget)
 
-        # test_layout = qtw.QHBoxLayout()
-        # self.x_col = qtw.QSpinBox(
-        #     self,
-        #     minimum=1,
-        #     maximum=100,
-        #     singleStep=1,
-        #     value=1
-        # )
-        # test_layout.addWidget(self.x_col)
-
         main_layout.addLayout(name_layout)
         main_layout.addLayout(col_layout)
 
@@ -274,23 +259,6 @@ class ViewRun(qtw.QWidget):
                     self.dir_line.setText(os.path.dirname(filename))
                 else:
                     self.dir_line.setText(os.path.dirname(os.path.dirname(filename)))
-
-    # def btnstate(self, change_status):
-    #     print("here")
-    #     print(change_status)
-    #     if not change_status:
-    #         self.status = change_status
-    #         self.start_btn.setDisabled(self.status)
-    #         print(self.status)
-    #
-    # def disableButton(self):
-    #     self.start_btn.setDisabled(self.status)
-    #     self.start_btn.repaint()
-    #
-    # def toggleStateAndButton(self):
-    #     self.start_btn.setDisabled(self.status)
-    #     self.status = not self.status
-    #     self.start_btn.repaint()
 
     def start_run(self):
 
