@@ -160,7 +160,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
 
           plots_arrange(plot_truelabels, plot_estimatedlabels, 1, expname, paste0(filename_base, "true_estimate_plot"))
         }else {
-          plot_clustering <- cluster_plot(pts, labelsbest, "Clustering", sds, "experiment")
+          plot_clustering <- cluster_plot(pts, labelsbest, "Clustering", sds)
           plot_save(plot_clustering, expname, paste0(filename_base, "Clustering"))
         }
 
