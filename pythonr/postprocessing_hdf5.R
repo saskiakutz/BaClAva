@@ -164,14 +164,10 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
           plot_save(plot_clustering, expname, paste0(filename_base, "Clustering"))
         }
 
-        # plot summarytable data ("numDetectionsCluster", "areasCluster", "densitiesCluster")
-        plot_num_area <- ggplot(summarytable, aes(x = numDetectionsCluster, y = areasCluster)) + geom_point()
-        plot_save(plot_num_area, expname, paste0(filename_base, "numDetectionsCluster_vs_areasCluster"))
-        plot_num_density <- ggplot(summarytable, aes(x = numDetectionsCluster, y = densitiesCluster)) + geom_point()
-        plot_save(plot_num_density, expname, paste0(filename_base, "numDetectionsCluster_vs_densitiesCluster"))
-        plot_area_density <- ggplot(summarytable, aes(x = areasCluster, y = densitiesCluster)) + geom_point()
-        plot_save(plot_area_density, expname, paste0(filename_base, "areasCluster_vs_densitiesCluster"))
+        summary_plot(summarytable, paste0(filename_base, "summarytable_plots"), exp_name = expname)
       }
+
+      # H5Fclose(file)
 
       if (makeplot & superplot) {
         list(
@@ -196,7 +192,6 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
           area = summarytable$areasCluster,
           density = summarytable$densitiesCluster)
       }
-      H5Fclose(file)
     })
 
     # statistics over all datasets
