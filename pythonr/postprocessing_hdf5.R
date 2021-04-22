@@ -154,17 +154,17 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
           plot_estimatedlabels <- cluster_plot(pts, labelsbest, "Estimated labels")
 
           if (separateplots) {
-            plot_save(plot_truelabels, expname, paste0(filename_base, "truelabels"))
-            plot_save(plot_estimatedlabels, expname, paste0(filename_base, "estimatedlabels"))
+            plot_save(plot_truelabels, expname, paste0(filename_base, "_truelabels"))
+            plot_save(plot_estimatedlabels, expname, paste0(filename_base, "_estimatedlabels"))
           }
 
-          plots_arrange(plot_truelabels, plot_estimatedlabels, 1, expname, paste0(filename_base, "true_estimate_plot"))
+          plots_arrange(plot_truelabels, plot_estimatedlabels, 1, expname, paste0(filename_base, "_true_estimate_plot"))
         }else {
           plot_clustering <- cluster_plot(pts, labelsbest, "Clustering", sds)
-          plot_save(plot_clustering, expname, paste0(filename_base, "Clustering"))
+          plot_save(plot_clustering, expname, paste0(filename_base, "_Clustering"))
         }
 
-        summary_plot(summarytable, paste0(filename_base, "summarytable_plots"), exp_name = expname)
+        summary_plot(summarytable, paste0(filename_base, "_summarytable_plots"), exp_name = expname)
       }
 
       # H5Fclose(file)
