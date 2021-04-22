@@ -202,8 +202,7 @@ cluster_plot <-
   function(pts,
            colourlabels,
            title,
-           pointsize = 0.03,
-           datatype = "simulation") {  #TODO: remove parameter
+           pointsize = 0.03) {
     dataset <- as_tibble(pts)
     data <- dataset %>%
       mutate(radius_SD = pointsize) %>%
