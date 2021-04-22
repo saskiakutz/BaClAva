@@ -203,7 +203,7 @@ cluster_plot <-
            colourlabels,
            title,
            pointsize = 0.03,
-           datatype = "simulation") {
+           datatype = "simulation") {  #TODO: remove parameter
     dataset <- as_tibble(pts)
     data <- dataset %>%
       mutate(radius_SD = pointsize) %>%
@@ -289,4 +289,33 @@ mkcols <- function(labels) {
     }
   })
   s
+}
+
+# summarytable plots
+scatterplot <- function(datatable, col1, col2, col3) {
+  scatter_plot <- ggplot(datatable, aes_string(x = col1, y = col2, color = col3)) +
+    geom_point() +
+    # labs(x = "x [µm]", y = "y [µm]") +
+    # ggtitle(title) +
+    theme_bw() +
+    theme(
+      axis.text = element_text(size = 8),
+      plot.title = element_text(size = 8),
+      axis.title = element_text(size = 8),
+      panel.border = element_rect(size = 1),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.background = element_rect(fill = "white") #
+    )
+
+  scatter_plot
+}
+
+summary_plot <- function(data_table, summaryplot_name, exp_name = expname, column1 = "numDetectionsCluster", column2 = "areasCluster", column3 = "densitiesCluster") {
+  plot_num_area_density <- scatterplot(data_table, column1, column2, column3)
+  plot_num_density_area <- scatterplot(data_table, column1, column3, column2)
+  plot_area_density_num <- scatterplot(data_table, column2, column3, column1)
+
+  summaryplot <- ggarrange(plot_num_area_density, plot_num_density_area, plot_area_density_num, nrow = 1)
+  plot_save(summaryplot, exp_name, summaryplot_name, plot_height = 45, plot_width = 300)
 }
