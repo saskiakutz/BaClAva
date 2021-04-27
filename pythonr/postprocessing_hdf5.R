@@ -179,6 +179,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
           reldensity = reldensity(pts, labelsbest, summarytable$areasCluster, xlim, ylim),
           area = summarytable$areasCluster,
           density = summarytable$densitiesCluster,
+          density_area = summarytable$densitiesCluster / summarytable$areasCluster,
           plots = plot_clustering
         )
       }else {
@@ -190,7 +191,8 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
           totalmols = length(labelsbest),
           reldensity = reldensity(pts, labelsbest, summarytable$areasCluster, xlim, ylim),
           area = summarytable$areasCluster,
-          density = summarytable$densitiesCluster)
+          density = summarytable$densitiesCluster,
+          density_area = summarytable$densitiesCluster / summarytable$areasCluster)
       }
     })
 
