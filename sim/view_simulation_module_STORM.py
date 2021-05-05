@@ -4,7 +4,7 @@ from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 
 
-class View_STORM(qtw.QWidget):
+class ViewSTORM(qtw.QWidget):
     submitted = qtc.pyqtSignal(object)
     startsim = qtc.pyqtSignal()
 
