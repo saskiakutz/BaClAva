@@ -7,6 +7,7 @@ from PyQt5 import QtCore as qtc
 class ViewSTORM(qtw.QWidget):
     submitted = qtc.pyqtSignal(object)
     startsim = qtc.pyqtSignal()
+    cancel_STORM = qtc.pyqtSignal()
 
     # noinspection PyArgumentList
     def __init__(self):
@@ -150,10 +151,19 @@ class ViewSTORM(qtw.QWidget):
             clicked=self.start_sim
         )
 
+        button_layout = qtw.QHBoxLayout()
+
         self.start_btn.setDisabled(True)
         self.dir_line.textChanged.connect(lambda x: self.start_btn.setDisabled(x == ''))
 
-        self.layout().addRow(self.start_btn)
+        self.cancel_btn = qtw.QPushButton(
+            "cancel",
+            clicked=self.cancel_STORM.emit
+        )
+        # self.layout().addRow(self.start_btn)
+        button_layout.addWidget(self.start_btn)
+        button_layout.addWidget(self.cancel_btn)
+        self.layout().addRow(button_layout)
 
     def save_file(self):
         filename = qtw.QFileDialog.getExistingDirectory(
