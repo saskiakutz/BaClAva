@@ -15,7 +15,7 @@ minimized user-bias and significantly accelerated computation.
 
 - [Installation](#Installation)
 - [Software overview](#Software-overview)
-  - [Module 1: Simulation tool](#Module-1-Simulation-tool)
+  - [Module 1: Simulation tool](#Module-1-Simulation-tools)
   - [Module 2: Bayesian calculations](#Module-2-Bayesian-calculations)
   - [Module 3: Bayesian postprocessing](#Module-3-Bayesian-postprocessing)
   - [Data format](#Data-format)
@@ -37,16 +37,24 @@ data. The final module performs a calculations based on these parameters and gen
 of essential characteristics of clusters, i.e. the cluster area or density. This can also be done in batches of datasets
 using parallel computing. For ease of use, each module can also be used independently.
 
-## Module 1: Simulation tool
+## Module 1: Simulation tools
 
 ![alt text](readme_images/sim_20.png "Screenshot of the simulation module")
 
 The first module of the Bayesian software, the simulation tool, enables the user to simulate simple Gaussian-like
-clusters. Upon starting the simulation tool, the user is prompted to adjust several simulation parameters, the number of
+clusters. This module has to parts depending on the output the user would like to get. Module 1a simulates the single
+localisations and Module 1b enables the user to simulate blinking fluorophores.
+
+Upon starting the simulation tool 1a, the user is prompted to adjust several simulation parameters, the number of
 datasets, and the storage directory. The user can only start the simulation process after choosing a proper directory.
 The tool simulates the final localisations assuming that each molecule is represented by a single localisation. For each
 simulation, the final table of localisations with the 2D coordinates (‘x’, ‘y’), the localisation’s standard deviation (
 ’ sd’) and its label (‘clusterID’) are stored as a dataset (‘data’) in a hdf5 file.
+
+In the module 1b, the user is prompted to adjust the simulation parameters for the underlying molecule distribution, the
+fluorophores' blinking and the camera parameters as well as the storage directory. The user cannot start the simulation
+until a storage directory is chosen. This module simulates SMLM-like behaviour of blinking dyes and stores the results
+in tiff files. In order to continue the Module 2, these files need to be localised by algorithms such as SMAP.
 
 ## Module 2: Bayesian calculations
 
