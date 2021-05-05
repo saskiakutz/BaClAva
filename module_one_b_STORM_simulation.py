@@ -7,8 +7,8 @@ from sim.model_simulation_module_STORM import Model_STORM
 
 
 class MainWindow_simulation_STORM(qtw.QWidget):
-    finished_sim = qtc.pyqtSignal(str)
-    start_sim = qtc.pyqtSignal(str)
+    finished_STORM_sim = qtc.pyqtSignal(str)
+    start_STORM_sim = qtc.pyqtSignal(str)
 
     # noinspection PyArgumentList,PyTypeChecker
     def __init__(self):
@@ -21,13 +21,13 @@ class MainWindow_simulation_STORM(qtw.QWidget):
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.view)
 
-        self.sim_thread = qtc.QThread()
-        self.model.moveToThread(self.sim_thread)
-        self.model.finished.connect(self.sim_thread.quit)
-        self.sim_thread.start()
+        self.sim_STORM_thread = qtc.QThread()
+        self.model.moveToThread(self.sim_STORM_thread)
+        self.model.finished.connect(self.sim_STORM_thread.quit)
+        self.sim_STORM_thread.start()
 
         self.view.submitted.connect(self.model.set_data)
-        self.view.startsim.connect(self.sim_thread.start)
+        self.view.startsim.connect(self.sim_STORM_thread.start)
         self.view.startsim.connect(self.on_started)
         self.view.submitted.connect(self.model.print_income)
         self.model.error.connect(self.view.show_error)
@@ -44,14 +44,14 @@ class MainWindow_simulation_STORM(qtw.QWidget):
 
     def on_started(self):
         # self.view.start_btn.setEnabled(False)
-        self.start_sim.emit('Simulating blinking clusters.')
+        self.start_STORM_sim.emit('Simulating blinking clusters.')
 
     def on_finished(self):
         # self.statusBar().showMessage('Simulation finished.')
-        self.sim_thread.quit()
-        self.sim_thread.deleteLater()
+        self.sim_STORM_thread.quit()
+        self.sim_STORM_thread.deleteLater()
         self.view.start_btn.setEnabled(True)
-        self.finished_sim.emit('Simulation finished.')
+        self.finished_STORM_sim.emit('Simulation finished.')
 
 # if __name__ == '__main__':
 #     app = qtw.QApplication(sys.argv)
