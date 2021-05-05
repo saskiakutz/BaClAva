@@ -67,22 +67,6 @@ class View_STORM(qtw.QWidget):
         rate_layout = qtw.QHBoxLayout()
         rate_layout.layout().addWidget(self.on_rate)
         rate_layout.layout().addWidget(self.off_rate)
-        #
-        # self.beta_a = qtw.QDoubleSpinBox(
-        #     self,
-        #     minimum=0,
-        #     maximum=100,
-        #     value=1
-        # )
-        # self.beta_b = qtw.QDoubleSpinBox(
-        #     self,
-        #     minimum=0,
-        #     maximum=100,
-        #     value=1
-        # )
-        # beta_layout = qtw.QHBoxLayout()
-        # beta_layout.layout().addWidget(self.beta_a)
-        # beta_layout.layout().addWidget(self.beta_b)
 
         self.inputs = {
             "number of clusters": qtw.QSpinBox(
