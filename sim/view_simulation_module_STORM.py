@@ -42,7 +42,7 @@ class View_STORM(qtw.QWidget):
             maximum=100000,
             value=3000
         )
-        # form.layout().addRow(self.roi_x_min, self.roi_x_max)
+
         roi_layout_y = qtw.QHBoxLayout()
         roi_layout_y.layout().addWidget(self.roi_y_min)
         roi_layout_y.layout().addWidget(self.roi_y_max)
