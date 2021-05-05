@@ -1,11 +1,8 @@
-import sys
 from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
-from PyQt5 import QtCore as qtc
-from module_one_simulation import MainWindow_simulation
-from module_one_b_STORM_simulation import MainWindow_simulation_STORM
-from module_two_Bayesian import MainWindow_Bayesian
-from module_three_post import MainWindow_post
+from modules.module_one_simulation import MainWindow_simulation
+from modules.module_one_b_STORM_simulation import MainWindow_simulation_STORM
+from modules.module_two_Bayesian import MainWindow_Bayesian
+from modules.module_three_post import MainWindow_post
 
 
 class View_software(qtw.QWidget):
