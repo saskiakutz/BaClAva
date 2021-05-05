@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 
-from sim.view_simulation_module import View_sim
+from sim.view_simulation_module_STORM import View_STORM
 from sim.model_simulation_module import Model_sim
 
 
@@ -17,7 +17,7 @@ class MainWindow_simulation_STORM(qtw.QWidget):
         # Main UI code goes here
 
         self.model = Model_sim()
-        self.view = View_sim()
+        self.view = View_STORM()
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.view)
 
