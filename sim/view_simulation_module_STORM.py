@@ -189,5 +189,5 @@ class View_STORM(qtw.QWidget):
     def show_error(self, error):
         qtw.QMessageBox.critical(None, 'Error', error)
 
-    # TODO: multimerisation as a checkbox option, if chosen: option to state number of molecules, proportion multimers,
+    # TODO: cancel button?
     # import stored sim_parameters.txt
