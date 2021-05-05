@@ -1,13 +1,8 @@
 import sys
 from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 from PyQt5.QtGui import QPalette, QColor
-from module_one_simulation import MainWindow_simulation
-from module_two_Bayesian import MainWindow_Bayesian
-from module_three_post import MainWindow_post
 from Bayesian_software_view import View_software
-
 
 class Main_Window(qtw.QMainWindow):
 
