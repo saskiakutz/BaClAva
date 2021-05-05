@@ -183,7 +183,7 @@ class View_STORM(qtw.QWidget):
             'directory': self.dir_line.text(),
             'n_clusters': self.inputs['number of clusters'].value(),
             'mol_per_cluster': self.inputs['density or number of molecules per cluster'].value(),
-            'blinking rate': self.inputs['model'].currentText(),
+            'blinking_rate': self.inputs['blinking rate'].currentText(),
             'radius_cluster': self.inputs['cluster radius [nm]'].value(),
             'mol_background': self.inputs['density or number of molecules in the background'].value(),
             'nsim': self.inputs['number of simulations'].value(),
