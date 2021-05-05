@@ -43,9 +43,9 @@ class ViewSTORM(qtw.QWidget):
             value=3000
         )
 
-        PSF_layout = qtw.QHBoxLayout()
-        PSF_layout.layout().addWidget(self.PSF_FWHM)
-        PSF_layout.layout().addWidget(self.PSF_intensity)
+        psf_layout = qtw.QHBoxLayout()
+        psf_layout.layout().addWidget(self.PSF_FWHM)
+        psf_layout.layout().addWidget(self.PSF_intensity)
 
         self.on_rate = qtw.QDoubleSpinBox(
             self,
@@ -99,7 +99,7 @@ class ViewSTORM(qtw.QWidget):
             ),
             "blinking rate": qtw.QComboBox(),
             "blinking rate (on, off) [s⁻¹]": rate_layout,
-            "PFS(FWHM [nm], intensity)": PSF_layout,
+            "PFS(FWHM [nm], intensity)": psf_layout,
             "camera ROI size [px]": roi_layout,
             "pixel size [nm]": qtw.QDoubleSpinBox(
                 self,
