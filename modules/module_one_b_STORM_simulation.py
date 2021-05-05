@@ -27,8 +27,8 @@ class MainWindow_simulation_STORM(qtw.QWidget):
         self.sim_STORM_thread.start()
 
         self.view.submitted.connect(self.model.set_data)
-        self.view.startsim.connect(self.sim_STORM_thread.start)
-        self.view.startsim.connect(self.on_started)
+        self.view.start_STORM.connect(self.sim_STORM_thread.start)
+        self.view.start_STORM.connect(self.on_started)
         self.view.submitted.connect(self.model.print_income)
         self.model.error.connect(self.view.show_error)
 
