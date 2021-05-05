@@ -34,11 +34,6 @@ class MainWindow_simulation_STORM(qtw.QWidget):
 
         self.model.finished.connect(self.on_finished)
 
-        #     status_bar = qtw.QStatusBar()
-        #     self.setStatusBar(status_bar)
-        #     status_bar.showMessage('cluster simulation')
-        #     # TODO: status_bar update messages
-        #
         # End main UI code
         self.show()
 
