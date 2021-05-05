@@ -1,12 +1,7 @@
-import sys
 from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 import os
-import time
-import csv
 import multiprocessing
-from model_table import TableModel
 from run.model_table_pd import DataFrameModel
 
 
