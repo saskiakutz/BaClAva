@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 from module_one_simulation import MainWindow_simulation
+from module_one_b_STORM_simulation import MainWindow_simulation_STORM
 from module_two_Bayesian import MainWindow_Bayesian
 from module_three_post import MainWindow_post
 
@@ -27,15 +28,21 @@ class View_software(qtw.QWidget):
         self.subwidget_3 = qtw.QWidget(self)
         self.grid_layout3 = qtw.QGridLayout()
         self.subwidget_3.setLayout(self.grid_layout3)
-        self.tab_widget.addTab(self.subwidget_1, 'Module 1: Simulation')
+        self.subwidget_4 = qtw.QWidget(self)
+        self.grid_layout4 = qtw.QGridLayout()
+        self.subwidget_4.setLayout(self.grid_layout4)
+        self.tab_widget.addTab(self.subwidget_1, 'Module 1a: Simulation')
         self.main_simulation = MainWindow_simulation()
         self.subwidget_1.layout().addWidget(self.main_simulation)
-        self.tab_widget.addTab(self.subwidget_2, 'Module 2: Bayesian engine')
+        self.tab_widget.addTab(self.subwidget_2, 'Module 1b: STORM simulation')
+        self.main_simulation_STORM = MainWindow_simulation_STORM()
+        self.subwidget_2.layout().addWidget(self.main_simulation_STORM)
+        self.tab_widget.addTab(self.subwidget_3, 'Module 2: Bayesian engine')
         self.main_run = MainWindow_Bayesian()
-        self.subwidget_2.layout().addWidget(self.main_run)
-        self.tab_widget.addTab(self.subwidget_3, 'Module 3: Postprocessing')
+        self.subwidget_3.layout().addWidget(self.main_run)
+        self.tab_widget.addTab(self.subwidget_4, 'Module 3: Postprocessing')
         self.main_post = MainWindow_post()
-        self.subwidget_3.layout().addWidget(self.main_post)
+        self.subwidget_4.layout().addWidget(self.main_post)
         # self.tab_widget.currentChanged(self.set_statusbar)
         tab_layout.addWidget(self.tab_widget)
         self.main_layout.addLayout(tab_layout)
