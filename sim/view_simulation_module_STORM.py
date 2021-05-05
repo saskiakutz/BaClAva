@@ -6,7 +6,7 @@ from PyQt5 import QtCore as qtc
 
 class ViewSTORM(qtw.QWidget):
     submitted = qtc.pyqtSignal(object)
-    startsim = qtc.pyqtSignal()
+    start_STORM = qtc.pyqtSignal()
     cancel_STORM = qtc.pyqtSignal()
 
     # noinspection PyArgumentList
