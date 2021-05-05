@@ -13,75 +13,76 @@ class View_STORM(qtw.QWidget):
         super().__init__()
         self.setLayout(qtw.QFormLayout())
 
-        self.roi_x_min = qtw.QSpinBox(
+        self.roi_x = qtw.QSpinBox(
+            self,
+            minimum=0,
+            maximum=10000,
+            value=31
+        )
+        self.roi_y = qtw.QSpinBox(
+            self,
+            minimum=1,
+            maximum=100000,
+            value=31
+        )
+
+        roi_layout = qtw.QHBoxLayout()
+        roi_layout.layout().addWidget(self.roi_x)
+        roi_layout.layout().addWidget(self.roi_y)
+
+        self.PSF_FWHM = qtw.QSpinBox(
             self,
             minimum=0,
             maximum=10000,
             value=0
         )
-        self.roi_x_max = qtw.QSpinBox(
+        self.PSF_intensity = qtw.QSpinBox(
             self,
             minimum=1,
             maximum=100000,
             value=3000
         )
 
-        roi_layout_x = qtw.QHBoxLayout()
-        roi_layout_x.layout().addWidget(self.roi_x_min)
-        roi_layout_x.layout().addWidget(self.roi_x_max)
+        PSF_layout = qtw.QHBoxLayout()
+        PSF_layout.layout().addWidget(self.PSF_FWHM)
+        PSF_layout.layout().addWidget(self.PSF_intensity)
 
-        self.roi_y_min = qtw.QSpinBox(
-            self,
-            minimum=0,
-            maximum=10000,
-            value=0
-        )
-        self.roi_y_max = qtw.QSpinBox(
-            self,
-            minimum=1,
-            maximum=100000,
-            value=3000
-        )
-
-        roi_layout_y = qtw.QHBoxLayout()
-        roi_layout_y.layout().addWidget(self.roi_y_min)
-        roi_layout_y.layout().addWidget(self.roi_y_max)
-
-        self.alpha = qtw.QDoubleSpinBox(
+        self.on_rate = qtw.QDoubleSpinBox(
             self,
             minimum=0,
             maximum=100,
+            decimals=1,
             singleStep=1,
             value=5
         )
-        self.beta = qtw.QDoubleSpinBox(
+        self.off_rate = qtw.QDoubleSpinBox(
             self,
             minimum=0,
-            maximum=100,
-            decimals=6,
-            singleStep=0.000001,
-            value=0.166667
+            maximum=10000,
+            decimals=1,
+            singleStep=0.1,
+            value=10
         )
 
-        gamma_layout = qtw.QHBoxLayout()
-        gamma_layout.layout().addWidget(self.alpha)
-        gamma_layout.layout().addWidget(self.beta)
-
-        self.beta_a = qtw.QDoubleSpinBox(
-            self,
-            minimum=0,
-            maximum=100,
-            value=1
-        )
-        self.beta_b = qtw.QDoubleSpinBox(
-            self,
-            minimum=0,
-            maximum=100,
-            value=1
-        )
-        beta_layout = qtw.QHBoxLayout()
-        beta_layout.layout().addWidget(self.beta_a)
-        beta_layout.layout().addWidget(self.beta_b)
+        rate_layout = qtw.QHBoxLayout()
+        rate_layout.layout().addWidget(self.on_rate)
+        rate_layout.layout().addWidget(self.off_rate)
+        #
+        # self.beta_a = qtw.QDoubleSpinBox(
+        #     self,
+        #     minimum=0,
+        #     maximum=100,
+        #     value=1
+        # )
+        # self.beta_b = qtw.QDoubleSpinBox(
+        #     self,
+        #     minimum=0,
+        #     maximum=100,
+        #     value=1
+        # )
+        # beta_layout = qtw.QHBoxLayout()
+        # beta_layout.layout().addWidget(self.beta_a)
+        # beta_layout.layout().addWidget(self.beta_b)
 
         self.inputs = {
             "number of clusters": qtw.QSpinBox(
@@ -91,27 +92,51 @@ class View_STORM(qtw.QWidget):
                 maximum=1000,
                 singleStep=1
             ),
-            "number of molecules per cluster": qtw.QSpinBox(
-                self,
-                minimum=1,
-                maximum=10000,
-                singleStep=1,
-                value=100
-            ),
-            "model": qtw.QComboBox(),
-            "standard deviation [nm]": qtw.QSpinBox(
+            "cluster radius [nm]": qtw.QSpinBox(
                 self,
                 minimum=0,
                 maximum=10000,
                 singleStep=1,
                 value=50
             ),
-            "background percentage": qtw.QDoubleSpinBox(
+            "density or number of molecules per cluster": qtw.QSpinBox(
+                self,
+                minimum=1,
+                maximum=10000,
+                singleStep=1,
+                value=100
+            ),
+            "density or number of molecules in the background": qtw.QDoubleSpinBox(
                 self,
                 minimum=0,
-                maximum=1,
+                maximum=100000,
+                singleStep=1,
+                value=100
+            ),
+            "blinking rate": qtw.QComboBox(),
+            "blinking rate (on, off) [s⁻¹]": rate_layout,
+            "PFS(FWHM [nm], intensity)": PSF_layout,
+            "camera ROI size [px]": roi_layout,
+            "pixel size [nm]": qtw.QDoubleSpinBox(
+                self,
+                minimum=0,
+                maximum=200,
                 singleStep=0.1,
-                value=0.5
+                value=100
+            ),
+            "exposure time [s]": qtw.QSpinBox(
+                self,
+                minimum=1,
+                maximum=500,
+                singleStep=1,
+                value=20
+            ),
+            "number of frames per simulation": qtw.QSpinBox(
+                self,
+                minimum=1,
+                maximum=1000000000,
+                singleStep=1000,
+                value=50000
             ),
             "number of simulations": qtw.QSpinBox(
                 self,
@@ -119,15 +144,10 @@ class View_STORM(qtw.QWidget):
                 maximum=1000000,
                 singleStep=1,
                 value=10
-            ),
-            "ROI x size [nm]": roi_layout_x,
-            "ROI y size [nm]": roi_layout_y,
-            "Gamma parameters (\u03B1, \u03B2)": gamma_layout,
-            "background distribution": beta_layout
+            )
         }
-        models = ('Gaussian', 'no other model implemented')
-        self.inputs["model"].addItems(models)
-        self.inputs["model"].model().item(1).setEnabled(False)
+        models = ('AF647', 'AF488', 'CF680', 'other dye')
+        self.inputs["blinking rate"].addItems(models)
 
         for label, widget in self.inputs.items():
             self.layout().addRow(label, widget)
@@ -167,10 +187,10 @@ class View_STORM(qtw.QWidget):
             'sdcluster': self.inputs['standard deviation [nm]'].value(),
             'background': self.inputs['background percentage'].value(),
             'nsim': self.inputs['number of simulations'].value(),
-            'roixmin': self.roi_x_min.value(),
-            'roixmax': self.roi_x_max.value(),
-            'roiymin': self.roi_y_min.value(),
-            'roiymax': self.roi_y_max.value(),
+            'roixmin': self.roi_x.value(),
+            'roixmax': self.roi_y.value(),
+            'roiymin': self.PSF_FWHM.value(),
+            'roiymax': self.PSF_intensity.value(),
             'alpha': self.alpha.value(),
             'beta': self.beta.value(),
             'a': self.beta_a.value(),
