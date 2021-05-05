@@ -137,7 +137,7 @@ class ViewSTORM(qtw.QWidget):
             self.layout().addRow(label, widget)
 
         self.dir_btn = qtw.QPushButton("Select directory")
-        self.dir_btn.clicked.connect(self.saveFile)
+        self.dir_btn.clicked.connect(self.save_file)
         self.dir_line = qtw.QLineEdit("select directory")
         self.dir_line.setReadOnly(True)
         self.dir_line.textChanged.connect(lambda x: self.dir_line.setReadOnly(x == ''))
@@ -154,7 +154,7 @@ class ViewSTORM(qtw.QWidget):
 
         self.layout().addRow(self.start_btn)
 
-    def saveFile(self):
+    def save_file(self):
         filename = qtw.QFileDialog.getExistingDirectory(
             self,
             "Select directory",
