@@ -13,12 +13,6 @@ class View_STORM(qtw.QWidget):
         super().__init__()
         self.setLayout(qtw.QFormLayout())
 
-        # heading = qtw.QLabel("Simulation")
-        # self.layout().addRow(heading)
-        # heading_font = qtg.QFont('Arial', 20, qtg.QFont.Bold)
-        # heading_font.setStretch(qtg.QFont.ExtraExpanded)
-        # heading.setFont(heading_font)
-
         self.roi_x_min = qtw.QSpinBox(
             self,
             minimum=0,
@@ -31,7 +25,7 @@ class View_STORM(qtw.QWidget):
             maximum=100000,
             value=3000
         )
-        # form.layout().addRow(self.roi_x_min, self.roi_x_max)
+
         roi_layout_x = qtw.QHBoxLayout()
         roi_layout_x.layout().addWidget(self.roi_x_min)
         roi_layout_x.layout().addWidget(self.roi_x_max)
