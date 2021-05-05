@@ -21,6 +21,8 @@ class Main_Window(qtw.QMainWindow):
         # self.simulation.finished_sim.connect(self.set_statusbar)
         self.main_view.main_simulation.start_sim.connect(self.set_statusbar)
         self.main_view.main_simulation.finished_sim.connect(self.set_statusbar)
+        self.main_view.main_simulation_STORM.start_STORM_sim.connect(self.set_statusbar)
+        self.main_view.main_simulation_STORM.finished_STORM_sim.connect(self.set_statusbar)
         self.main_view.main_run.start_bayesian.connect(self.set_statusbar)
         self.main_view.main_run.finished_bayesian.connect(self.set_statusbar)
         self.main_view.main_post.started_post.connect(self.set_statusbar)
