@@ -128,7 +128,8 @@ class ViewSTORM(qtw.QWidget):
                 maximum=1000000,
                 singleStep=1,
                 value=10
-            )
+            ),
+            "store as stack": qtw.QCheckBox(checked=True)
         }
         models = ('AF647', 'AF488', 'CF680', 'other dye')
         self.inputs["blinking rate"].addItems(models)
@@ -179,7 +180,8 @@ class ViewSTORM(qtw.QWidget):
             'off_rate': self.off_rate.value(),
             'pixel_size': self.inputs['pixel size [nm]'].value(),
             'exposure_time': self.inputs['exposure time [s]'].value(),
-            'n_frames': self.inputs['number of frames per simulation'].value()
+            'n_frames': self.inputs['number of frames per simulation'].value(),
+            'tiff_stack': self.inputs['store as stack'].isChecked()
         }
         self.start_btn.setDisabled(True)
         self.startsim.emit()
