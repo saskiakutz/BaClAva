@@ -2,10 +2,10 @@
 
 ## About Bayesian software:
 
-Bayesian software **need a proper name!** is a software tool with a graphic user interface for the analysis of
-clustering in data from single-molecule localisation microscopy (SMLM). It uses a Bayesian engine for user-independent
-investigation of spatial distributions based on the code published in Rubin-Delaunchy et al. [[1]](#1) and includes a
-number of clustering algorithms published therein and in [[2]](#2). This tool offers the option to generate artificial
+Bayesian software **BaClAva** is a software tool with a graphic user interface for the analysis of clustering in data
+from single-molecule localisation microscopy (SMLM). It uses a Bayesian engine for user-independent investigation of
+spatial distributions based on the code published in Rubin-Delaunchy et al. [[1]](#1) and includes a number of
+clustering algorithms published therein and in [[2]](#2). This tool offers the option to generate artificial
 ground-truth data, to analyze the spatial distribution localisations with a Bayesian model to determine the degree of
 clustering and other quantitative measures of nonrandom distribution. It specifically offers batch processing of several
 experiments, and the fast turnover of large field of view data. Our software delivers clustering analysis with actively
