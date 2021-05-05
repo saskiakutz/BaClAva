@@ -181,20 +181,21 @@ class View_STORM(qtw.QWidget):
     def start_sim(self):
         data = {
             'directory': self.dir_line.text(),
-            'nclusters': self.inputs['number of clusters'].value(),
-            'molspercluster': self.inputs['number of molecules per cluster'].value(),
-            'model': self.inputs['model'].currentText(),
-            'sdcluster': self.inputs['standard deviation [nm]'].value(),
-            'background': self.inputs['background percentage'].value(),
+            'n_clusters': self.inputs['number of clusters'].value(),
+            'mol_per_cluster': self.inputs['density or number of molecules per cluster'].value(),
+            'blinking rate': self.inputs['model'].currentText(),
+            'radius_cluster': self.inputs['cluster radius [nm]'].value(),
+            'mol_background': self.inputs['density or number of molecules in the background'].value(),
             'nsim': self.inputs['number of simulations'].value(),
-            'roixmin': self.roi_x.value(),
-            'roixmax': self.roi_y.value(),
-            'roiymin': self.PSF_FWHM.value(),
-            'roiymax': self.PSF_intensity.value(),
-            'alpha': self.alpha.value(),
-            'beta': self.beta.value(),
-            'a': self.beta_a.value(),
-            'b': self.beta_b.value()
+            'pixel_x': self.roi_x.value(),
+            'pixel_y': self.roi_y.value(),
+            'PSF_FWHM': self.PSF_FWHM.value(),
+            'PSF_intensity': self.PSF_intensity.value(),
+            'on_rate': self.on_rate.value(),
+            'off_rate': self.off_rate.value(),
+            'pixel_size': self.inputs['pixel size [nm]'].value(),
+            'exposure_time': self.inputs['exposure time [s]'].value(),
+            'n_frames': self.inputs['number of frames per simulation'].value()
         }
         self.start_btn.setDisabled(True)
         self.startsim.emit()
