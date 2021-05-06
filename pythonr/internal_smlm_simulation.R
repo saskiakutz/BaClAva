@@ -15,19 +15,13 @@
 # an Array with randomly(uniformly) distributed centers(x,y) of clusters
 
 
-distribute_clusters_uniform <- function(number_of_clusters,
-                                        cluster_radius,
-                                        SizeX, SizeY, indent,
-                                        distance_between_clusters) {
+distribute_clusters_uniform <- function(number_of_clusters, cluster_radius, SizeX, SizeY, indent, distance_between_clusters) {
 
   # error handling
   if (number_of_clusters <= 1 || number_of_clusters > 300) stop("number_of_clusters must be in range 2-300")
   number_of_clusters <- floor(number_of_clusters)
 
-  if (SizeX < 20 ||
-    SizeY < 20 ||
-    SizeX > 500 ||
-    SizeY > 500) stop("SizeX and SizeY must be in range 20-500")
+  if (SizeX < 20 || SizeY < 20 || SizeX > 500 || SizeY > 500) stop("SizeX and SizeY must be in range 20-500")
   SizeX <- floor(SizeX)
   SizeY <- floor(SizeY)
 
@@ -36,11 +30,8 @@ distribute_clusters_uniform <- function(number_of_clusters,
 
   if (cluster_radius < 0) stop("cluster_radius must be positive")
 
-  if (distance_between_clusters < 0 || max(SizeX, SizeY) -
-    2 * indent -
-    2 * cluster_radius < distance_between_clusters)
-  { stop("distance between clusters must be positive and smaller then 'max(SizeX,SizeY)-(2*indent+2*cluster_radius)'.
-   Make a matrix bigger or a cluster_radius smaller.") }
+  if (distance_between_clusters < 0 || max(SizeX, SizeY) - 2 * indent - 2 * cluster_radius < distance_between_clusters)
+  { stop("distance between clusters must be positive and smaller then 'max(SizeX,SizeY)-(2*indent+2*cluster_radius)'. Make a matrix bigger or a cluster_radius smaller.") }
 
   if (distance_between_clusters < cluster_radius * 2)
   { warning("if distance_between_clusters < cluster_radius*2, then some molecules can belong to several clusters") }
@@ -53,16 +44,14 @@ distribute_clusters_uniform <- function(number_of_clusters,
   if (X1 >= X2 || Y1 >= Y2) stop("indent or cluster_radius is too large")
 
   #if (floor((X2-X1)/distance_between_clusters+1) * floor((Y2-Y1)/distance_between_clusters+1) < number_of_clusters )
-  #{ stop("It wont work. There is not enough space.
-  # Try to reduce distance_between_clusters or cluster_radius or make a matrix larger") }
+  #{ stop("It wont work. There is not enough space. Try to reduce distance_between_clusters or cluster_radius or make a matrix larger") }
   #-----------------------------------------------#
 
   cluster_centers <- matrix(0, number_of_clusters, 2)
 
   cluster_centers[1,] <- c(runif(1, min = X1, max = X2), runif(1, min = Y1, max = Y2))
 
-  # since there are enough problematic cases(mostly because of the "distance_between_clusters"),
-  # some "extra protection" will be used
+  # since there are enough problematic cases(mostly because of the "distance_between_clusters"), some "extra protection" will be used
   # just to be sure that a procedure call will terminate
   start_again <- number_of_clusters * 100
   steps_made <- 0
@@ -73,10 +62,9 @@ distribute_clusters_uniform <- function(number_of_clusters,
   while (i < number_of_clusters)
   {
     if (real_stop == 10) {
-      print(paste("results of distributing the centers of clusters will be different from input.
-      Distance between clusters will be smaller than:", distance_between_clusters))
-      cluster_centers[, 1] <- runif(number_of_clusters, min = X1, max = X2)
-      cluster_centers[, 2] <- runif(number_of_clusters, min = Y1, max = Y2)
+      print(paste("results of distributing the centers of clusters will be different from input. Distance between clusters will be smaller than:", distance_between_clusters))
+      cluster_centers[, 1] <- c(runif(number_of_clusters, min = X1, max = X2))
+      cluster_centers[, 2] <- c(runif(number_of_clusters, min = Y1, max = Y2))
       return(cluster_centers)
     }
 
@@ -94,8 +82,7 @@ distribute_clusters_uniform <- function(number_of_clusters,
     {
       steps_made <- steps_made + 1
       if (steps_made == start_again ||
-        sqrt(abs(cluster_centers[k,][1] - cluster_centers[i + 1,][1])^2 +
-               abs(cluster_centers[k,][2] - cluster_centers[i + 1,][2])^2)
+        sqrt(abs(cluster_centers[k,][1] - cluster_centers[i + 1,][1])^2 + abs(cluster_centers[k,][2] - cluster_centers[i + 1,][2])^2)
           < distance_between_clusters)
       { i <- i - 1
         break }
@@ -105,6 +92,8 @@ distribute_clusters_uniform <- function(number_of_clusters,
 
   return(cluster_centers)
 }
+
+#-------------------------#
 
 # This function distributes the given number of molecules around X/Y point
 #
@@ -138,8 +127,7 @@ distribute_molecules_in_cluster_gauss <- function(X, Y, number_of_molecules, clu
   if (distance < 0 || distance > 2) stop("distance must be in range 0-2")
 
   #if ((sqrt(cluster_radius^2*pi)*distance+1)^2 < number_of_molecules/10)
-  #{ stop("there is not enough space for molecules.
-  # Reduce the distance or number_of_molecules or make a cluster_radius bigger") }
+  #{ stop("there is not enough space for molecules. Reduce the distance or number_of_molecules or make a cluster_radius bigger") }
   #--------------------------------#
 
   mol_array <- matrix(0, number_of_molecules, 2)
@@ -206,6 +194,8 @@ distribute_molecules_in_cluster_gauss <- function(X, Y, number_of_molecules, clu
 
 #--------------------------------------------------------------------------------#
 
+#--------------------------------------------------------------------------------#
+
 
 # this function creates distributes(gauss) molecules in clusters(decides how many molecules each cluster will have)
 # in the end there are "number_of_clusters*cluster_mean" molecules total in all clusters
@@ -230,7 +220,7 @@ distribute_molecules_in_clusters <- function(cluster_mean, cluster_SD, number_of
   if (cluster_mean < 1 || cluster_mean > 1000) stop("cluster_mean must be in range 1-1000")
   cluster_mean <- floor(cluster_mean)
 
-  if (cluster_SD < 0) stop("cluster_SD must positive or zero")
+  if (cluster_SD < 0) stop("cluster_SD must be positive or zero")
 
   if (cluster_mean < cluster_SD * 3) {
     warning("cluster_mean < cluster_SD*3. SD will be changed")
@@ -240,7 +230,7 @@ distribute_molecules_in_clusters <- function(cluster_mean, cluster_SD, number_of
 
   if (missing(molecules_in_clusters)) molecules_in_clusters <- number_of_clusters * cluster_mean
   else {
-    molecules_in_clusters <- abs(molecules_in_clusters)
+    molecules_in_clusters <- floor(abs(molecules_in_clusters))
     cluster_mean <- floor(molecules_in_clusters / number_of_clusters)
     cluster_SD <- floor(cluster_mean / 3)
     print(paste("cluster_mean will be:", cluster_mean))
@@ -250,18 +240,21 @@ distribute_molecules_in_clusters <- function(cluster_mean, cluster_SD, number_of
   number_of_molecules <- number_of_clusters * cluster_mean
   molecules_in_clusters_rest <- molecules_in_clusters - number_of_molecules
 
-  if (number_of_molecules == 0 || cluster_mean == 0) return(c())
+  if (number_of_molecules == 0)  return(c())
 
   mol_array <- c()
-  if (cluster_SD == 0) mol_array <- rep(1, number_of_clusters)
-
+  if (cluster_SD == 0) {
+    mol_array <- rep(cluster_mean, number_of_clusters)
+    rest_positions <- floor(runif(molecules_in_clusters_rest, 1, number_of_clusters + 1))
+    for (i in rest_positions) mol_array[i] <- mol_array[i] + 1
+    return(mol_array)
+  }
   #if (molecules_in_clusters_rest < 0) stop("there must be at least cluster_mean*number_of_clusters molecules")
   #if (molecules_in_clusters_rest != 0){
   #	warning("mean number and SD of molecules in clusters will be different from the input")
 
   #}
-  # because molecules are distributed randomly it can happen that a result would be wrong,
-  # so we have to start distributing again
+  # because molecules are distributed randomly it can happen that a result would be wrong, so we have to start distributing again
   # some sort of protection from an endless loop is needed
   threshold <- 0.01
   steps_made <- 0
@@ -330,6 +323,8 @@ distribute_molecules_in_clusters <- function(cluster_mean, cluster_SD, number_of
 
 #-----------------------------------------#
 
+#-----------------------------------------#
+
 
 # Binary search for a matrix
 # undefinied behavior if an input-matrix(first column(x-positions)) is not sorted
@@ -366,11 +361,7 @@ binary_search <- function(Matrix, number) {
 # Output:
 # a matrix with background molecules' positions(x,y)
 
-distribute_background_molecules_uniform <- function(SizeX, SizeY, indent,
-                                                    clusters_centers,
-                                                    clusters_radiuses,
-                                                    number_of_molecules,
-                                                    distance) {
+distribute_background_molecules_uniform <- function(SizeX, SizeY, indent, clusters_centers, clusters_radiuses, number_of_molecules, distance) {
 
   # error checking
   if (SizeX < 20 ||
@@ -406,8 +397,7 @@ distribute_background_molecules_uniform <- function(SizeX, SizeY, indent,
   if (distance && (sqrt((X2 - X1) * (Y2 - Y1) - sum(clusters_radiuses^2 * pi)) / distance + 1)^2 < number_of_molecules)
   { stop("There is definitely not enough space for molecules. Try to reduce the distance or enlarge the matrix.") }
   if (distance && (sqrt((X2 - X1) * (Y2 - Y1) - sum(clusters_radiuses^2 * pi)) / distance + 1)^2 * 0.55 < number_of_molecules)
-  { print("Warning: it is probably going to be hard to distribute molecules with the given distance.
-  It is gonna take some time to find that out. No guarantee that it will work.") }
+  { print("Warning: it is probably going to be hard to distribute molecules with the given distance. It is gonna take some time to find that out. No guarantee that it will work.") }
 
   # protection from looping forever(can happen only if distance > 0)
   stop_counter <- 0
@@ -523,6 +513,8 @@ distribute_background_molecules_uniform <- function(SizeX, SizeY, indent,
   return(mol_array)
 }
 
+#------------------#
+
 # creates a tiff stack
 # !appends! matrices(frames) to a file, so if a file already contains something then this function will corrupt it!
 # all matrices must have the same size, otherwise undefined behavior
@@ -561,8 +553,7 @@ write_tiff <- function(matrix_stack, file_out) {
   #					  bitwAnd(matrix_axis[2],255),
   #					  bitwAnd(matrix_axis[2],65280),0,0))
 
-  # offsets[1] to the first image data, it will be "updated" after each added frame and point to the next matrix.
-  # This offset is counted in bytes.
+  # offsets[1] to the first image data, it will be "updated" after each added frame and point to the next matrix. This offset is counted in bytes.
   # offsets[2] to the first IFD data, will also point to the next IFD later.
   offsets <- as.integer(c(74, 74 + matrix_axis[1] * matrix_axis[2] * 2))
 
@@ -574,9 +565,7 @@ write_tiff <- function(matrix_stack, file_out) {
 
     writeBin(tags, con, size = 1)
     writeBin(offsets, con, size = 4)
-    offsets <- as.integer(offsets +
-                            66 +
-                            matrix_axis[1] * matrix_axis[2] * 2) # 66 because header was cut off
+    offsets <- as.integer(offsets + 66 + matrix_axis[1] * matrix_axis[2] * 2) # 66 because header was cut off
 
     writeBin(as.integer(matrix_stack[[i]]), con, size = 2)
 
