@@ -16,23 +16,23 @@ class MainWindowSimulationSMLM(qtw.QWidget):
         super().__init__()
         # Main UI code goes here
 
-        self.model = ModelSMLM()
+        self.model_smlm = ModelSMLM()
         self.storm_view = ViewSMLM()
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.storm_view)
 
         self.sim_STORM_thread = qtc.QThread(parent=self)
-        self.model.moveToThread(self.sim_STORM_thread)
-        self.model.finished.connect(self.sim_STORM_thread.quit)
+        self.model_smlm.moveToThread(self.sim_STORM_thread)
+        self.model_smlm.finished.connect(self.sim_STORM_thread.quit)
         self.sim_STORM_thread.start()
 
-        self.storm_view.submitted.connect(self.model.set_data)
+        self.storm_view.submitted.connect(self.model_smlm.set_data)
         self.storm_view.start_STORM.connect(self.sim_STORM_thread.start)
         self.storm_view.start_STORM.connect(self.on_started)
-        self.storm_view.submitted.connect(self.model.print_income)
-        self.model.error.connect(self.storm_view.show_error)
+        self.storm_view.submitted.connect(self.model_smlm.print_income)
+        self.model_smlm.error.connect(self.storm_view.show_error)
 
-        self.model.finished.connect(self.on_finished)
+        self.model_smlm.finished.connect(self.on_finished)
 
         self.storm_view.cancel_STORM.connect(self.on_cancel)
         # End main UI code
@@ -45,7 +45,7 @@ class MainWindowSimulationSMLM(qtw.QWidget):
     def on_finished(self):
         # self.statusBar().showMessage('Simulation finished.')
         self.sim_STORM_thread.quit()
-        self.sim_STORM_thread.deleteLater()
+        self.model_smlm.deleteLater()
         self.storm_view.start_btn.setEnabled(True)
         self.finished_STORM_sim.emit('Simulation finished.')
 
