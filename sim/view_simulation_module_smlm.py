@@ -51,15 +51,15 @@ class ViewSMLM(qtw.QWidget):
         self.on_rate = qtw.QDoubleSpinBox(
             self,
             minimum=0,
-            maximum=100,
+            maximum=0.1,
             decimals=6,
-            singleStep=1,
+            singleStep=0.00001,
             value=0.00004
         )
         self.off_rate = qtw.QDoubleSpinBox(
             self,
             minimum=0,
-            maximum=10000,
+            maximum=1,
             decimals=2,
             singleStep=0.1,
             value=0.4
