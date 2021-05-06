@@ -43,7 +43,7 @@ class ModelSMLM(qtc.QObject):
 
             try:
                 simulation = PythonToR()
-                simulation.r_smlm_simulation()
+                simulation.r_smlm_simulation(self.inputs)
 
             except Exception as e:
                 error = f'Cannot do the simulations: {e}'
