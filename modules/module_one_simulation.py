@@ -21,7 +21,7 @@ class MainWindow_simulation(qtw.QWidget):
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.view)
 
-        self.sim_thread = qtc.QThread()
+        self.sim_thread = qtc.QThread(parent=self)
         self.model.moveToThread(self.sim_thread)
         self.model.finished.connect(self.sim_thread.quit)
         self.sim_thread.start()
