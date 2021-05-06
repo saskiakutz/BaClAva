@@ -4,7 +4,7 @@ from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
 
 
-class ViewSTORM(qtw.QWidget):
+class ViewSMLM(qtw.QWidget):
     submitted = qtc.pyqtSignal(object)
     start_STORM = qtc.pyqtSignal()
     cancel_STORM = qtc.pyqtSignal()
