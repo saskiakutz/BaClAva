@@ -9,11 +9,11 @@ from os.path import isfile, join
 
 
 class PythonToR:
+    base = importr('base')
     r = r_objects.r
 
     def r_simulation(self, input_dic):
         # call R simulation
-        base = importr('base')
         self.r.source('./pythonr/simulate.R')
 
         numpy2ri.activate()
