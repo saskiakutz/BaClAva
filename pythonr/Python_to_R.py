@@ -39,7 +39,31 @@ class PythonToR:
         # TODO: multimerisation not ready yet
 
     def r_smlm_simulation(self, input_dic):
-        pass
+        self.r.source('./pythonr/simulation_smlm.R')
+        print(BoolVector([input_dic.get('tiff_stack')]))
+        print(BoolVector([input_dic.get('noise')]))
+        numpy2ri.activate()
+        self.r.make_plot(
+            SizeX=input_dic.get('pixel_x'),
+            SizeY=input_dic.get('pixel_y'),
+            indent=input_dic.get('pixel_indent'),
+            number_of_clusters=input_dic.get('n_clusters'),
+            cluster_radius=input_dic.get('radius_cluster'),
+            distance_between_clusters=2 / 3 * input_dic.get('radius_cluster'),
+            FWHM=input_dic.get('PSF_FWHM'),
+            max_intensity=input_dic.get('PSF_intensity'),
+            on=input_dic.get('on_rate'),
+            off=input_dic.get('off_rate'),
+            frames=input_dic.get('n_frames'),
+            simulations=input_dic.get('n_simulation'),
+            stack_or_single=BoolVector([input_dic.get('tiff_stack')]),
+            noise=BoolVector([input_dic.get('noise')]),
+            clusters_density=input_dic.get('density_per_cluster'),
+            background_density=input_dic.get('density_background')
+        )
+        self.r.test_fun(3)
+        numpy2ri.deactivate()
+        print('done')
 
     def r_bayesian_run(self, input_dic, status):
         self.r.source('./pythonr/run_hdf5.R')
