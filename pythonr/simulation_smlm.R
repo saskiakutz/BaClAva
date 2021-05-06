@@ -62,7 +62,7 @@ make_plot <- function(SizeX, SizeY, indent,
   SD <- FWHM / 2.355
   if (indent < ceiling(SD * 3.1)) {
     indent <- ceiling(SD * 3.1)
-    print(paste("indent will be:", indent))
+    print(paste0("indent will be:", indent))
   }
 
   # max_intensity is taken from storm data(alexa 647)
@@ -81,10 +81,10 @@ make_plot <- function(SizeX, SizeY, indent,
 
   if ((SizeX * SizeX * 2 + 66) * frames + 74 > 300000000) {
     if (((SizeX * SizeX * 2 + 66) * frames + 74) / 1000000000 >= 5) {
-      print(paste("You crazy! i won't create", ((SizeX * SizeX * 2 + 66) * frames + 74) / 1000000000, "Gb. You can change the code though to get rid of that disobedience."))
+      print(paste0("You crazy! i won't create", ((SizeX * SizeX * 2 + 66) * frames + 74) / 1000000000, "Gb. You can change the code though to get rid of that disobedience."))
       return(0)
     }
-    print(paste("you can not create a stack of size ", (SizeX * SizeX * 2 + 55) * frames / 1000000000, " Gb"))
+    print(paste0("you can not create a stack of size ", (SizeX * SizeX * 2 + 55) * frames / 1000000000, " Gb"))
     print("Max size is 300 Mb")
     print("if you disagree with that delete 'return(0)' in make_plot(). You can find this string with ctrl+F there. But be carefull, you will have to either create only single tiffs or modify Stack writing(write every 1000 frames for instance).")
     return(0)
@@ -120,15 +120,15 @@ make_plot <- function(SizeX, SizeY, indent,
                                      (2 * pi * cluster_radius^2) *
                                      number_of_clusters *
                                      10^-6)
-    print(paste("number of molecules in clusters:", molecules_in_clusters))
+    print(paste0("number of molecules in clusters:", molecules_in_clusters))
     if (molecules_in_clusters < number_of_clusters) {
-      Out_error <- paste(paste("there too few molecules_in_clusters:", molecules_in_clusters), paste("number of clusters:", number_of_clusters), "please make a cluster's density larger or adjust cluster_radius with number_of_clusters", sep = "\n")
+      Out_error <- paste0(paste0("there too few molecules_in_clusters:", molecules_in_clusters), paste0("number of clusters:", number_of_clusters), "please make a cluster's density larger or adjust cluster_radius with number_of_clusters", sep = "\n")
       stop(Out_error)
     }
 
     cluster_mean <- floor(molecules_in_clusters / number_of_clusters)
     cluster_SD <- floor(cluster_mean / 3)
-    if (cluster_mean < 3) print(paste("cluster_mean is", cluster_mean, ".Weird result is possible."))
+    if (cluster_mean < 3) print(paste0("cluster_mean is", cluster_mean, ".Weird result is possible."))
 
     if (molecules_in_clusters == 0) stop("molecules_in_clusters = 0, please change the input(cluster radius or density)")
   }
@@ -150,19 +150,19 @@ make_plot <- function(SizeX, SizeY, indent,
       molecules_background <- 0
     }
     if (molecules_background < 0 || molecules_background > 1000000) stop("molecules_background must be in [0,1000000]")
-    molecules_background <- floor(molecules_background)
+    # molecules_background <- floor(molecules_background)
   } #------------------------------------------------------------------------#
 
   cluster_radius <- cluster_radius / 100 # 100 nm is pixel size by default. must be changed if resolution is added.
 
-  output_directory <- paste(frames, "frames_", clusters_density, "clus density_", background_density, "back density_",
-                            cluster_radius, "nm clusradius_", round(100 * distance_between_clusters, 2), "nm distance between clusters_",
-                            "mols in clusters", molecules_in_clusters, sep = '')
+  output_directory <- paste0(frames, "frames_", clusters_density, "clus density_", background_density, "back density_",
+                             cluster_radius, "nm clusradius_", round(100 * distance_between_clusters, 2), "nm distance between clusters_",
+                             "mols in clusters", molecules_in_clusters, sep = '')
 
   if (0 && file.exists(file.path(directory_folder, output_directory)))
   {
     print("Warning:")
-    print(paste("following directory already exists:", output_directory))
+    print(paste0("following directory already exists:", output_directory))
     answer <- readline(prompt = "Should it be removed(y/n): ")
     if (answer != '' && length(grep(answer, "Yes", ignore.case = TRUE))) {
       unlink(output_directory, recursive = TRUE)
@@ -187,7 +187,7 @@ make_plot <- function(SizeX, SizeY, indent,
   }
   PSF_range <- PSF:-PSF # from positive to negative for proper calculation of a distznce to the neighbour-pixels
 
-  radius_x <- c()
+  radius_x <- NULL
   for (x in -PSF:PSF) radius_x <- c(radius_x, rep(x, (PSF * 2 + 1)))
   #radius_y <- rep(PSF_range,(PSF*2+1))
 
@@ -205,7 +205,7 @@ make_plot <- function(SizeX, SizeY, indent,
     cluster_mols_positions <- matrix(0, molecules_in_clusters, 2)
     print(cluster_mols_positions)
     # distribute molecules' positions in clusters
-    clusters_radiuses <- c()
+    clusters_radiuses <- NULL
     current_index <- 1
 
     # third column is used for testing a deviance of a calculated radius from the 'cluster_radius'.
@@ -251,9 +251,9 @@ make_plot <- function(SizeX, SizeY, indent,
       (SizeY - 2 * indent) - sum((100 * clusters_radiuses)^2 * pi)
     molecules_background <- floor(background_density * background_area * 10^-6)
 
-    #if (molecules_background < 500) warning(paste("there are totally", molecules_background, "molecules in background"))
+    #if (molecules_background < 500) warning(paste0("there are totally", molecules_background, "molecules in background"))
 
-    print(paste("number of molecules in background:", molecules_background))
+    print(paste0("number of molecules in background:", molecules_background))
 
     rest <- distribute_background_molecules_uniform(SizeX, SizeY, indent, clusters_centers, clusters_radiuses, molecules_background, 0)
 
@@ -271,8 +271,8 @@ make_plot <- function(SizeX, SizeY, indent,
     dir.create(paste0(file.path(directory_folder, output_directory), '/', n_sim, sep = ''))
 
     print("Molecules' positions are distributed")
-    print(paste("Total number of frames: ", frames))
-    print(paste("creating frames for a ", n_sim, '/', simulations, " simulation...", sep = ''))
+    print(paste0("Total number of frames: ", frames))
+    print(paste0("creating frames for a ", n_sim, '/', simulations, " simulation...", sep = ''))
 
     # just a little quirk:
     # changing "while (n_frame <= frames)" to "for (n_frame in 1:frames)" throws sometimes an error in bitwAnd() in write_tiff() on R version 4.0.5
@@ -294,8 +294,8 @@ make_plot <- function(SizeX, SizeY, indent,
       # make sure that the current frame contains PSFs.
       if (!is.element(1, mols[, 3])) next
 
-      mols_on = mols[, 1:2][mols[, 3] == 1]
-      Length = length(mols_on) / 2
+      mols_on <- mols[, 1:2][mols[, 3] == 1]
+      Length <- length(mols_on) / 2
       for (i in 1:Length)
       {
         # matrix indexes start with 1 so positions(start with 0) must be shifted
@@ -320,7 +320,7 @@ make_plot <- function(SizeX, SizeY, indent,
 
       # write a single .tiff or append a frame to a stack
       if (stack_or_single) Stack[[n_frame]] <- Frame
-      else write_tiff(list(Frame), paste(file.path(directory_folder, output_directory), '/', n_sim, '/', n_frame, '.tiff', sep = ''))
+      else write_tiff(list(Frame), paste0(file.path(directory_folder, output_directory), '/', n_sim, '/', n_frame, '.tiff', sep = ''))
 
       n_frame <- n_frame + 1
     }
@@ -328,21 +328,21 @@ make_plot <- function(SizeX, SizeY, indent,
     if (stack_or_single) {
       print("all frames are done")
       print("creating tiff...")
-      write_tiff(Stack, paste(file.path(directory_folder, output_directory), '/', n_sim, '/', n_sim, '.tiff', sep = ''))
+      write_tiff(Stack, paste0(file.path(directory_folder, output_directory), '/', n_sim, '/', n_sim, '.tiff', sep = ''))
     }
     else print("all tiffs are created")
 
-    meta_file <- paste(file.path(directory_folder, output_directory), '/', n_sim, '/', 'meta.txt', sep = '')
-    write(paste('"Summary": {\n"Total number of molecules": ', n_mols, ',\n"Molecules in clusters": ', molecules_in_clusters, ',\n"Molecules in background": ', molecules_background,
-                ',\n"Frames": ', frames, ',\n"Height": ', SizeY, ',\n"Width": ', SizeX, ',\n"Indent": ', indent, ',\n"FWHM": ', 100 * FWHM, 'nm,\n"Max color intensity": ',
-                spare_max_intensity, ',\n"Clusters density(molecules per um^2)": ', clusters_density, ',\n"Background density(molecules per um^2)": ',
-                background_density, ',\n"Noise": ', ifelse(noise, '"Gamma"', '"No noise"'), ',\n"Number of clusters": ', number_of_clusters, ',\n"Max cluster radius": ',
-                100 * cluster_radius, 'nm,\n"Distance_between clusters": ', 100 * distance_between_clusters,
-                'nm,\n"PixelType": "GRAY16",\n"Exposure-ms": 20,\n"On rate(per frame)": ', on, ',\n"Off rate(per frame)": ', off,
-                ',\n"Camera": "Evolve",\n"PVCAM-CameraHandle": "0",\n"Core-Camera": "Evolve",\n"PVCAM-CameraHandle": "0",\n}', sep = ''), meta_file)
+    meta_file <- paste0(file.path(directory_folder, output_directory), '/', n_sim, '/', 'meta.txt', sep = '')
+    write(paste0('"Summary": {\n"Total number of molecules": ', n_mols, ',\n"Molecules in clusters": ', molecules_in_clusters, ',\n"Molecules in background": ', molecules_background,
+                 ',\n"Frames": ', frames, ',\n"Height": ', SizeY, ',\n"Width": ', SizeX, ',\n"Indent": ', indent, ',\n"FWHM": ', 100 * FWHM, 'nm,\n"Max color intensity": ',
+                 spare_max_intensity, ',\n"Clusters density(molecules per um^2)": ', clusters_density, ',\n"Background density(molecules per um^2)": ',
+                 background_density, ',\n"Noise": ', ifelse(noise, '"Gamma"', '"No noise"'), ',\n"Number of clusters": ', number_of_clusters, ',\n"Max cluster radius": ',
+                 100 * cluster_radius, 'nm,\n"Distance_between clusters": ', 100 * distance_between_clusters,
+                 'nm,\n"PixelType": "GRAY16",\n"Exposure-ms": 20,\n"On rate(per frame)": ', on, ',\n"Off rate(per frame)": ', off,
+                 ',\n"Camera": "Evolve",\n"PVCAM-CameraHandle": "0",\n"Core-Camera": "Evolve",\n"PVCAM-CameraHandle": "0",\n}', sep = ''), meta_file)
     write("\nClusters' info(position x, position y, number of molecules, radius(nm)):", meta_file, append = TRUE)
     clusters_centers <- clusters_centers[order(clusters_centers[, 1]),]
-    for (pos in 1:number_of_clusters) write(paste(round(clusters_centers[pos,][1], 3), round(clusters_centers[pos,][2], 3), mol_array[pos], round(100 * clusters_radiuses[pos], 3)), meta_file, append = TRUE)
+    for (pos in 1:number_of_clusters) write(paste0(round(clusters_centers[pos,][1], 3), round(clusters_centers[pos,][2], 3), mol_array[pos], round(100 * clusters_radiuses[pos], 3)), meta_file, append = TRUE)
     print("Total creation time: ")
     print(Sys.time() - start_time)
     n_sim <- n_sim + 1
