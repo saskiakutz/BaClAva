@@ -15,11 +15,13 @@
 # 7) on, off: probabilities of a molecule to be turned on/off per frame
 # 8) frames: number of frames(single tiffs or all in a stack)
 # 9) noise: gamma(1) or no noise(0), if omitted gamma is taken
-# 10)density_or_molecules: 1 is for input as density, 0 as number of molecules and mean with SD for clusters see below 9)
+# 10)density_or_molecules: 1 is for input as density, 0 as number of molecules and mean with SD
+#    for clusters see below 9)
 # 11)clusters_density and background_density are measured as 'number_of_molecules/um^2'
 # 12)cluster_mean, cluster_SD: measured in molecules. mean number of mols per cluster and SD is a deviation from mean.
 #    there will be totally number_of_clusters*mean_cluster molecules
-# 13)molecules_background: nothing interesting just a total number of molecules in background. these will NOT be placed in clusters.
+# 13)molecules_background: nothing interesting just a total number of molecules in background.
+#    these will NOT be placed in clusters.
 # 14)!gamma for psf centers!iscoming
 #
 # each pixel is set to 100 nm
@@ -43,10 +45,16 @@ make_plot <- function(SizeX, SizeY, indent,
   if (number_of_clusters < 1 || number_of_clusters > 200) stop("number_of_clusters must be within [1,200]")
 
   if (missing(cluster_radius)) stop("cluster_radius is missing. Choose from [1,500]. Measured in nm.")
-  if (cluster_radius < 1 || cluster_radius > 500) stop("cluster_radius is not valid. Choose from [1,500]. Measured in nm.")
+  if (cluster_radius < 1 || cluster_radius > 500) {
+    stop("cluster_radius is not valid. Choose from [1,500]. Measured in nm.")
+  }
 
-  if (missing(distance_between_clusters)) stop("distance_between_clusters is missing. Choose from [0,1000]. Measured in nm")
-  if (distance_between_clusters < 0 || distance_between_clusters > 1000) stop("Valid range for distance_between_clusters is [1,1000]. Measured in nm")
+  if (missing(distance_between_clusters)) {
+    stop("distance_between_clusters is missing. Choose from [0,1000]. Measured in nm")
+  }
+  if (distance_between_clusters < 0 || distance_between_clusters > 1000) {
+    stop("Valid range for distance_between_clusters is [1,1000]. Measured in nm")
+  }
   distance_between_clusters <- distance_between_clusters / 100 # transform to pixels
 
   if (missing(FWHM)) {
@@ -78,12 +86,15 @@ make_plot <- function(SizeX, SizeY, indent,
 
   if ((SizeX * SizeX * 2 + 66) * frames + 74 > 300000000) {
     if (((SizeX * SizeX * 2 + 66) * frames + 74) / 1000000000 >= 5) {
-      print(paste0("You crazy! i won't create", ((SizeX * SizeX * 2 + 66) * frames + 74) / 1000000000, "Gb. You can change the code though to get rid of that disobedience."))
+      print(paste0("You crazy! i won't create", ((SizeX * SizeX * 2 + 66) * frames + 74) / 1000000000, "Gb.
+      You can change the code though to get rid of that disobedience."))
       return(0)
     }
     print(paste0("you can not create a stack of size ", (SizeX * SizeX * 2 + 55) * frames / 1000000000, " Gb"))
     print("Max size is 300 Mb")
-    print("if you disagree with that delete 'return(0)' in make_plot(). You can find this string with ctrl+F there. But be carefull, you will have to either create only single tiffs or modify Stack writing(write every 1000 frames for instance).")
+    print("if you disagree with that delete 'return(0)' in make_plot(). You can find this string with ctrl+F there.
+    But be carefull, you will have to either create only single tiffs or modify Stack writing
+    (write every 1000 frames for instance).")
     return(0)
   }
 
@@ -102,15 +113,27 @@ make_plot <- function(SizeX, SizeY, indent,
     stack_or_single <- 1
   }
 
-  if (missing(density_or_molecules)) stop("density_or_molecules is not specified. Please select 1 for density or 0 for molecules")
-  if (density_or_molecules != 0 && density_or_molecules != 1) stop("allowed values for density_or_molecules are: 1 for density or 0 for molecules")
+  if (missing(density_or_molecules)) {
+    stop("density_or_molecules is not specified. Please select 1 for density or 0 for molecules")
+  }
+  if (density_or_molecules != 0 && density_or_molecules != 1) {
+    stop("allowed values for density_or_molecules are: 1 for density or 0 for molecules")
+  }
 
   if (density_or_molecules) {
-    if (missing(clusters_density)) stop("Select a clusters_density. Choose from [200,20000]. clusters_density is measured in 'number of molecules/um^2'")
-    if (clusters_density < 200 || clusters_density > 20000) stop("clusters_density must be in [200,20000]. Measured in 'number of molecules/um^2'")
+    if (missing(clusters_density)) {
+      stop("Select a clusters_density. Choose from [200,20000]. clusters_density is measured in 'number of molecules/um^2'")
+    }
+    if (clusters_density < 200 || clusters_density > 20000) {
+      stop("clusters_density must be in [200,20000]. Measured in 'number of molecules/um^2'")
+    }
 
-    if (missing(background_density)) stop("background_density is missing. Please select one from [0,20000]. Measured in 'molecules/um^2'.")
-    if (background_density < 0 || background_density > 20000) stop("invalid background_density value. Please select one from [0,20000]. Measured in 'molecules/um^2'.")
+    if (missing(background_density)) {
+      stop("background_density is missing. Please select one from [0,20000]. Measured in 'molecules/um^2'.")
+    }
+    if (background_density < 0 || background_density > 20000) {
+      stop("invalid background_density value. Please select one from [0,20000]. Measured in 'molecules/um^2'.")
+    }
 
     # 1um^2 = 10^6nm^2 = 10x10 pixels, 1pixel = 100nm
     molecules_in_clusters <- round(clusters_density *
@@ -119,7 +142,10 @@ make_plot <- function(SizeX, SizeY, indent,
                                      10^-6)
     print(paste0("number of molecules in clusters:", molecules_in_clusters))
     if (molecules_in_clusters < number_of_clusters) {
-      Out_error <- paste0(paste0("there too few molecules_in_clusters:", molecules_in_clusters), paste0("number of clusters:", number_of_clusters), "please make a cluster's density larger or adjust cluster_radius with number_of_clusters", sep = "\n")
+      Out_error <- paste0(paste0("there too few molecules_in_clusters:", molecules_in_clusters),
+                          paste0("number of clusters:", number_of_clusters),
+                          "please make a cluster's density larger or adjust cluster_radius with number_of_clusters",
+                          sep = "\n")
       stop(Out_error)
     }
 
@@ -127,7 +153,9 @@ make_plot <- function(SizeX, SizeY, indent,
     cluster_SD <- floor(cluster_mean / 3)
     if (cluster_mean < 3) print(paste0("cluster_mean is", cluster_mean, ".Weird result is possible."))
 
-    if (molecules_in_clusters == 0) stop("molecules_in_clusters = 0, please change the input(cluster radius or density)")
+    if (molecules_in_clusters == 0) {
+      stop("molecules_in_clusters = 0, please change the input(cluster radius or density)")
+    }
   }
   else {
     if (missing(cluster_mean)) stop("cluster_mean is missing. Select one from [1,1000]. Measure in molecules.")
@@ -195,7 +223,8 @@ make_plot <- function(SizeX, SizeY, indent,
   {
     start_time <- Sys.time()
 
-    clusters_centers <- distribute_clusters_uniform(number_of_clusters, cluster_radius, SizeX, SizeY, indent, distance_between_clusters)
+    clusters_centers <- distribute_clusters_uniform(number_of_clusters, cluster_radius, SizeX, SizeY, indent,
+                                                    distance_between_clusters)
     mol_array <- distribute_molecules_in_clusters(cluster_mean, cluster_SD, number_of_clusters, molecules_in_clusters)
 
     cluster_mols_positions <- matrix(0, molecules_in_clusters, 2)
@@ -249,14 +278,16 @@ make_plot <- function(SizeX, SizeY, indent,
       (SizeY - 2 * indent) - sum((100 * clusters_radiuses)^2 * pi)
     molecules_background <- floor(background_density * background_area * 10^-6)
 
-    #if (molecules_background < 500) warning(paste0("there are totally", molecules_background, "molecules in background"))
+    #if (molecules_background < 500) warning(paste0("there are totally", molecules_background,
+    # "molecules in background"))
 
     print(paste0("number of molecules in background:", molecules_background))
 
     rest <- distribute_background_molecules_uniform(SizeX, SizeY, indent, clusters_centers,
                                                     clusters_radiuses, molecules_background, 0)
 
-    # Bind background and clusters together and add a third column for blinking(1-on, 0-off; at the beginning everything is off)
+    # Bind background and clusters together and add a third column for blinking(1-on, 0-off;
+    # at the beginning everything is off)
     #
     # This third column can be used for other purposes as well:
     # For example: the LSF can mark blinking(on or off) and the second bit(left from LSF) can be used for bleaching.
@@ -274,7 +305,8 @@ make_plot <- function(SizeX, SizeY, indent,
     print(paste0("creating frames for a ", n_sim, '/', simulations, " simulation...", sep = ''))
 
     # just a little quirk:
-    # changing "while (n_frame <= frames)" to "for (n_frame in 1:frames)" throws sometimes an error in bitwAnd() in write_tiff() on R version 4.0.5
+    # changing "while (n_frame <= frames)" to "for (n_frame in 1:frames)"
+    # throws sometimes an error in bitwAnd() in write_tiff() on R version 4.0.5
     n_frame <- 1
     while (n_frame <= frames)
     {
@@ -288,7 +320,8 @@ make_plot <- function(SizeX, SizeY, indent,
       else Frame[0:SizeX,] <- 0
 
       # molecules are randomly turned on/off
-      mols[, 3] <- ifelse(mols[, 3] == 1, rbinom(sum(mols[, 3] == 1), 1, 1 - off), rbinom(sum(mols[, 3] == 0), 1, on))
+      mols[, 3] <- ifelse(mols[, 3] == 1, rbinom(sum(mols[, 3] == 1), 1, 1 - off),
+                          rbinom(sum(mols[, 3] == 0), 1, on))
 
       # make sure that the current frame contains PSFs.
       if (!is.element(1, mols[, 3])) next
@@ -352,7 +385,8 @@ make_plot <- function(SizeX, SizeY, indent,
                  'nm,\n"Distance_between clusters": ', 100 * distance_between_clusters,
                  'nm,\n"PixelType": "GRAY16",\n"Exposure-ms": 20,\n"On rate(per frame)": ', on,
                  ',\n"Off rate(per frame)": ', off,
-                 ',\n"Camera": "Evolve",\n"PVCAM-CameraHandle": "0",\n"Core-Camera": "Evolve",\n"PVCAM-CameraHandle": "0",\n}',
+                 ',\n"Camera": "Evolve",\n"PVCAM-CameraHandle": "0",\n"Core-Camera": "Evolve",
+                 \n"PVCAM-CameraHandle": "0",\n}',
                  sep = ''), meta_file)
     write("\nClusters' info(position x, position y, number of molecules, radius(nm)):", meta_file, append = TRUE)
     clusters_centers <- clusters_centers[order(clusters_centers[, 1]),]
