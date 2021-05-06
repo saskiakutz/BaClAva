@@ -115,6 +115,7 @@ class ViewSMLM(qtw.QWidget):
                 singleStep=0.1,
                 value=100
             ),
+            "noise": qtw.QCheckBox(checked=True),
             "exposure time [s]": qtw.QSpinBox(
                 self,
                 minimum=1,
@@ -192,6 +193,7 @@ class ViewSMLM(qtw.QWidget):
             'PSF_intensity': self.PSF_intensity.value(),
             'on_rate': self.on_rate.value(),
             'off_rate': self.off_rate.value(),
+            'noise': self.inputs['noise'].isChecked(),
             'pixel_size': self.inputs['pixel size [nm]'].value(),
             'exposure_time': self.inputs['exposure time [s]'].value(),
             'n_frames': self.inputs['number of frames per simulation'].value(),
