@@ -33,8 +33,8 @@ class ViewSMLM(qtw.QWidget):
 
         self.PSF_FWHM = qtw.QSpinBox(
             self,
-            minimum=0,
-            maximum=10000,
+            minimum=100,
+            maximum=4000,
             value=250
         )
         self.PSF_intensity = qtw.QSpinBox(
