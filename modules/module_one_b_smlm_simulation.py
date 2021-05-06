@@ -55,7 +55,3 @@ class MainWindowSimulationSMLM(qtw.QWidget):
         self.storm_view.start_btn.setEnabled(True)
         self.finished_STORM_sim.emit('SMLM simulation cancelled.')
 
-# if __name__ == '__main__':
-#     app = qtw.QApplication(sys.argv)
-#     mw = MainWindow_simulation()
-#     sys.exit(app.exec())
