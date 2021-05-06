@@ -216,8 +216,10 @@ make_plot <- function(SizeX, SizeY, indent,
 
       for (i in 1:number_of_clusters)
       {
-        if (clusters_centers[i,][3])
-        { out <- distribute_molecules_in_cluster_gauss(clusters_centers[i,][1], clusters_centers[i,][2], mol_array[i], cluster_radius) }
+        if (clusters_centers[i,][3]) {
+          out <- distribute_molecules_in_cluster_gauss(clusters_centers[i,][1], clusters_centers[i,][2],
+                                                       mol_array[i], cluster_radius)
+        }
         else next
 
         if (cluster_radius - out$True_radius <= cluster_radius * deviation_percent)
