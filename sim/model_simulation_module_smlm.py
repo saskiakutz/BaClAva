@@ -33,7 +33,7 @@ class ModelSMLM(qtc.QObject):
                 error = f'Directory creation failed'
         else:
             try:
-                dir_file = dir_ + '/' + 'sim_parameters.txt'
+                dir_file = dir_ + '/' + 'sim_smlm_parameters.txt'
                 list_dir = [f'{key}={self.inputs[key]}' for key in self.inputs]
                 with open(dir_file, 'w') as fh:
                     [fh.write(f'{st}\n') for st in list_dir]
