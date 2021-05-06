@@ -31,7 +31,7 @@ class View_software(qtw.QWidget):
         self.tab_widget.addTab(self.subwidget_1, 'Module 1a: Simulation')
         self.main_simulation = MainWindow_simulation()
         self.subwidget_1.layout().addWidget(self.main_simulation)
-        self.tab_widget.addTab(self.subwidget_2, 'Module 1b: STORM simulation')
+        self.tab_widget.addTab(self.subwidget_2, 'Module 1b: SMLM simulation')
         self.main_simulation_STORM = MainWindowSimulationSMLM()
         self.subwidget_2.layout().addWidget(self.main_simulation_STORM)
         self.tab_widget.addTab(self.subwidget_3, 'Module 2: Bayesian engine')
