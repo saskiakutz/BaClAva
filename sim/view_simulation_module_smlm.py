@@ -133,7 +133,7 @@ class ViewSMLM(qtw.QWidget):
             "number of simulations": qtw.QSpinBox(
                 self,
                 minimum=1,
-                maximum=1000000,
+                maximum=200,
                 singleStep=1,
                 value=10
             ),
