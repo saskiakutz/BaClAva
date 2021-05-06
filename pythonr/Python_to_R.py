@@ -56,8 +56,10 @@ class PythonToR:
             simulations=input_dic.get('n_simulation'),
             stack_or_single=BoolVector([input_dic.get('tiff_stack')]),
             noise=BoolVector([input_dic.get('noise')]),
+            density_or_molecules=1,
             clusters_density=input_dic.get('density_per_cluster'),
-            background_density=input_dic.get('density_background')
+            background_density=input_dic.get('density_background'),
+            directory_folder=input_dic.get('directory')
         )
         numpy2ri.deactivate()
         print('done')
