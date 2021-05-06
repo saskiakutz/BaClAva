@@ -16,14 +16,14 @@ class ViewSMLM(qtw.QWidget):
 
         self.roi_x = qtw.QSpinBox(
             self,
-            minimum=0,
-            maximum=10000,
+            minimum=20,
+            maximum=250,
             value=31
         )
         self.roi_y = qtw.QSpinBox(
             self,
-            minimum=1,
-            maximum=100000,
+            minimum=20,
+            maximum=250,
             value=31
         )
 
