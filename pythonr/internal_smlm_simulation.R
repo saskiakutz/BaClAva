@@ -106,6 +106,103 @@ distribute_clusters_uniform <- function(number_of_clusters,
   return(cluster_centers)
 }
 
+# This function distributes the given number of molecules around X/Y point
+#
+# Input parameters:
+# 1) X and Y are coordinates for a cluster center, this X/Y point is where a gauss mean will be "allocated"
+# 2) cluster_radius is just a radius of a cluster, not STD
+# 3) distance: a distance between molecules. 0 by default.
+#			   Be carefull with values larger than 0. It can end up in an endless loop.
+#			   Some protection is needed as in distribute_clusters_uniform() for example. Or some smart error checking.
+#			   If you need this to work then this task is for you stranger :)
+#
+# Output:
+# a matrix with molecules' coordinates and a real radius(<= cluster_radius) of a cluster.
+# This real radius is every time different.
+
+distribute_molecules_in_cluster_gauss <- function(X, Y, number_of_molecules, cluster_radius, distance) {
+
+  #error handling
+  if (X < 0 || Y < 0) stop("X and Y must be positive")
+
+  if (cluster_radius < 0) stop("cluster_radius must be positive")
+
+  if (number_of_molecules < 1) stop("number_of_molecules must be positive")
+  number_of_molecules <- floor(number_of_molecules)
+
+  # 100 is pixels size in nm
+  if (X / 2 - cluster_radius <= 0 || Y / 2 - cluster_radius <= 0) stop("cluster_radius can't be larger than X/2 or Y/2")
+
+  if (missing(distance)) distance <- 0
+
+  if (distance < 0 || distance > 2) stop("distance must be in range 0-2")
+
+  #if ((sqrt(cluster_radius^2*pi)*distance+1)^2 < number_of_molecules/10)
+  #{ stop("there is not enough space for molecules.
+  # Reduce the distance or number_of_molecules or make a cluster_radius bigger") }
+  #--------------------------------#
+
+  mol_array <- matrix(0, number_of_molecules, 2)
+
+  # because an area of +-3*sigma(in gauss) covers > 99%, the Standart deviation is defined as:
+  SD <- cluster_radius / 3
+
+  mol_array[1,] <- c(rnorm(1, X, SD), rnorm(1, Y, SD))
+
+  Radius <- sqrt(abs(X - mol_array[1,][1])^2 + abs(Y - mol_array[1,][2])^2)
+
+  # each molecule must be within a cluster
+  while (Radius > cluster_radius) {
+    mol_array[1,] <- c(rnorm(1, X, SD), rnorm(1, Y, SD))
+    Radius <- sqrt(abs(X - mol_array[1,][1])^2 + abs(Y - mol_array[1,][2])^2)
+  }
+
+  # start to store a real radius(a molecule with the max distance from the center)
+  True_radius <- Radius
+
+  i <- 2
+  while (i < number_of_molecules + 1)
+  {
+    mol_array[i,] <- c(rnorm(1, X, SD), rnorm(1, Y, SD))
+    Radius <- sqrt(abs(X - mol_array[i,][1])^2 + abs(Y - mol_array[i,][2])^2)
+
+    # control again that it's within a valid area
+    while (Radius > cluster_radius) {
+      mol_array[i,] <- c(rnorm(1, X, SD), rnorm(1, Y, SD))
+      Radius <- sqrt(abs(X - mol_array[i,][1])^2 + abs(Y - mol_array[i,][2])^2)
+    }
+
+    if (distance)
+    {
+      is_fine <- TRUE
+
+      # look if there is enough distance between molecules
+      for (k in 1:(i - 1))
+      {
+        if (sqrt(abs(mol_array[k,][1] - mol_array[i,][1])^2 +
+                   abs(mol_array[k,][2] - mol_array[i,][2])^2) < distance) {
+          is_fine <- FALSE
+          break
+        }
+      }
+
+      if (is_fine) {
+        if (Radius > True_radius) True_radius <- Radius
+        i <- i + 1
+      }
+    }
+
+    else
+    {
+      if (Radius > True_radius) True_radius <- Radius
+      i <- i + 1
+    }
+  }
+
+  return(list("Molecule_positions" = mol_array, "True_radius" = True_radius))
+}
+
+#--------------------------------------------------------------------------------#
 
 #--------------------------------------------------------------------------------#
 
