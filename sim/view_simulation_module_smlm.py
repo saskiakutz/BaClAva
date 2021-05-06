@@ -182,9 +182,9 @@ class ViewSMLM(qtw.QWidget):
         data = {
             'directory': self.dir_line.text(),
             'n_clusters': self.inputs['number of clusters'].value(),
-            'density_per_cluster': self.inputs['density or number of molecules per cluster'].value(),
+            'density_per_cluster': self.inputs['molecule density per cluster'].value(),
             'radius_cluster': self.inputs['cluster radius [nm]'].value(),
-            'density_background': self.inputs['density or number of molecules in the background'].value(),
+            'density_background': self.inputs['molecule density in the background'].value(),
             'n_simulation': self.inputs['number of simulations'].value(),
             'pixel_x': self.roi_x.value(),
             'pixel_y': self.roi_y.value(),
