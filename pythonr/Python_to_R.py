@@ -8,12 +8,13 @@ from os import getcwd, listdir
 from os.path import isfile, join
 
 
-class PythonToR():
+class PythonToR:
+    base = importr('base')
+    r = r_objects.r
+
     def r_simulation(self, input_dic):
         # call R simulation
-        base = importr('base')
-        r = r_objects.r
-        r.source('./pythonr/simulate.R')
+        self.r.source('./pythonr/simulate.R')
 
         numpy2ri.activate()
         xlim = np.array([input_dic.get('roixmin'), input_dic.get('roixmax')])
@@ -21,7 +22,7 @@ class PythonToR():
         gammaparams = np.array([input_dic.get('alpha'), input_dic.get('beta')])
         ab = np.array([input_dic.get('a'), input_dic.get('b')])
 
-        r.simulation_fun(
+        self.r.simulation_fun(
             newfolder=input_dic.get('directory'),
             nclusters=input_dic.get('nclusters'),
             molspercluster=input_dic.get('molspercluster'),
@@ -37,9 +38,11 @@ class PythonToR():
         print("done")
         # TODO: multimerisation not ready yet
 
+    def r_smlm_simulation(self, input_dic):
+        pass
+
     def r_bayesian_run(self, input_dic, status):
-        r = r_objects.r
-        r.source('./pythonr/run_hdf5.R')
+        self.r.source('./pythonr/run_hdf5.R')
         if len(status) == 2:
             ncores = status.get('cores')
         else:
@@ -53,7 +56,7 @@ class PythonToR():
         cols = np.array([input_dic.get('xcol'), input_dic.get('ycol'), input_dic.get('sdcol')])
 
         if input_dic.get('datasource') == 'simulation':
-            r.run_fun(
+            self.r.run_fun(
                 newfolder=input_dic.get('directory'),
                 bayes_model=input_dic.get('model'),
                 datasource=input_dic.get('datasource'),
@@ -69,7 +72,7 @@ class PythonToR():
                 bayes_background=input_dic.get('background')
             )
         else:
-            r.run_fun(
+            self.r.run_fun(
                 newfolder=input_dic.get('directory'),
                 bayes_model=input_dic.get('model'),
                 datasource=input_dic.get('datasource'),
@@ -86,10 +89,9 @@ class PythonToR():
         print("done")
 
     def r_post_processing(self, input_dic):
-        r = r_objects.r
-        r.source("./pythonr/postprocessing_hdf5.R")
+        self.r.source("./pythonr/postprocessing_hdf5.R")
         numpy2ri.activate()
-        r.post_fun(
+        self.r.post_fun(
             newfolder=input_dic.get('directory'),
             # datasource=input_dic.get('datasource'),
             # process=input_dic.get('computation'),
@@ -106,8 +108,7 @@ class PythonToR():
         convertfiles = [f for f in onlyfiles if
                         (f.endswith('.txt') or f.endswith('.csv')) and not f.endswith('summary.txt')]
         if convertfiles:
-            r = r_objects.r
-            r.source('./pythonr/convert.R')
+            self.r.source('./pythonr/convert.R')
             numpy2ri.activate()
-            r.convert_hdf5(directory, convertfiles)
+            self.r.convert_hdf5(directory, convertfiles)
             numpy2ri.deactivate()
