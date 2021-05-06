@@ -1,6 +1,6 @@
 # Title     : SMLM simulation
 # Objective : creation of TIFF stack/files of SMLM-like experiments
-# Created by: Roman
+# Created by: Roman, Saskia
 # Created on: 2021-05-06
 
 # this function creates a tiff stack(or single tiffs) with distributed PSFs
@@ -23,6 +23,7 @@
 # 13)molecules_background: nothing interesting just a total number of molecules in background.
 #    these will NOT be placed in clusters.
 # 14)!gamma for psf centers!iscoming
+# 15) directory where the data is supposed to be stored
 #
 # each pixel is set to 100 nm
 # distance between molecules in background is possible, but set by default to zero
@@ -32,8 +33,9 @@ make_plot <- function(SizeX, SizeY, indent,
                       number_of_clusters, cluster_radius, distance_between_clusters,
                       FWHM, max_intensity, on, off, frames, simulations, stack_or_single, noise,
                       density_or_molecules = 1, clusters_density, background_density,
-                      cluster_mean, cluster_SD, molecules_background)
+                      cluster_mean, cluster_SD, molecules_background, directory_folder)
 {
+  source('./pythonr/internal_smlm_simulation.R')
   #--------------------------------------error handling-------------------------------------------------#
   if (SizeX < 20 ||
     SizeY < 20 ||
@@ -56,7 +58,7 @@ make_plot <- function(SizeX, SizeY, indent,
   }
 
   if (FWHM < 100 || FWHM > 4000) stop("FWHM must be in [100,4000]")
-  FWHM <- FWHM / 100
+  FWHM <- FWHM / 100 #TODO: pixel size as input
   SD <- FWHM / 2.355
   if (indent < ceiling(SD * 3.1)) {
     indent <- ceiling(SD * 3.1)
@@ -72,7 +74,7 @@ make_plot <- function(SizeX, SizeY, indent,
   if (off < 0 || off > 1) stop("off probability must be in [0,1]")
 
   frames <- floor(frames)
-  if (frames < 1 || frames > 50000) stop("number of frames must be in range 1-50000")
+  if (frames < 1 || frames > 100000) stop("number of frames must be in range 1-50000")
 
   simulations <- floor(simulations)
   if (simulations < 1 || simulations > 200) stop("simulations must be in [1,200]")
@@ -157,7 +159,7 @@ make_plot <- function(SizeX, SizeY, indent,
                             cluster_radius, "nm clusradius_", round(100 * distance_between_clusters, 2), "nm distance between clusters_",
                             "mols in clusters", molecules_in_clusters, sep = '')
 
-  if (0 && file.exists(output_directory))
+  if (0 && file.exists(file.path(directory_folder, output_directory)))
   {
     print("Warning:")
     print(paste("following directory already exists:", output_directory))
@@ -172,7 +174,7 @@ make_plot <- function(SizeX, SizeY, indent,
     }
   }
   unlink(output_directory, recursive = TRUE) ###!!!!!
-  dir.create(output_directory)
+  dir.create(file.path(directory_folder, output_directory))
 
   # create a matrix of a circle, it will be used to create PSF
   # only entries equal to 1 are within a PSF(circle)
@@ -199,9 +201,9 @@ make_plot <- function(SizeX, SizeY, indent,
     clusters_centers <- distribute_clusters_uniform(number_of_clusters, cluster_radius, SizeX, SizeY, indent, distance_between_clusters)
     mol_array <- distribute_molecules_in_clusters(cluster_mean, cluster_SD, number_of_clusters, molecules_in_clusters)
     print(sum(mol_array))
-    return()
+    # return()
     cluster_mols_positions <- matrix(0, molecules_in_clusters, 2)
-
+    print(cluster_mols_positions)
     # distribute molecules' positions in clusters
     clusters_radiuses <- c()
     current_index <- 1
@@ -243,7 +245,10 @@ make_plot <- function(SizeX, SizeY, indent,
     clusters_density <- molecules_in_clusters / (sum((100 * clusters_radiuses)^2 * pi * 2) * 10^-6)
 
     # calculate the number of background molecules and distribute them
-    background_area <- 100 * (SizeX - 2 * indent) * 100 * (SizeY - 2 * indent) - sum((100 * clusters_radiuses)^2 * pi)
+    background_area <- 100 *
+      (SizeX - 2 * indent) *
+      100 *
+      (SizeY - 2 * indent) - sum((100 * clusters_radiuses)^2 * pi)
     molecules_background <- floor(background_density * background_area * 10^-6)
 
     #if (molecules_background < 500) warning(paste("there are totally", molecules_background, "molecules in background"))
@@ -263,7 +268,7 @@ make_plot <- function(SizeX, SizeY, indent,
     mols <- cbind(mols, matrix(0, n_mols, 1))
 
     if (stack_or_single) Stack <- list() # create a list which will contain stack frames
-    dir.create(paste(output_directory, '/', n_sim, sep = ''))
+    dir.create(paste0(file.path(directory_folder, output_directory), '/', n_sim, sep = ''))
 
     print("Molecules' positions are distributed")
     print(paste("Total number of frames: ", frames))
@@ -315,7 +320,7 @@ make_plot <- function(SizeX, SizeY, indent,
 
       # write a single .tiff or append a frame to a stack
       if (stack_or_single) Stack[[n_frame]] <- Frame
-      else write_tiff(list(Frame), paste(output_directory, '/', n_sim, '/', n_frame, '.tiff', sep = ''))
+      else write_tiff(list(Frame), paste(file.path(directory_folder, output_directory), '/', n_sim, '/', n_frame, '.tiff', sep = ''))
 
       n_frame <- n_frame + 1
     }
@@ -323,11 +328,11 @@ make_plot <- function(SizeX, SizeY, indent,
     if (stack_or_single) {
       print("all frames are done")
       print("creating tiff...")
-      write_tiff(Stack, paste(output_directory, '/', n_sim, '/', n_sim, '.tiff', sep = ''))
+      write_tiff(Stack, paste(file.path(directory_folder, output_directory), '/', n_sim, '/', n_sim, '.tiff', sep = ''))
     }
     else print("all tiffs are created")
 
-    meta_file <- paste(output_directory, '/', n_sim, '/', 'meta.txt', sep = '')
+    meta_file <- paste(file.path(directory_folder, output_directory), '/', n_sim, '/', 'meta.txt', sep = '')
     write(paste('"Summary": {\n"Total number of molecules": ', n_mols, ',\n"Molecules in clusters": ', molecules_in_clusters, ',\n"Molecules in background": ', molecules_background,
                 ',\n"Frames": ', frames, ',\n"Height": ', SizeY, ',\n"Width": ', SizeX, ',\n"Indent": ', indent, ',\n"FWHM": ', 100 * FWHM, 'nm,\n"Max color intensity": ',
                 spare_max_intensity, ',\n"Clusters density(molecules per um^2)": ', clusters_density, ',\n"Background density(molecules per um^2)": ',
@@ -358,5 +363,7 @@ make_plot <- function(SizeX, SizeY, indent,
 # background density: 200-600
 
 # make_plot(SizeX=40,SizeY=40,indent=6,
-# 	  number_of_clusters=40,cluster_radius=25,distance_between_clusters=25*2/3,		  FWHM=250,max_intensity=4762,on=0.00004,off=0.4,frames=50000,simulations=10,stack_or_single=1,noise=1,
-# 		  density_or_molecules=1,clusters_density=799,background_density=200)	  density_or_molecules=1,clusters_density=10185,background_density=0)
+# 	  number_of_clusters=40,cluster_radius=25,distance_between_clusters=25*2/3,
+# 	  FWHM=250,max_intensity=4762,on=0.00004,off=0.4,frames=50000,simulations=10,stack_or_single=1,noise=1,
+# 		  density_or_molecules=1,clusters_density=799,background_density=200)
+# 		  density_or_molecules=1,clusters_density=10185,background_density=0)
