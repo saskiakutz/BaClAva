@@ -46,6 +46,7 @@ class MainWindowSimulationSMLM(qtw.QWidget):
         # self.statusBar().showMessage('Simulation finished.')
         self.sim_STORM_thread.quit()
         self.model_smlm.deleteLater()
+        self.sim_STORM_thread.deleteLater()
         self.storm_view.start_btn.setEnabled(True)
         self.finished_STORM_sim.emit('Simulation finished.')
 
