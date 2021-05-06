@@ -79,8 +79,8 @@ class ViewSMLM(qtw.QWidget):
             ),
             "cluster radius [nm]": qtw.QSpinBox(
                 self,
-                minimum=0,
-                maximum=10000,
+                minimum=1,
+                maximum=500,
                 singleStep=1,
                 value=25
             ),
