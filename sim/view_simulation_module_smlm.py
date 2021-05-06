@@ -98,10 +98,16 @@ class ViewSMLM(qtw.QWidget):
                 singleStep=1,
                 value=100
             ),
-            "blinking rate": qtw.QComboBox(),
             "blinking rate (on, off) [s⁻¹]": rate_layout,
             "PFS(FWHM [nm], intensity)": psf_layout,
             "camera ROI size [px]": roi_layout,
+            "ROI indent [px]": qtw.QSpinBox(
+                self,
+                minimum=1,
+                maximum=100,
+                singleStep=1,
+                value=6
+            ),
             "pixel size [nm]": qtw.QDoubleSpinBox(
                 self,
                 minimum=0,
@@ -132,8 +138,6 @@ class ViewSMLM(qtw.QWidget):
             ),
             "store as stack": qtw.QCheckBox(checked=True)
         }
-        models = ('AF647', 'AF488', 'CF680', 'other dye')
-        self.inputs["blinking rate"].addItems(models)
 
         for label, widget in self.inputs.items():
             self.layout().addRow(label, widget)
@@ -178,12 +182,12 @@ class ViewSMLM(qtw.QWidget):
             'directory': self.dir_line.text(),
             'n_clusters': self.inputs['number of clusters'].value(),
             'mol_per_cluster': self.inputs['density or number of molecules per cluster'].value(),
-            'blinking_rate': self.inputs['blinking rate'].currentText(),
             'radius_cluster': self.inputs['cluster radius [nm]'].value(),
             'mol_background': self.inputs['density or number of molecules in the background'].value(),
             'nsim': self.inputs['number of simulations'].value(),
             'pixel_x': self.roi_x.value(),
             'pixel_y': self.roi_y.value(),
+            'pixel_inden': self.inputs['ROI indent [px]'].value(),
             'PSF_FWHM': self.PSF_FWHM.value(),
             'PSF_intensity': self.PSF_intensity.value(),
             'on_rate': self.on_rate.value(),
