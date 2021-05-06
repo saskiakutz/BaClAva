@@ -28,29 +28,6 @@ class Main_Window(qtw.QMainWindow):
         self.main_view.main_post.started_post.connect(self.set_statusbar)
         self.main_view.main_post.finished_post.connect(self.set_statusbar)
 
-        # self.tab_widget = qtw.QTabWidget()
-        # self.setCentralWidget(self.tab_widget)
-
-        # self.subwidget_1 = qtw.QWidget(self)
-        # self.grid_layout = qtw.QGridLayout()
-        # self.subwidget_1.setLayout(self.grid_layout)
-        # self.subwidget_2 = qtw.QWidget(self)
-        # self.grid_layout2 = qtw.QGridLayout()
-        # self.subwidget_2.setLayout(self.grid_layout2)
-        # self.subwidget_3 = qtw.QWidget(self)
-        # self.grid_layout3 = qtw.QGridLayout()
-        # self.subwidget_3.setLayout(self.grid_layout3)
-        # self.tab_widget.addTab(self.subwidget_1, 'Module 1: Simulation')
-        # self.main_simulation = MainWindow_simulation()
-        # self.subwidget_1.layout().addWidget(self.main_simulation)
-        # self.tab_widget.addTab(self.subwidget_2, 'Module 2: Bayesian engine')
-        # self.main_run = MainWindow_Bayesian()
-        # self.subwidget_2.layout().addWidget(self.main_run)
-        # self.tab_widget.addTab(self.subwidget_3, 'Module 3: Postprocessing')
-        # self.main_post = MainWindow_post()
-        # self.subwidget_3.layout().addWidget(self.main_post)
-        # # self.tab_widget.currentChanged(self.set_statusbar)
-
         self.status_bar = qtw.QStatusBar()
         self.setStatusBar(self.status_bar)
         self.status_bar.showMessage('Select a module.')
@@ -64,10 +41,6 @@ class Main_Window(qtw.QMainWindow):
     @qtc.pyqtSlot(str)
     def set_statusbar(self, message):
         self.status_bar.showMessage(message)
-
-    # def on_finished(self):
-    #     self.statusBar().showMessage('Simulation finished.')
-    #     # self.view.start_btn.setEnabled(True)
 
 
 class MainWindow(qtw.QMainWindow):
