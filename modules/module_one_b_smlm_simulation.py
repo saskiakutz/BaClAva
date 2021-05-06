@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 
-from sim.view_simulation_module_STORM import ViewSTORM
+from sim.view_simulation_module_smlm import ViewSTORM
 from sim.model_simulation_module_STORM import Model_STORM
 
 
