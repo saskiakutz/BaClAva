@@ -4,7 +4,8 @@ from PyQt5 import QtCore as qtc
 from PyQt5.QtGui import QPalette, QColor
 from Bayesian_software_view import View_software
 
-class Main_Window(qtw.QMainWindow):
+
+class ModuleWindow(qtw.QMainWindow):
 
     def __init__(self):
         super().__init__()
@@ -49,7 +50,7 @@ class MainWindow(qtw.QMainWindow):
         """MainWindow constructor"""
         super().__init__()
         # Main UI code goes here
-        self.view = Main_Window()
+        self.view = ModuleWindow()
         self.setWindowTitle('BaClAva')
         self.setCentralWidget(self.view)
 
