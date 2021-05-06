@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets as qtw
 from modules.module_one_simulation import MainWindow_simulation
-from modules.module_one_b_STORM_simulation import MainWindow_simulation_STORM
+from modules.module_one_b_smlm_simulation import MainWindow_simulation_STORM
 from modules.module_two_Bayesian import MainWindow_Bayesian
 from modules.module_three_post import MainWindow_post
 
