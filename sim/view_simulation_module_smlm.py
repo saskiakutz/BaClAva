@@ -194,7 +194,7 @@ class ViewSMLM(qtw.QWidget):
             'tiff_stack': self.inputs['store as stack'].isChecked()
         }
         self.start_btn.setDisabled(True)
-        self.startsim.emit()
+        self.start_STORM.emit()
         print(data)
         self.submitted.emit(data)
 
