@@ -35,7 +35,7 @@ class ViewSMLM(qtw.QWidget):
             self,
             minimum=0,
             maximum=10000,
-            value=0
+            value=250
         )
         self.PSF_intensity = qtw.QSpinBox(
             self,
@@ -52,17 +52,17 @@ class ViewSMLM(qtw.QWidget):
             self,
             minimum=0,
             maximum=100,
-            decimals=1,
+            decimals=6,
             singleStep=1,
-            value=5
+            value=0.00004
         )
         self.off_rate = qtw.QDoubleSpinBox(
             self,
             minimum=0,
             maximum=10000,
-            decimals=1,
+            decimals=2,
             singleStep=0.1,
-            value=10
+            value=0.4
         )
 
         rate_layout = qtw.QHBoxLayout()
@@ -72,7 +72,7 @@ class ViewSMLM(qtw.QWidget):
         self.inputs = {
             "number of clusters": qtw.QSpinBox(
                 self,
-                value=10,
+                value=40,
                 minimum=1,
                 maximum=1000,
                 singleStep=1
@@ -82,21 +82,21 @@ class ViewSMLM(qtw.QWidget):
                 minimum=0,
                 maximum=10000,
                 singleStep=1,
-                value=50
+                value=25
             ),
             "molecule density per cluster": qtw.QSpinBox(
                 self,
                 minimum=1,
                 maximum=10000,
                 singleStep=1,
-                value=100
+                value=800
             ),
             "molecule density in the background": qtw.QDoubleSpinBox(
                 self,
                 minimum=0,
                 maximum=100000,
                 singleStep=1,
-                value=100
+                value=200
             ),
             "blinking rate (on, off) [s⁻¹]": rate_layout,
             "PFS(FWHM [nm], intensity)": psf_layout,
