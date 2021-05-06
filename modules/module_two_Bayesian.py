@@ -20,7 +20,7 @@ class MainWindow_Bayesian(qtw.QWidget):
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.run_view)
 
-        self.run_thread = qtc.QThread()
+        self.run_thread = qtc.QThread(parent=self)
         self.run_model.moveToThread(self.run_thread)
         self.run_model.finished.connect(self.run_thread.quit)
         self.run_model.finished.connect(self.on_finished)

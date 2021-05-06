@@ -20,7 +20,7 @@ class MainWindow_post(qtw.QWidget):
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.post_view)
 
-        self.post_thread = qtc.QThread()
+        self.post_thread = qtc.QThread(parent=self)
         self.post_model.moveToThread(self.post_thread)
         self.post_model.finished.connect(self.post_thread.quit)
         self.post_thread.start()

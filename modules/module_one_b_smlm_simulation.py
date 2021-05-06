@@ -21,7 +21,7 @@ class MainWindowSimulationSMLM(qtw.QWidget):
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.storm_view)
 
-        self.sim_STORM_thread = qtc.QThread()
+        self.sim_STORM_thread = qtc.QThread(parent=self)
         self.model.moveToThread(self.sim_STORM_thread)
         self.model.finished.connect(self.sim_STORM_thread.quit)
         self.sim_STORM_thread.start()
