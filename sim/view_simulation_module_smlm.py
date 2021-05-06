@@ -126,7 +126,7 @@ class ViewSMLM(qtw.QWidget):
             "number of frames per simulation": qtw.QSpinBox(
                 self,
                 minimum=1,
-                maximum=1000000000,
+                maximum=1000000,
                 singleStep=1000,
                 value=50000
             ),
