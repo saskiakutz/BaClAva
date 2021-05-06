@@ -40,8 +40,6 @@ class PythonToR:
 
     def r_smlm_simulation(self, input_dic):
         self.r.source('./pythonr/simulation_smlm.R')
-        print(BoolVector([input_dic.get('tiff_stack')]))
-        print(BoolVector([input_dic.get('noise')]))
         numpy2ri.activate()
         self.r.make_plot(
             SizeX=input_dic.get('pixel_x'),
@@ -61,7 +59,6 @@ class PythonToR:
             clusters_density=input_dic.get('density_per_cluster'),
             background_density=input_dic.get('density_background')
         )
-        self.r.test_fun(3)
         numpy2ri.deactivate()
         print('done')
 
