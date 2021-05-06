@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 
 from sim.view_simulation_module_smlm import ViewSMLM
-from sim.model_simulation_module_STORM import Model_STORM
+from sim.model_simulation_module_smlm import ModelSMLM
 
 
 class MainWindowSimulationSMLM(qtw.QWidget):
@@ -16,7 +16,7 @@ class MainWindowSimulationSMLM(qtw.QWidget):
         super().__init__()
         # Main UI code goes here
 
-        self.model = Model_STORM()
+        self.model = ModelSMLM()
         self.storm_view = ViewSMLM()
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.storm_view)
