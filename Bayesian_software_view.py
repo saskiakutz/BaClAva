@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets as qtw
 from modules.module_one_simulation import MainWindow_simulation
-from modules.module_one_b_smlm_simulation import MainWindow_simulation_STORM
+from modules.module_one_b_smlm_simulation import MainWindowSimulationSMLM
 from modules.module_two_Bayesian import MainWindow_Bayesian
 from modules.module_three_post import MainWindow_post
 
@@ -32,7 +32,7 @@ class View_software(qtw.QWidget):
         self.main_simulation = MainWindow_simulation()
         self.subwidget_1.layout().addWidget(self.main_simulation)
         self.tab_widget.addTab(self.subwidget_2, 'Module 1b: STORM simulation')
-        self.main_simulation_STORM = MainWindow_simulation_STORM()
+        self.main_simulation_STORM = MainWindowSimulationSMLM()
         self.subwidget_2.layout().addWidget(self.main_simulation_STORM)
         self.tab_widget.addTab(self.subwidget_3, 'Module 2: Bayesian engine')
         self.main_run = MainWindow_Bayesian()
