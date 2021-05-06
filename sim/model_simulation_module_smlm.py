@@ -41,12 +41,12 @@ class ModelSMLM(qtc.QObject):
             except Exception as e:
                 error = f'Cannot store parameters: {e}'
 
-            # try:
-            #     simulation = PythonToR()
-            #     simulation.r_simulation(self.inputs)
-            #
-            # except Exception as e:
-            #     error = f'Cannot do the simulations: {e}'
+            try:
+                simulation = PythonToR()
+                simulation.r_smlm_simulation()
+
+            except Exception as e:
+                error = f'Cannot do the simulations: {e}'
 
         self.finished.emit()
 
