@@ -84,14 +84,14 @@ class ViewSMLM(qtw.QWidget):
                 singleStep=1,
                 value=50
             ),
-            "density or number of molecules per cluster": qtw.QSpinBox(
+            "molecule density per cluster": qtw.QSpinBox(
                 self,
                 minimum=1,
                 maximum=10000,
                 singleStep=1,
                 value=100
             ),
-            "density or number of molecules in the background": qtw.QDoubleSpinBox(
+            "molecule density in the background": qtw.QDoubleSpinBox(
                 self,
                 minimum=0,
                 maximum=100000,
@@ -182,9 +182,9 @@ class ViewSMLM(qtw.QWidget):
         data = {
             'directory': self.dir_line.text(),
             'n_clusters': self.inputs['number of clusters'].value(),
-            'mol_per_cluster': self.inputs['density or number of molecules per cluster'].value(),
+            'density_per_cluster': self.inputs['density or number of molecules per cluster'].value(),
             'radius_cluster': self.inputs['cluster radius [nm]'].value(),
-            'mol_background': self.inputs['density or number of molecules in the background'].value(),
+            'density_background': self.inputs['density or number of molecules in the background'].value(),
             'n_simulation': self.inputs['number of simulations'].value(),
             'pixel_x': self.roi_x.value(),
             'pixel_y': self.roi_y.value(),
