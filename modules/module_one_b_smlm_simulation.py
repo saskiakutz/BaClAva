@@ -6,7 +6,7 @@ from sim.view_simulation_module_STORM import ViewSTORM
 from sim.model_simulation_module_STORM import Model_STORM
 
 
-class MainWindow_simulation_STORM(qtw.QWidget):
+class MainWindowSimulationSMLM(qtw.QWidget):
     finished_STORM_sim = qtc.pyqtSignal(str)
     start_STORM_sim = qtc.pyqtSignal(str)
 
