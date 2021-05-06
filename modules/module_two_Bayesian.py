@@ -42,7 +42,8 @@ class MainWindow_Bayesian(qtw.QWidget):
     def on_finished(self):
         # self.run_model.finished.connect(self.on_finished)
         self.run_thread.quit()
-        self.run_thread.deleteLater()
+        # self.run_thread.deleteLater()
+        self.run_model.deleteLater()
         self.run_view.start_btn.setEnabled(True)
         self.finished_bayesian.emit('Bayesian clustering finished.')
 
