@@ -37,6 +37,7 @@ make_plot <- function(SizeX, SizeY, indent,
 {
   source('./pythonr/package_list.R')
   source('./pythonr/internal_smlm_simulation.R')
+  source('./pythonr/plot_functions_smlm.R')
   #--------------------------------------error handling-------------------------------------------------#
   if (SizeX < 20 ||
     SizeY < 20 ||
@@ -331,6 +332,18 @@ make_plot <- function(SizeX, SizeY, indent,
       write_tiff(Stack, paste0(file.path(directory_folder, output_directory), '/', n_sim, '/', n_sim, '.tiff'))
     }
     else print("all tiffs are created")
+
+    mol_plotting(size_x = SizeX,
+                 size_y = SizeY,
+                 mol_clusters = molecules_in_clusters,
+                 positions_mol_cluster = cluster_mols_positions,
+                 mol_background = molecules_background,
+                 dist_background = rest,
+                 n_clusters = number_of_clusters,
+                 cluster_centers = clusters_centers,
+                 dir_output = file.path(directory_folder, output_directory),
+                 number_simulation = n_sim
+    )
 
     meta_file <- paste0(file.path(directory_folder, output_directory), '/', n_sim, '/', 'meta.txt')
     write(paste0('"Summary": {\n"Total number of molecules": ', n_mols, ',\n"Molecules in clusters": ', molecules_in_clusters, ',\n"Molecules in background": ', molecules_background,
