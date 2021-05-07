@@ -8,6 +8,7 @@
 # input:
 # 1) SizeX, SizeY in pixels is the matrix size
 # 2) indent is a black rim around the matrix. it is a part of a SizeX*SizeX matrix, not an extra area!
+# 2a) pixel_size can in set in nm.
 # 3) cluster radius is measured in nm.
 # 4) distance_between_clusters is measured in nm.
 # 5) FWHM(Full width at half maximum) measured in nm. Defines the PSF's gauss distribution.
@@ -25,7 +26,6 @@
 # 14)!gamma for psf centers!iscoming
 # 15) directory where the data is supposed to be stored
 #
-# each pixel is set to 100 nm
 # distance between molecules in background is possible, but set by default to zero
 
 
@@ -56,10 +56,10 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
 
   if (missing(FWHM)) {
     print("FWHM was not defined. It will be 450 nm then.")
-    FWHM <- 4.5
+    FWHM <- 450 / pixel_size
   }
 
-  if (FWHM < pixel_size || FWHM > 4000) stop("FWHM must be in [chosen pixel size,4000]")
+  if (FWHM < pixel_size || FWHM > 4000) stop("FWHM must be in [pixel size,4000]")
   FWHM <- FWHM / pixel_size
   SD <- FWHM / 2.355
   if (indent < ceiling(SD * 3.1)) {
@@ -155,7 +155,7 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
     # molecules_background <- floor(molecules_background)
   } #------------------------------------------------------------------------#
 
-  cluster_radius <- cluster_radius / 100 # 100 nm is pixel size by default. must be changed if resolution is added.
+  cluster_radius <- cluster_radius / pixel_size
 
   output_directory <- paste0(frames, "frames_", clusters_density, "clus density_", background_density, "back density_",
                              cluster_radius, "nm clusradius_", round(100 * distance_between_clusters, 2), "nm distance between clusters_",
