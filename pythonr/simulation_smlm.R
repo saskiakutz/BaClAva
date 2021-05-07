@@ -29,7 +29,7 @@
 # distance between molecules in background is possible, but set by default to zero
 
 
-make_plot <- function(SizeX, SizeY, indent,
+make_plot <- function(SizeX, SizeY, indent, pixel_size,
                       number_of_clusters, cluster_radius, distance_between_clusters,
                       FWHM, max_intensity, on, off, frames, simulations, stack_or_single, noise,
                       density_or_molecules = 1, clusters_density, background_density,
@@ -59,8 +59,8 @@ make_plot <- function(SizeX, SizeY, indent,
     FWHM <- 4.5
   }
 
-  if (FWHM < 100 || FWHM > 4000) stop("FWHM must be in [100,4000]")
-  FWHM <- FWHM / 100 #TODO: pixel size as input
+  if (FWHM < pixel_size || FWHM > 4000) stop("FWHM must be in [100,4000]")
+  FWHM <- FWHM / pixel_size
   SD <- FWHM / 2.355
   if (indent < ceiling(SD * 3.1)) {
     indent <- ceiling(SD * 3.1)
