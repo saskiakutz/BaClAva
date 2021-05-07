@@ -58,20 +58,20 @@ distribute_clusters_uniform <- function(number_of_clusters, cluster_radius, Size
   real_stop <- 0
 
   i = 1
-
   while (i < number_of_clusters)
   {
-    if (real_stop == 10) {
-      print(paste("results of distributing the centers of clusters will be different from input. Distance between clusters will be smaller than:", distance_between_clusters))
-      cluster_centers[, 1] <- c(runif(number_of_clusters, min = X1, max = X2))
-      cluster_centers[, 2] <- c(runif(number_of_clusters, min = Y1, max = Y2))
-      return(cluster_centers)
-    }
+    steps_made <- steps_made + 1
 
-    if (steps_made == start_again) {
+    if (steps_made == start_again)
+    {
       i <- 1
-      steps_made <- 0
-      cluster_centers <- matrix(0, number_of_clusters, 2)
+      steps_made <- 1
+      if (real_stop == 10) {
+        warning("distance_between_clusters will be less then in input(distance 0 is also possible).")
+        cluster_centers[, 1] <- runif(number_of_clusters, min = X1, max = X2)
+        cluster_centers[, 2] <- runif(number_of_clusters, min = Y1, max = Y2)
+        return(cluster_centers)
+      }
       cluster_centers[1,] <- c(runif(1, min = X1, max = X2), runif(1, min = Y1, max = Y2))
       real_stop <- real_stop + 1
     }
@@ -80,10 +80,8 @@ distribute_clusters_uniform <- function(number_of_clusters, cluster_radius, Size
 
     for (k in 1:i)
     {
-      steps_made <- steps_made + 1
-      if (steps_made == start_again ||
-        sqrt(abs(cluster_centers[k,][1] - cluster_centers[i + 1,][1])^2 + abs(cluster_centers[k,][2] - cluster_centers[i + 1,][2])^2)
-          < distance_between_clusters)
+      if (sqrt(abs(cluster_centers[k,][1] - cluster_centers[i + 1,][1])^2 + abs(cluster_centers[k,][2] - cluster_centers[i + 1,][2])^2)
+        < distance_between_clusters)
       { i <- i - 1
         break }
     }
@@ -92,6 +90,8 @@ distribute_clusters_uniform <- function(number_of_clusters, cluster_radius, Size
 
   return(cluster_centers)
 }
+
+#-------------------------#
 
 #-------------------------#
 
@@ -191,6 +191,7 @@ distribute_molecules_in_cluster_gauss <- function(X, Y, number_of_molecules, clu
 }
 
 #--------------------------------------------------------------------------------#
+#--------------------------------------------------------------------------------#
 
 #--------------------------------------------------------------------------------#
 
@@ -224,17 +225,17 @@ distribute_molecules_in_clusters <- function(cluster_mean, cluster_SD, number_of
 
   if (cluster_mean < cluster_SD * 3) {
     warning("cluster_mean < cluster_SD*3. SD will be changed")
-    cluster_SD <- floor(cluster_mean / 3)
-    print(paste("cluster_SD is:", cluster_SD))
+    cluster_SD <- floor(cluster_mean / 5)
+    print(paste0("cluster_SD is: ", cluster_SD))
   }
 
   if (missing(molecules_in_clusters)) molecules_in_clusters <- number_of_clusters * cluster_mean
   else {
     molecules_in_clusters <- floor(abs(molecules_in_clusters))
     cluster_mean <- floor(molecules_in_clusters / number_of_clusters)
-    cluster_SD <- floor(cluster_mean / 3)
-    print(paste("cluster_mean will be:", cluster_mean))
-    print(paste("cluster_SD will be:", cluster_SD))
+    cluster_SD <- floor(cluster_mean / 5)
+    print(paste0("cluster_mean will be: ", cluster_mean))
+    print(paste0("cluster_SD will be: ", cluster_SD))
   }
 
   number_of_molecules <- number_of_clusters * cluster_mean
@@ -320,6 +321,8 @@ distribute_molecules_in_clusters <- function(cluster_mean, cluster_SD, number_of
 
   return(mol_array)
 }
+
+#-----------------------------------------#
 
 #-----------------------------------------#
 
@@ -435,12 +438,12 @@ distribute_background_molecules_uniform <- function(SizeX, SizeY, indent, cluste
     # check  the distance to the left "neighbors"
     while (is_fine &&
       (Left >= 1) &&
-      (abs(clusters_centers[Left,][1] - mol_array[i,][1]) < clusters_radiuses[Left]))
+      (abs(clusters_centers[Left,][1] - mol_array[i,][1]) <= clusters_radiuses[Left]))
     {
       # check the distance at the y axis first, just to avoid calling sqrt()
-      if (abs(clusters_centers[Left,][2] - mol_array[i,][2]) < clusters_radiuses[Left]) {
+      if (abs(clusters_centers[Left,][2] - mol_array[i,][2]) <= clusters_radiuses[Left]) {
         if (sqrt(abs(clusters_centers[Left,][1] - mol_array[i,][1])^2 +
-                   abs(clusters_centers[Left,][2] - mol_array[i,][2])^2) < clusters_radiuses[Left]) is_fine <- FALSE
+                   abs(clusters_centers[Left,][2] - mol_array[i,][2])^2) <= clusters_radiuses[Left]) is_fine <- FALSE
       }
       Left <- Left - 1
     }
@@ -448,11 +451,11 @@ distribute_background_molecules_uniform <- function(SizeX, SizeY, indent, cluste
     # and to the right ones
     while (is_fine &&
       (Right <= Number_of_clusters) &&
-      (abs(clusters_centers[Right,][1] - mol_array[i,][1]) < clusters_radiuses[Right]))
+      (abs(clusters_centers[Right,][1] - mol_array[i,][1]) <= clusters_radiuses[Right]))
     {
-      if (abs(clusters_centers[Right,][2] - mol_array[i,][2]) < clusters_radiuses[Right]) {
+      if (abs(clusters_centers[Right,][2] - mol_array[i,][2]) <= clusters_radiuses[Right]) {
         if (sqrt(abs(clusters_centers[Right,][1] - mol_array[i,][1])^2 +
-                   abs(clusters_centers[Right,][2] - mol_array[i,][2])^2) < clusters_radiuses[Right]) is_fine <- FALSE
+                   abs(clusters_centers[Right,][2] - mol_array[i,][2])^2) <= clusters_radiuses[Right]) is_fine <- FALSE
       }
       Right <- Right + 1
     }
@@ -512,6 +515,8 @@ distribute_background_molecules_uniform <- function(SizeX, SizeY, indent, cluste
 
   return(mol_array)
 }
+
+#------------------#
 
 #------------------#
 
