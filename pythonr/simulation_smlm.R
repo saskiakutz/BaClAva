@@ -59,7 +59,7 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
     FWHM <- 4.5
   }
 
-  if (FWHM < pixel_size || FWHM > 4000) stop("FWHM must be in [100,4000]")
+  if (FWHM < pixel_size || FWHM > 4000) stop("FWHM must be in [chosen pixel size,4000]")
   FWHM <- FWHM / pixel_size
   SD <- FWHM / 2.355
   if (indent < ceiling(SD * 3.1)) {
