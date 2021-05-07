@@ -361,22 +361,3 @@ make_plot <- function(SizeX, SizeY, indent,
     n_sim <- n_sim + 1
   }
 }
-
-
-# for cluster radius 25nm with 40 clusters
-# number of molecules in clusters
-# 600 molecules - density 3820/um^2
-# 800 molecules - density 5090/um^2
-# 1000 - 6366
-# 1200 - 7639
-# 1400 - 8912
-# 1600 - 10185
-#
-
-# background density: 200-600
-
-# make_plot(SizeX=40,SizeY=40,indent=6,
-# 	  number_of_clusters=40,cluster_radius=25,distance_between_clusters=25*2/3,
-# 	  FWHM=250,max_intensity=4762,on=0.00004,off=0.4,frames=50000,simulations=10,stack_or_single=1,noise=1,
-# 		  density_or_molecules=1,clusters_density=799,background_density=200)
-# 		  density_or_molecules=1,clusters_density=10185,background_density=0)
