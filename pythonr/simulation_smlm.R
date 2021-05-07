@@ -35,6 +35,7 @@ make_plot <- function(SizeX, SizeY, indent,
                       density_or_molecules = 1, clusters_density, background_density,
                       cluster_mean, cluster_SD, molecules_background, directory_folder)
 {
+  source('./pythonr/package_list.R')
   source('./pythonr/internal_smlm_simulation.R')
   #--------------------------------------error handling-------------------------------------------------#
   if (SizeX < 20 ||
@@ -127,7 +128,7 @@ make_plot <- function(SizeX, SizeY, indent,
     }
 
     cluster_mean <- floor(molecules_in_clusters / number_of_clusters)
-    cluster_SD <- floor(cluster_mean / 3)
+    cluster_SD <- floor(cluster_mean / 5)
     if (cluster_mean < 3) print(paste0("cluster_mean is", cluster_mean, ".Weird result is possible."))
 
     if (molecules_in_clusters == 0) stop("molecules_in_clusters = 0, please change the input(cluster radius or density)")
@@ -200,10 +201,9 @@ make_plot <- function(SizeX, SizeY, indent,
 
     clusters_centers <- distribute_clusters_uniform(number_of_clusters, cluster_radius, SizeX, SizeY, indent, distance_between_clusters)
     mol_array <- distribute_molecules_in_clusters(cluster_mean, cluster_SD, number_of_clusters, molecules_in_clusters)
-    print(sum(mol_array))
-    # return()
+
     cluster_mols_positions <- matrix(0, molecules_in_clusters, 2)
-    print(cluster_mols_positions)
+
     # distribute molecules' positions in clusters
     clusters_radiuses <- NULL
     current_index <- 1
@@ -268,11 +268,11 @@ make_plot <- function(SizeX, SizeY, indent,
     mols <- cbind(mols, matrix(0, n_mols, 1))
 
     if (stack_or_single) Stack <- list() # create a list which will contain stack frames
-    dir.create(paste0(file.path(directory_folder, output_directory), '/', n_sim, sep = ''))
+    dir.create(paste0(file.path(directory_folder, output_directory), '/', n_sim))
 
     print("Molecules' positions are distributed")
     print(paste0("Total number of frames: ", frames))
-    print(paste0("creating frames for a ", n_sim, '/', simulations, " simulation...", sep = ''))
+    print(paste0("creating frames for a ", n_sim, '/', simulations, " simulation..."))
 
     # just a little quirk:
     # changing "while (n_frame <= frames)" to "for (n_frame in 1:frames)" throws sometimes an error in bitwAnd() in write_tiff() on R version 4.0.5
@@ -328,11 +328,11 @@ make_plot <- function(SizeX, SizeY, indent,
     if (stack_or_single) {
       print("all frames are done")
       print("creating tiff...")
-      write_tiff(Stack, paste0(file.path(directory_folder, output_directory), '/', n_sim, '/', n_sim, '.tiff', sep = ''))
+      write_tiff(Stack, paste0(file.path(directory_folder, output_directory), '/', n_sim, '/', n_sim, '.tiff'))
     }
     else print("all tiffs are created")
 
-    meta_file <- paste0(file.path(directory_folder, output_directory), '/', n_sim, '/', 'meta.txt', sep = '')
+    meta_file <- paste0(file.path(directory_folder, output_directory), '/', n_sim, '/', 'meta.txt')
     write(paste0('"Summary": {\n"Total number of molecules": ', n_mols, ',\n"Molecules in clusters": ', molecules_in_clusters, ',\n"Molecules in background": ', molecules_background,
                  ',\n"Frames": ', frames, ',\n"Height": ', SizeY, ',\n"Width": ', SizeX, ',\n"Indent": ', indent, ',\n"FWHM": ', 100 * FWHM, 'nm,\n"Max color intensity": ',
                  spare_max_intensity, ',\n"Clusters density(molecules per um^2)": ', clusters_density, ',\n"Background density(molecules per um^2)": ',
