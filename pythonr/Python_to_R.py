@@ -45,6 +45,7 @@ class PythonToR:
             SizeX=input_dic.get('pixel_x'),
             SizeY=input_dic.get('pixel_y'),
             indent=input_dic.get('pixel_indent'),
+            pixel_size=input_dic.get('pixel_size'),
             number_of_clusters=input_dic.get('n_clusters'),
             cluster_radius=input_dic.get('radius_cluster'),
             distance_between_clusters=2 / 3 * input_dic.get('radius_cluster'),
