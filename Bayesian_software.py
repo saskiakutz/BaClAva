@@ -1,6 +1,7 @@
 import sys
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
+from PyQt5 import QtGui as qtg
 from PyQt5.QtGui import QPalette, QColor
 from Bayesian_software_view import View_software
 
@@ -51,6 +52,7 @@ class MainWindow(qtw.QMainWindow):
         super().__init__()
         # Main UI code goes here
         self.view = ModuleWindow()
+        self.setWindowIcon(qtg.QIcon('./readme_images/logo.png'))
         self.setWindowTitle('BaClAva')
         self.setCentralWidget(self.view)
 
