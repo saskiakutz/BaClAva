@@ -39,17 +39,19 @@ using parallel computing. For ease of use, each module can also be used independ
 
 ## Module 1: Simulation tools
 
-![alt text](readme_images/sim_20.png "Screenshot of the simulation module")
-
 The first module of the Bayesian software, the simulation tool, enables the user to simulate simple Gaussian-like
 clusters. This module has two parts depending on the output the user would like to get. Module 1a simulates the single
 localisations, and Module 1b enables the user to simulate blinking fluorophores.
+
+![alt text](readme_images/sim_20.png "Screenshot of the simulation module")
 
 Upon starting the simulation module 1a, the user is prompted to adjust several simulation parameters, the number of
 datasets, and the storage directory. The user can only start the simulation process after choosing a proper directory.
 The tool simulates the final localisations assuming that each molecule is represented by a single localisation. For each
 simulation, the final table of localisations with the 2D coordinates ('x', 'y'), the localisation's standard deviation (
 ' sd') and its label ('clusterID') are stored as a dataset ('data') in a hdf5 file.
+
+![alt text](readme_images/module_1b.png "Screenshot of the simulation module for smlm-like data")
 
 In module 1b, the GUI prompts the user to adjust the parameters for the simulation of the underlying molecule
 distribution, the fluorophores' blinking and the camera parameters, and the storage directory. The user needs to select
