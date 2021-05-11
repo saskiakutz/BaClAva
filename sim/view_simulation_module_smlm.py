@@ -195,7 +195,7 @@ class ViewSMLM(qtw.QWidget):
             'off_rate': self.off_rate.value(),
             'noise': self.inputs['noise'].isChecked(),
             'pixel_size': self.inputs['pixel size [nm]'].value(),
-            'exposure_time': self.inputs['exposure time [s]'].value(),
+            'exposure_time': self.inputs['exposure time [ms]'].value(),
             'n_frames': self.inputs['number of frames per simulation'].value(),
             'tiff_stack': self.inputs['store as stack'].isChecked()
         }
