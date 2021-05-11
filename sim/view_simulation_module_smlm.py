@@ -116,7 +116,7 @@ class ViewSMLM(qtw.QWidget):
                 value=100
             ),
             "noise": qtw.QCheckBox(checked=True),
-            "exposure time [s]": qtw.QSpinBox(
+            "exposure time [ms]": qtw.QSpinBox(
                 self,
                 minimum=1,
                 maximum=500,
