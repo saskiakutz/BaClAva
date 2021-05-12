@@ -16,12 +16,13 @@ from matplotlib.figure import Figure
 
 
 class MplCanvas(FigureCanvas):
-    def __init__(self, parent=None, width=5, height=5, dpi=100):
+    def __init__(self, parent=None, width=1, height=1, dpi=100):
+        # width, height = matplotlib.figure.figaspect(2.)
         self.fig = Figure(figsize=(width, height), dpi=dpi, tight_layout=True)
         self.axes = self.fig.add_subplot(111)
         super(MplCanvas, self).__init__(self.fig)
 
-        FigureCanvas.setMinimumSize(self, 100, 185)
+        FigureCanvas.setMinimumSize(self, 50, 50)
         FigureCanvas.setSizePolicy(self,
                                    qtw.QSizePolicy.MinimumExpanding,
                                    qtw.QSizePolicy.MinimumExpanding)
@@ -107,35 +108,35 @@ class View_post(qtw.QWidget):
 
         # self.text = qtw.QLabel('cluster plot')
         # plot_layout.addWidget(self.text, 1, 0)
-        self.scatter_canvas = MplCanvas(self, width=5, height=6, dpi=100)
+        self.scatter_canvas = MplCanvas(self, width=1, height=5, dpi=100)
         scatter_tb = NavigationToolbar(self.scatter_canvas, self)
         plot_layout.addWidget(scatter_tb, 0, 0)
         plot_layout.addWidget(self.scatter_canvas, 1, 0)
 
-        self.area_canvas = MplCanvas(self, width=5, height=6, dpi=100)
+        self.area_canvas = MplCanvas(self, width=1, height=5, dpi=100)
         # area_number_layout.addWidget(self.area_canvas)
         area_tb = NavigationToolbar(self.area_canvas, self)
         plot_layout.addWidget(area_tb, 0, 1)
         plot_layout.addWidget(self.area_canvas, 1, 1)
 
-        self.number_canvas = MplCanvas(self, width=5, height=6, dpi=100)
+        self.number_canvas = MplCanvas(self, width=1, height=5, dpi=100)
         # area_number_layout.addWidget(self.number_canvas)
         number_tb = NavigationToolbar(self.number_canvas, self)
         plot_layout.addWidget(number_tb, 0, 2)
         plot_layout.addWidget(self.number_canvas, 1, 2)
 
-        self.density_canvas = MplCanvas(self, width=5, height=5, dpi=100)
+        self.density_canvas = MplCanvas(self, width=1, height=5, dpi=100)
         density_tb = NavigationToolbar(self.density_canvas, self)
         plot_layout.addWidget(density_tb, 2, 0)
         plot_layout.addWidget(self.density_canvas, 3, 0)
 
-        self.percentage_canvas = MplCanvas(self, width=5, height=6, dpi=100)
+        self.percentage_canvas = MplCanvas(self, width=1, height=5, dpi=100)
         # percentage_ratio_layout.addWidget(self.percentage_canvas)
         percentage_tb = NavigationToolbar(self.percentage_canvas, self)
         plot_layout.addWidget(percentage_tb, 2, 1)
         plot_layout.addWidget(self.percentage_canvas, 3, 1)
 
-        self.ratio_canvas = MplCanvas(self, width=5, height=6, dpi=100)
+        self.ratio_canvas = MplCanvas(self, width=1, height=5, dpi=100)
         # percentage_ratio_layout.addWidget(self.ratio_canvas)
         ratio_tb = NavigationToolbar(self.ratio_canvas, self)
         plot_layout.addWidget(ratio_tb, 2, 2)
