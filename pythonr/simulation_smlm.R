@@ -13,7 +13,8 @@
 # 4) distance_between_clusters is measured in nm.
 # 5) FWHM(Full width at half maximum) measured in nm. Defines the PSF's gauss distribution.
 # 6) max_intensity is for the largest color value of PSF.
-# 7) on, off: probabilities of a molecule to be turned on/off per frame
+# 7) on, off: probabilities of a molecule to be turned on/off per second -> internal conversion to per frame
+# 7a) exposure: exposure time per frame of the camera
 # 8) frames: number of frames(single tiffs or all in a stack)
 # 9) noise: gamma(1) or no noise(0), if omitted gamma is taken
 # 10)density_or_molecules: 1 is for input as density, 0 as number of molecules and mean with SD
@@ -34,7 +35,7 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
                       number_of_clusters, cluster_radius, distance_between_clusters,
                       FWHM, max_intensity, on, off, frames, exposure, simulations, stack_or_single, noise,
                       density_or_molecules = 1, clusters_density, background_density,
-                      cluster_mean, cluster_SD, molecules_background, directory_folder, exposure)
+                      cluster_mean, cluster_SD, molecules_background, directory_folder)
 {
   source('package_list.R')
   source('internal_smlm_simulation.R')
