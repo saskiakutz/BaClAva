@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets as qtw
+from PyQt5 import QtGui as qtg
 from modules.module_one_simulation import MainWindow_simulation
 from modules.module_one_b_smlm_simulation import MainWindowSimulationSMLM
 from modules.module_two_Bayesian import MainWindow_Bayesian
@@ -14,6 +15,7 @@ class ViewSoftware(qtw.QWidget):
         self.main_layout = qtw.QVBoxLayout()
         tab_layout = qtw.QHBoxLayout()
         self.tab_widget = qtw.QTabWidget()
+        self.tab_widget.setStyleSheet('QTabBar { font-size: 13pt; font-family: Arial; }')
         # self.setCentralWidget(self.tab_widget)
 
         self.subwidget_1 = qtw.QWidget(self)
