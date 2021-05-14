@@ -25,6 +25,7 @@ pacman::p_load(
   "plyr",
   "ggforce",
   "tidyverse",
-  "rhdf5"
+  "rhdf5",
+  "grid"
 )
 pacman::p_load_gh("saskiakutz/RSMLM")

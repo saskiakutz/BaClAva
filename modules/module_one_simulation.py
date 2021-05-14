@@ -21,7 +21,7 @@ class MainWindow_simulation(qtw.QWidget):
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.view)
 
-        self.sim_thread = qtc.QThread()
+        self.sim_thread = qtc.QThread(parent=self)
         self.model.moveToThread(self.sim_thread)
         self.model.finished.connect(self.sim_thread.quit)
         self.sim_thread.start()
@@ -49,7 +49,7 @@ class MainWindow_simulation(qtw.QWidget):
     def on_finished(self):
         # self.statusBar().showMessage('Simulation finished.')
         self.sim_thread.quit()
-        self.sim_thread.deleteLater()
+        self.model.deleteLater()
         self.view.start_btn.setEnabled(True)
         self.finished_sim.emit('Simulation finished.')
 

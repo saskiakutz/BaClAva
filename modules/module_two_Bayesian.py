@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 
-from run.view_run_module import View_run
+from run.view_run_module import ViewRun
 from run.model_run_module import Model_run
 
 
@@ -16,11 +16,11 @@ class MainWindow_Bayesian(qtw.QWidget):
         # Main UI code goes here
 
         self.run_model = Model_run()
-        self.run_view = View_run()
+        self.run_view = ViewRun()
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.run_view)
 
-        self.run_thread = qtc.QThread()
+        self.run_thread = qtc.QThread(parent=self)
         self.run_model.moveToThread(self.run_thread)
         self.run_model.finished.connect(self.run_thread.quit)
         self.run_model.finished.connect(self.on_finished)
@@ -42,7 +42,8 @@ class MainWindow_Bayesian(qtw.QWidget):
     def on_finished(self):
         # self.run_model.finished.connect(self.on_finished)
         self.run_thread.quit()
-        self.run_thread.deleteLater()
+        # self.run_thread.deleteLater()
+        self.run_model.deleteLater()
         self.run_view.start_btn.setEnabled(True)
         self.finished_bayesian.emit('Bayesian clustering finished.')
 

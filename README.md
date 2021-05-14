@@ -1,21 +1,23 @@
-# Project name: Bayesian software
+# Project name: BaClAva
 
-## About Bayesian software:
+![alt text](readme_images/logo.png "BaClAva logo")
 
-Bayesian software **need a proper name!** is a software tool with a graphic user interface for the analysis of
-clustering in data from single-molecule localisation microscopy (SMLM). It uses a Bayesian engine for user-independent
-investigation of spatial distributions based on the code published in Rubin-Delaunchy et al. [[1]](#1) and includes a
-number of clustering algorithms published therein and in [[2]](#2). This tool offers the option to generate artificial
-ground-truth data, to analyze the spatial distribution localisations with a Bayesian model to determine the degree of
-clustering and other quantitative measures of nonrandom distribution. It specifically offers batch processing of several
-experiments, and the fast turnover of large field of view data. Our software delivers clustering analysis with actively
-minimized user-bias and significantly accelerated computation.
+## About the Bayesian software BaClAva:
+
+Bayesian software BaClAva (Bayesian Cluster Analysis and Visualisation Application) is a software tool with a graphic
+user interface for the analysis of clustering in data from single-molecule localisation microscopy (SMLM). It uses a
+Bayesian engine for user-independent investigation of spatial distributions based on the code published in
+Rubin-Delaunchy et al. [[1]](#1) and includes a number of clustering algorithms published therein and in [[2]](#2). This
+tool offers the option to generate artificial ground-truth data, to analyze the spatial distribution localisations with
+a Bayesian model to determine the degree of clustering and other quantitative measures of nonrandom distribution. It
+specifically offers batch processing of several experiments, and the fast turnover of large field of view data. Our
+software delivers clustering analysis with actively minimized user-bias and significantly accelerated computation.
 
 ## Table of content:
 
 - [Installation](#Installation)
 - [Software overview](#Software-overview)
-  - [Module 1: Simulation tool](#Module-1-Simulation-tool)
+  - [Module 1: Simulation tool](#Module-1-Simulation-tools)
   - [Module 2: Bayesian calculations](#Module-2-Bayesian-calculations)
   - [Module 3: Bayesian postprocessing](#Module-3-Bayesian-postprocessing)
   - [Data format](#Data-format)
@@ -37,16 +39,27 @@ data. The final module performs a calculations based on these parameters and gen
 of essential characteristics of clusters, i.e. the cluster area or density. This can also be done in batches of datasets
 using parallel computing. For ease of use, each module can also be used independently.
 
-## Module 1: Simulation tool
+## Module 1: Simulation tools
+
+The first module of the Bayesian software, the simulation tool, enables the user to simulate simple Gaussian-like
+clusters. This module has two parts depending on the output the user would like to get. Module 1a simulates the single
+localisations, and Module 1b enables the user to simulate blinking fluorophores.
 
 ![alt text](readme_images/sim_20.png "Screenshot of the simulation module")
 
-The first module of the Bayesian software, the simulation tool, enables the user to simulate simple Gaussian-like
-clusters. Upon starting the simulation tool, the user is prompted to adjust several simulation parameters, the number of
+Upon starting the simulation module 1a, the user is prompted to adjust several simulation parameters, the number of
 datasets, and the storage directory. The user can only start the simulation process after choosing a proper directory.
 The tool simulates the final localisations assuming that each molecule is represented by a single localisation. For each
-simulation, the final table of localisations with the 2D coordinates (‘x’, ‘y’), the localisation’s standard deviation (
-’ sd’) and its label (‘clusterID’) are stored as a dataset (‘data’) in a hdf5 file.
+simulation, the final table of localisations with the 2D coordinates ('x', 'y'), the localisation's standard deviation (
+' sd') and its label ('clusterID') are stored as a dataset ('data') in a hdf5 file.
+
+![alt text](readme_images/module_1b.png "Screenshot of the simulation module for smlm-like data")
+
+In module 1b, the GUI prompts the user to adjust the parameters for the simulation of the underlying molecule
+distribution, the fluorophores' blinking and the camera parameters, and the storage directory. The user needs to select
+a storage directory to start the simulation process. This module simulates the SMLM-like behaviour of blinking dyes and
+stores the results in tiff files. In order to continue module 2, the output files need to be localised by algorithms
+such as SMAP[[3]](#3) or Thunderstorm [[4]](#4).
 
 ## Module 2: Bayesian calculations
 
@@ -99,9 +112,14 @@ a matrix called ‘r_vs_thresh’. The columns are the radius sequence, and the 
 file, these names are stored as attributes to the ‘r_vs_thresh’ dataset. The parameter set of the best cluster result
 within the chosen parameter space is another attribute to this dataset called ‘best’.
 
+The simulation of SMLM-like data mimics actual microscopy experimental acquisition. The data is stored either as a
+tiff-stack or in a folder with individual tiff files for each frame. The tiff specifications are the same as for EMCCD
+cameras, and it is possible to load the data into ImageJ or SMAP for further processing.
+
 Since the selected parameters for simulations and the Bayesian analysis are the same for the entire folder, the software
-stores the information stored in two separate files ‘sim_parameters.txt’ and ‘run_config.txt’, respectively. For a new
-analysis, the folder should be duplicated.
+stores the information stored in two separate files ‘sim_parameters.txt’ or 'sim_smlm_parameters', depending on the
+selected simulation option, and ‘run_config.txt’, respectively. For a new analysis without losing the information of the
+previous analysis, the folder should be duplicated.
 
 The final histograms are stored in a separate folder named ‘postprocessing’.
 

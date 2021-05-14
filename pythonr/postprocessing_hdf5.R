@@ -73,27 +73,13 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
 
       labelsbest <- h5read(file, paste0("labels/clusterscale", bestcs, "_thresh", bestthr, sep = ''))
       write_metadata_df(file, paste0("clusterscale", bestcs, "_thresh", bestthr, sep = ''), 'r_vs_thresh', 'best')
-      # r_thresh <- H5Dopen(file, 'r_vs_thresh')
-      # h5writeAttribute(r_thresh, attr = paste0("clusterscale", bestcs, "_thresh", bestthr, sep = ''), name = 'best')
-      # H5Dclose(r_thresh)
 
       # summaries
       cluster_area_density_labelcorr <- cluster_area_density(pts, labelsbest)
       summarytable <- cluster_area_density_labelcorr[[1]]
 
-      # tryCatch(
-      # {
-      #   h5write(summarytable, file, "summarytable") },
-      #   error = function(e) {
-      #     h5delete(file, "cluster-statistics")
-      #     h5write(summarytable, file, "cluster-statistics")
-      #   }
-      # )
       write_df_hdf5(file, summarytable, "summarytable")
       write_metadata_df(file, names(summarytable), 'summarytable', 'colnames')
-      # ds <- H5Dopen(file, 'summarytable')
-      # h5writeAttribute(ds, attr = names(summarytable), name = 'colnames')
-      # H5Dclose(ds)
 
       if (length(labelsbest) == length(cluster_area_density_labelcorr[[2]])) {
         labelsbest <- cluster_area_density_labelcorr[[2]]
@@ -148,18 +134,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
       colnames(trans_s) <- c("x", "y", "sd", "nmol")
       if (!is.null(s) & s[1] != -1) {
         write_df_hdf5(file, trans_s, 'cluster-statistics')
-        # tryCatch(
-        # {
-        #   h5write(trans_s, file, "cluster-statistics") },
-        #   error = function(e) {
-        #     h5delete(file, "cluster-statistics")
-        #     h5write(trans_s, file, "cluster-statistics")
-        #   }
-        # )
         write_metadata_df(file, names(trans_s), 'cluster-statistics', 'colnames')
-        # ds <- H5Dopen(file, 'cluster-statistics')
-        # h5writeAttribute(ds, attr = names(trans_s), name = 'colnames')
-        # H5Dclose(ds)
       }
 
       if (makeplot == TRUE) {
@@ -179,16 +154,20 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
           plot_estimatedlabels <- cluster_plot(pts, labelsbest, "Estimated labels")
 
           if (separateplots) {
-            plot_save(plot_truelabels, expname, paste0(filename_base, "truelabels"))
-            plot_save(plot_estimatedlabels, expname, paste0(filename_base, "estimatedlabels"))
+            plot_save(plot_truelabels, expname, paste0(filename_base, "_truelabels"))
+            plot_save(plot_estimatedlabels, expname, paste0(filename_base, "_estimatedlabels"))
           }
 
-          plots_arrange(plot_truelabels, plot_estimatedlabels, 1, expname, paste0(filename_base, "true_estimate_plot"))
+          plots_arrange(plot_truelabels, plot_estimatedlabels, 1, expname, paste0(filename_base, "_true_estimate_plot"))
         }else {
-          plot_clustering <- cluster_plot(pts, labelsbest, "Clustering", sds, "experiment")
-          plot_save(plot_clustering, expname, paste0(filename_base, "Clustering"))
+          plot_clustering <- cluster_plot(pts, labelsbest, "Clustering", sds)
+          plot_save(plot_clustering, expname, paste0(filename_base, "_Clustering"))
         }
+
+        summary_plot(summarytable, paste0(filename_base, "_summarytable_plots"), exp_name = expname)
       }
+
+      # H5Fclose(file)
 
       if (makeplot & superplot) {
         list(
@@ -200,6 +179,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
           reldensity = reldensity(pts, labelsbest, summarytable$areasCluster, xlim, ylim),
           area = summarytable$areasCluster,
           density = summarytable$densitiesCluster,
+          density_area = summarytable$densitiesCluster / summarytable$areasCluster,
           plots = plot_clustering
         )
       }else {
@@ -211,7 +191,8 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
           totalmols = length(labelsbest),
           reldensity = reldensity(pts, labelsbest, summarytable$areasCluster, xlim, ylim),
           area = summarytable$areasCluster,
-          density = summarytable$densitiesCluster)
+          density = summarytable$densitiesCluster,
+          density_area = summarytable$densitiesCluster / summarytable$areasCluster)
       }
     })
 

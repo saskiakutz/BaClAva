@@ -151,6 +151,7 @@ class View_sim(qtw.QWidget):
             clicked=self.start_sim
         )
 
+        self.start_btn.setFont(qtg.QFont('Arial', 15))
         self.start_btn.setDisabled(True)
         self.dir_line.textChanged.connect(lambda x: self.start_btn.setDisabled(x == ''))
 

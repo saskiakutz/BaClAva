@@ -2,7 +2,7 @@ import sys
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 
-from run.view_run_module import View_run
+from run.view_run_module import ViewRun
 from run.model_run_module import Model_run
 
 
@@ -20,7 +20,7 @@ class MainWindow(qtw.QMainWindow):
 
         self.setWindowTitle("Bayesian clustering 3.0")
         self.run_model = Model_run()
-        self.run_view = View_run()
+        self.run_view = ViewRun()
         self.setCentralWidget(self.run_view)
 
         self.run_thread = qtc.QThread()

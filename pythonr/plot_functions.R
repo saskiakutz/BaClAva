@@ -3,8 +3,8 @@
 hist_plot <- function(res, nexpname, plotcreation) {
 
   length_res <- length(names(res[[1]]))
-  if (length_res == 9)
-    length_res <- 8
+  if (length_res == 10)
+    length_res <- 9
   for (j in 1:length_res) {
     datavec <- c()
     for (i in 1:length(res)) {
@@ -20,7 +20,8 @@ hist_plot <- function(res, nexpname, plotcreation) {
           j == 5 ~ c("Total Mols per ROI", "Number of regions"),
           j == 6 ~ c("Total Mols per ROI", "Number of regions"),
           j == 7 ~ c("Cluster area", "Number of clusters"),
-          j == 8 ~ c("Cluster density", "Number of clusters")
+          j == 8 ~ c("Cluster density", "Number of clusters"),
+          j == 9 ~ c("Cluster density/area", "Number of clusters")
         )
 
       #plot
@@ -202,32 +203,7 @@ cluster_plot <-
   function(pts,
            colourlabels,
            title,
-           pointsize = 0.03,
-           datatype = "simulation") {
-    #   clusterplot = ggplot(pts, aes(x, y)) +
-    #     geom_point(color = mkcols(colourlabels), size = pointsize) +
-    #     labs(x = "x [µm]", y = "y [µm]") +
-    #     ggtitle(title) +
-    #     theme_bw() +
-    #     theme(
-    #       axis.text = element_text(size = 8),
-    #       plot.title = element_text(size = 8),
-    #       axis.title = element_text(size = 8),
-    #       panel.border = element_rect(size = 1),
-    #       panel.grid.major = element_line(size = 0),
-    #       panel.grid.minor = element_line(size = 0),
-    #       panel.background = element_rect(fill = "white") #
-    #     )
-    #
-    #   if (datatype == "experiment") {
-    #     clusterplot +
-    #       scale_y_reverse() +
-    #       labs(x = "x [µm]", y = "y [µm]")
-    #   }
-    #
-    #   clusterplot
-    #
-    # }
+           pointsize = 0.03) {
     dataset <- as_tibble(pts)
     data <- dataset %>%
       mutate(radius_SD = pointsize) %>%
@@ -251,13 +227,6 @@ cluster_plot <-
         panel.grid.minor = element_blank(),
         panel.background = element_rect(fill = "white") #
       )
-
-
-    # if (datatype == "experiment") {
-    #   clusterplot +
-    #     scale_y_reverse() +
-    #     labs(x = "x [µm]", y = "y [µm]")
-    # }
 
     clusterplot
 
@@ -304,3 +273,81 @@ ground_truth_plot <- function(pts, colourlabels, title) {
     )
   clusterplot
 }
+
+mkcols <- function(labels) {
+  t <- table(labels)
+  cnames <- names(t[t > 1])
+  colors <- sample(rainbow(length(cnames)))
+  s <- sapply(labels, function(l) {
+    i <- which(names(t) == l)
+
+    if (t[i] == 1) {
+      "grey"
+    }
+    else {
+      colors[which(cnames == l)]
+    }
+  })
+  s
+}
+
+# summarytable plots
+scatterplot <- function(datatable, col1, col2, col3) {
+  scatter_plot <- ggplot(datatable, aes_string(x = col1, y = col2, color = col3)) +
+    geom_point() +
+    # labs(x = "x [µm]", y = "y [µm]") +
+    # ggtitle(title) +
+    theme_bw() +
+    theme(
+      axis.text = element_text(size = 8),
+      plot.title = element_text(size = 8),
+      axis.title = element_text(size = 8),
+      panel.border = element_rect(size = 1),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.background = element_rect(fill = "white") #
+    )
+
+  scatter_plot
+}
+
+summary_plot <- function(data_table, summaryplot_name, exp_name = expname, column1 = "numDetectionsCluster", column2 = "areasCluster", column3 = "densitiesCluster") {
+  plot_num_area_density <- scatterplot(data_table, column1, column2, column3)
+  plot_num_density_area <- scatterplot(data_table, column1, column3, column2)
+  plot_area_density_num <- scatterplot(data_table, column2, column3, column1)
+  plot_num_density_to_area <- ggplot(data_table, aes(x = numDetectionsCluster, y = densitiesCluster / areasCluster)) +
+    geom_point() +
+    theme_bw() +
+    theme(
+      axis.text = element_text(size = 8),
+      plot.title = element_text(size = 8),
+      axis.title = element_text(size = 8),
+      panel.border = element_rect(size = 1),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.background = element_rect(fill = "white")
+    )
+  plot_num_density_to_area_ecdf <- ggplot(data_table, aes(densitiesCluster / areasCluster)) +
+    stat_ecdf(geom = "point") +
+    # scale_y_continuous(labels = scales::percent) +
+    theme_bw() +
+    # xlab(xlabel) +
+    # ylab("Percent") +
+    theme(
+      axis.text = element_text(size = 8),
+      plot.title = element_text(size = 8),
+      axis.title = element_text(size = 8),
+      panel.border = element_rect(size = 1),
+      panel.grid.major = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.background = element_rect(fill = "white"),
+      legend.position = "bottom"
+    )
+  # +
+  #   scale_x_continuous(limits = c(0, 0.15))
+
+  summaryplot_2 <- ggarrange(plot_num_area_density, plot_num_density_area, plot_area_density_num, plot_num_density_to_area, plot_num_density_to_area_ecdf, nrow = 1)
+  plot_save(summaryplot_2, exp_name, summaryplot_name, plot_height = 45, plot_width = 500)
+}
+
+#TODO: 3D plot for summarytable

@@ -1,15 +1,12 @@
 import sys
 from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
+from PyQt5 import QtGui as qtg
 from PyQt5.QtGui import QPalette, QColor
-from module_one_simulation import MainWindow_simulation
-from module_two_Bayesian import MainWindow_Bayesian
-from module_three_post import MainWindow_post
-from Bayesian_software_view import View_software
+from Bayesian_software_view import ViewSoftware
 
 
-class Main_Window(qtw.QMainWindow):
+class ModuleWindow(qtw.QMainWindow):
 
     def __init__(self):
         super().__init__()
@@ -20,39 +17,18 @@ class Main_Window(qtw.QMainWindow):
         help_menu = menubar.addMenu('Help')
         quit_action = file_menu.addAction("Quit", self.close)
 
-        self.main_view = View_software()
+        self.main_view = ViewSoftware()
         self.setCentralWidget(self.main_view)
         # self.simulation = MainWindow_simulation()
         # self.simulation.finished_sim.connect(self.set_statusbar)
         self.main_view.main_simulation.start_sim.connect(self.set_statusbar)
         self.main_view.main_simulation.finished_sim.connect(self.set_statusbar)
+        self.main_view.main_simulation_STORM.start_STORM_sim.connect(self.set_statusbar)
+        self.main_view.main_simulation_STORM.finished_STORM_sim.connect(self.set_statusbar)
         self.main_view.main_run.start_bayesian.connect(self.set_statusbar)
         self.main_view.main_run.finished_bayesian.connect(self.set_statusbar)
         self.main_view.main_post.started_post.connect(self.set_statusbar)
         self.main_view.main_post.finished_post.connect(self.set_statusbar)
-
-        # self.tab_widget = qtw.QTabWidget()
-        # self.setCentralWidget(self.tab_widget)
-
-        # self.subwidget_1 = qtw.QWidget(self)
-        # self.grid_layout = qtw.QGridLayout()
-        # self.subwidget_1.setLayout(self.grid_layout)
-        # self.subwidget_2 = qtw.QWidget(self)
-        # self.grid_layout2 = qtw.QGridLayout()
-        # self.subwidget_2.setLayout(self.grid_layout2)
-        # self.subwidget_3 = qtw.QWidget(self)
-        # self.grid_layout3 = qtw.QGridLayout()
-        # self.subwidget_3.setLayout(self.grid_layout3)
-        # self.tab_widget.addTab(self.subwidget_1, 'Module 1: Simulation')
-        # self.main_simulation = MainWindow_simulation()
-        # self.subwidget_1.layout().addWidget(self.main_simulation)
-        # self.tab_widget.addTab(self.subwidget_2, 'Module 2: Bayesian engine')
-        # self.main_run = MainWindow_Bayesian()
-        # self.subwidget_2.layout().addWidget(self.main_run)
-        # self.tab_widget.addTab(self.subwidget_3, 'Module 3: Postprocessing')
-        # self.main_post = MainWindow_post()
-        # self.subwidget_3.layout().addWidget(self.main_post)
-        # # self.tab_widget.currentChanged(self.set_statusbar)
 
         self.status_bar = qtw.QStatusBar()
         self.setStatusBar(self.status_bar)
@@ -68,10 +44,6 @@ class Main_Window(qtw.QMainWindow):
     def set_statusbar(self, message):
         self.status_bar.showMessage(message)
 
-    # def on_finished(self):
-    #     self.statusBar().showMessage('Simulation finished.')
-    #     # self.view.start_btn.setEnabled(True)
-
 
 class MainWindow(qtw.QMainWindow):
 
@@ -79,8 +51,9 @@ class MainWindow(qtw.QMainWindow):
         """MainWindow constructor"""
         super().__init__()
         # Main UI code goes here
-        self.view = Main_Window()
-        self.setWindowTitle('Bayesian Software')
+        self.view = ModuleWindow()
+        self.setWindowIcon(qtg.QIcon('./readme_images/logo.png'))
+        self.setWindowTitle('BaClAva')
         self.setCentralWidget(self.view)
 
         # End main UI code

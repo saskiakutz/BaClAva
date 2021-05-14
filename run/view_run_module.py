@@ -1,16 +1,12 @@
-import sys
 from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
+from PyQt5 import QtGui as qtg
 import os
-import time
-import csv
 import multiprocessing
-from model_table import TableModel
 from run.model_table_pd import DataFrameModel
 
 
-class View_run(qtw.QWidget):
+class ViewRun(qtw.QWidget):
     submitted = qtc.pyqtSignal(object, object)
     startrun = qtc.pyqtSignal()
 
@@ -22,11 +18,6 @@ class View_run(qtw.QWidget):
         main_layout = qtw.QVBoxLayout()
 
         parameter_layout = qtw.QFormLayout()
-        # heading = qtw.QLabel("Bayesian Clustering")
-        # parameter_layout.addRow(heading)
-        # heading_font = qtg.QFont('Arial', 32, qtg.QFont.Bold)
-        # heading_font.setStretch(qtg.QFont.ExtraExpanded)
-        # heading.setFont(heading_font)
 
         self.roi_x_min = qtw.QSpinBox(
             self,
@@ -145,7 +136,7 @@ class View_run(qtw.QWidget):
         datasources = ('simulation', 'experiment')
         self.b_inputs["datasource"].addItems(datasources)
 
-        clustermethods = ("ToMATo", "DBSCAN", "Ripley' K based")
+        clustermethods = ("ToMATo", "DBSCAN", "Ripley' K based", "DMSCBAN 2")
         self.b_inputs["clustermethod"].addItems(clustermethods)
 
         if os.name == 'nt':
@@ -201,16 +192,6 @@ class View_run(qtw.QWidget):
             name_layout.addWidget(qtw.QLabel(label))
             col_layout.addWidget(widget)
 
-        # test_layout = qtw.QHBoxLayout()
-        # self.x_col = qtw.QSpinBox(
-        #     self,
-        #     minimum=1,
-        #     maximum=100,
-        #     singleStep=1,
-        #     value=1
-        # )
-        # test_layout.addWidget(self.x_col)
-
         main_layout.addLayout(name_layout)
         main_layout.addLayout(col_layout)
 
@@ -224,12 +205,14 @@ class View_run(qtw.QWidget):
             # checkable=True,
             clicked=self.start_run
         )
+        self.start_btn.setFont(qtg.QFont('Arial', 15))
         self.start_btn.setDisabled(True)
         self.dir_line.textChanged.connect(lambda x: self.start_btn.setDisabled(x == ''))
 
         self.cancel_btn = qtw.QPushButton(
             "cancel"  # TODO: cancel action
         )
+        self.cancel_btn.setFont(qtg.QFont('Arial', 15))
 
         button_layout.addWidget(self.start_btn)
         button_layout.addWidget(self.cancel_btn)
@@ -274,23 +257,6 @@ class View_run(qtw.QWidget):
                     self.dir_line.setText(os.path.dirname(filename))
                 else:
                     self.dir_line.setText(os.path.dirname(os.path.dirname(filename)))
-
-    # def btnstate(self, change_status):
-    #     print("here")
-    #     print(change_status)
-    #     if not change_status:
-    #         self.status = change_status
-    #         self.start_btn.setDisabled(self.status)
-    #         print(self.status)
-    #
-    # def disableButton(self):
-    #     self.start_btn.setDisabled(self.status)
-    #     self.start_btn.repaint()
-    #
-    # def toggleStateAndButton(self):
-    #     self.start_btn.setDisabled(self.status)
-    #     self.status = not self.status
-    #     self.start_btn.repaint()
 
     def start_run(self):
 
