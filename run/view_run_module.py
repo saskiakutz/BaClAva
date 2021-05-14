@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
+from PyQt5 import QtGui as qtg
 import os
 import multiprocessing
 from run.model_table_pd import DataFrameModel
@@ -204,12 +205,14 @@ class ViewRun(qtw.QWidget):
             # checkable=True,
             clicked=self.start_run
         )
+        self.start_btn.setFont(qtg.QFont('Arial', 15))
         self.start_btn.setDisabled(True)
         self.dir_line.textChanged.connect(lambda x: self.start_btn.setDisabled(x == ''))
 
         self.cancel_btn = qtw.QPushButton(
             "cancel"  # TODO: cancel action
         )
+        self.cancel_btn.setFont(qtg.QFont('Arial', 15))
 
         button_layout.addWidget(self.start_btn)
         button_layout.addWidget(self.cancel_btn)
