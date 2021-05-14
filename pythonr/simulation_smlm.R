@@ -66,7 +66,7 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
     print("exposure is missing, it will be 20ms per frame.")
     exposure <- 0.02
   }
-  if (exposure < 0.001 || exposure > 0.2) stop("exposure must be in [0.001,0.2]")
+  if (exposure < 0.001 || exposure > 0.5) stop("exposure must be in [0.001,0.5]")
   if (missing(FWHM)) {
     print("FWHM was not defined. It will be 450 nm then.")
     FWHM <- 450 / pixel_size
