@@ -55,7 +55,8 @@ class MainWindow_post(qtw.QWidget):
     def on_finished(self):
         # self.post_model.exit()
         self.post_thread.quit()
-        self.post_thread.deleteLater()
+        # self.post_thread.deleteLater()
+        self.post_model.deleteLater()
         self.post_view.start_btn.setEnabled(True)
         self.finished_post.emit('Post processing finished.')
 

@@ -52,7 +52,7 @@ class MainWindowSimulationSMLM(qtw.QWidget):
 
     def on_cancel(self):
         self.sim_STORM_thread.quit()
-        self.sim_STORM_thread.deleteLater()
+        self.model_smlm.deleteLater()
         self.storm_view.start_btn.setEnabled(True)
         self.finished_STORM_sim.emit('SMLM simulation cancelled.')
 
