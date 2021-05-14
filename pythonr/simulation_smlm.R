@@ -37,9 +37,9 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
                       density_or_molecules = 1, clusters_density, background_density,
                       cluster_mean, cluster_SD, molecules_background, directory_folder)
 {
-  source('package_list.R')
-  source('internal_smlm_simulation.R')
-  source('plot_functions_smlm.R')
+  source('./pythonr/package_list.R')
+  source('./pythonr/internal_smlm_simulation.R')
+  source('./pythonr/plot_functions_smlm.R')
   #--------------------------------------error handling-------------------------------------------------#
   if (SizeX < 20 ||
     SizeY < 20 ||
