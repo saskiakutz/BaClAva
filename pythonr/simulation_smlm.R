@@ -88,16 +88,11 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
   if (on <= 0 || on > 0.1) stop("on probability must be in (0,0.1]")
   if (off < 0 || off > 1) stop("off probability must be in [0,1]")
 
-  #!!!!!!!!!!!!!!!!!!
-  exposure <- exposure / 100 #exposure is measured in ms, 100 because s^-1/s^-3 is 100
   on <- on * exposure
   off <- off * exposure
-  print(paste0("on will be: ", on, " per ", exposure, "s-1"))
-  print((paste0("off will be: ", off, " per ", exposure, "s-1")))
-  #!!!!!!!!!!!!!!!!!!!!
 
   frames <- floor(frames)
-  if (frames < 1 || frames > 100000) stop("number of frames must be in range 1-50000")
+  if (frames < 1 || frames > 100000) stop("number of frames must be in range 1-100000")
 
   simulations <- floor(simulations)
   if (simulations < 1 || simulations > 200) stop("simulations must be in [1,200]")
