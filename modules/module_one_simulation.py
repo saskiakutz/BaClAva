@@ -49,7 +49,7 @@ class MainWindow_simulation(qtw.QWidget):
     def on_finished(self):
         # self.statusBar().showMessage('Simulation finished.')
         self.sim_thread.quit()
-        self.sim_thread.deleteLater()
+        self.model.deleteLater()
         self.view.start_btn.setEnabled(True)
         self.finished_sim.emit('Simulation finished.')
 
