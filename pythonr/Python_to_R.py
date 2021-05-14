@@ -54,6 +54,7 @@ class PythonToR:
             on=input_dic.get('on_rate'),
             off=input_dic.get('off_rate'),
             frames=input_dic.get('n_frames'),
+            exposure=input_dic.get('exposure_time'),
             simulations=input_dic.get('n_simulation'),
             stack_or_single=BoolVector([input_dic.get('tiff_stack')]),
             noise=BoolVector([input_dic.get('noise')]),

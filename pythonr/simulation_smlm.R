@@ -32,7 +32,7 @@
 
 make_plot <- function(SizeX, SizeY, indent, pixel_size,
                       number_of_clusters, cluster_radius, distance_between_clusters,
-                      FWHM, max_intensity, on, off, frames, simulations, stack_or_single, noise,
+                      FWHM, max_intensity, on, off, frames, exposure, simulations, stack_or_single, noise,
                       density_or_molecules = 1, clusters_density, background_density,
                       cluster_mean, cluster_SD, molecules_background, directory_folder, exposure)
 {
