@@ -3,7 +3,7 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
 from PyQt5.QtGui import QPalette, QColor
-from Bayesian_software_view import View_software
+from Bayesian_software_view import ViewSoftware
 
 
 class ModuleWindow(qtw.QMainWindow):
@@ -17,7 +17,7 @@ class ModuleWindow(qtw.QMainWindow):
         help_menu = menubar.addMenu('Help')
         quit_action = file_menu.addAction("Quit", self.close)
 
-        self.main_view = View_software()
+        self.main_view = ViewSoftware()
         self.setCentralWidget(self.main_view)
         # self.simulation = MainWindow_simulation()
         # self.simulation.finished_sim.connect(self.set_statusbar)

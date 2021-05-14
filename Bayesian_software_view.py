@@ -5,7 +5,7 @@ from modules.module_two_Bayesian import MainWindow_Bayesian
 from modules.module_three_post import MainWindow_post
 
 
-class View_software(qtw.QWidget):
+class ViewSoftware(qtw.QWidget):
 
     # noinspection PyArgumentList
     def __init__(self):
