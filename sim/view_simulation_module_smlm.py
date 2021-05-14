@@ -158,6 +158,7 @@ class ViewSMLM(qtw.QWidget):
 
         button_layout = qtw.QHBoxLayout()
 
+        self.start_btn.setFont(qtg.QFont('Arial', 15))
         self.start_btn.setDisabled(True)
         self.dir_line.textChanged.connect(lambda x: self.start_btn.setDisabled(x == ''))
 
@@ -165,6 +166,7 @@ class ViewSMLM(qtw.QWidget):
             "cancel",
             clicked=self.cancel_STORM.emit
         )
+        self.cancel_btn.setFont(qtg.QFont('Arial', 15))
         # self.layout().addRow(self.start_btn)
         button_layout.addWidget(self.start_btn)
         button_layout.addWidget(self.cancel_btn)
