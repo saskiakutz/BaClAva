@@ -13,7 +13,8 @@
 # 4) distance_between_clusters is measured in nm.
 # 5) FWHM(Full width at half maximum) measured in nm. Defines the PSF's gauss distribution.
 # 6) max_intensity is for the largest color value of PSF.
-# 7) on, off: probabilities of a molecule to be turned on/off per frame
+# 7) on, off: probabilities of a molecule to be turned on/off per second -> internal conversion to per frame
+# 7a) exposure: exposure time per frame of the camera
 # 8) frames: number of frames(single tiffs or all in a stack)
 # 9) noise: gamma(1) or no noise(0), if omitted gamma is taken
 # 10)density_or_molecules: 1 is for input as density, 0 as number of molecules and mean with SD
@@ -29,9 +30,10 @@
 # distance between molecules in background is possible, but set by default to zero
 
 
+
 make_plot <- function(SizeX, SizeY, indent, pixel_size,
                       number_of_clusters, cluster_radius, distance_between_clusters,
-                      FWHM, max_intensity, on, off, frames, simulations, stack_or_single, noise,
+                      FWHM, max_intensity, on, off, frames, exposure, simulations, stack_or_single, noise,
                       density_or_molecules = 1, clusters_density, background_density,
                       cluster_mean, cluster_SD, molecules_background, directory_folder)
 {
@@ -45,21 +47,32 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
     SizeY > 250) stop("SizeX and SizeY mist be in [20,250]")
 
   number_of_clusters <- floor(number_of_clusters)
-  if (number_of_clusters < 1 || number_of_clusters > 200) stop("number_of_clusters must be within [1,200]")
+  if (number_of_clusters < 0 || number_of_clusters > 200) stop("number_of_clusters must be within [1,200]")
 
   if (missing(cluster_radius)) stop("cluster_radius is missing. Choose from [1,500]. Measured in nm.")
   if (cluster_radius < 1 || cluster_radius > 500) stop("cluster_radius is not valid. Choose from [1,500]. Measured in nm.")
 
   if (missing(distance_between_clusters)) stop("distance_between_clusters is missing. Choose from [0,1000]. Measured in nm")
   if (distance_between_clusters < 0 || distance_between_clusters > 1000) stop("Valid range for distance_between_clusters is [1,1000]. Measured in nm")
-  distance_between_clusters <- distance_between_clusters / 100 # transform to pixels
+  distance_between_clusters <- distance_between_clusters / pixel_size # transform to pixels
 
+  if (missing(pixel_size)) {
+    print("pixel_size will be 100nm")
+    pixel_size <- 100
+  }
+  if (pixel_size < 50 || pixel_size > 300) stop("pixel_size must be within [1,300]")
+
+  if (missing(exposure)) {
+    print("exposure is missing, it will be 20ms per frame.")
+    exposure <- 0.02
+  }
+  if (exposure < 0.001 || exposure > 0.5) stop("exposure must be in [0.001,0.5]")
   if (missing(FWHM)) {
     print("FWHM was not defined. It will be 450 nm then.")
     FWHM <- 450 / pixel_size
   }
 
-  if (FWHM < pixel_size || FWHM > 4000) stop("FWHM must be in [pixel size,4000]")
+  if (FWHM < 1 || FWHM > 4000) stop("FWHM must be in [1,4000]")
   FWHM <- FWHM / pixel_size
   SD <- FWHM / 2.355
   if (indent < ceiling(SD * 3.1)) {
@@ -72,11 +85,15 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
   spare_max_intensity <- max_intensity # for meta
   max_intensity <- floor(max_intensity / bivariate_normal_distribution(0, 0, SD)) # scale it
 
+  # on/off as input in s-1
   if (on <= 0 || on > 0.1) stop("on probability must be in (0,0.1]")
   if (off < 0 || off > 1) stop("off probability must be in [0,1]")
 
+  on <- on * exposure
+  off <- off * exposure
+
   frames <- floor(frames)
-  if (frames < 1 || frames > 100000) stop("number of frames must be in range 1-50000")
+  if (frames < 1 || frames > 100000) stop("number of frames must be in range 1-100000")
 
   simulations <- floor(simulations)
   if (simulations < 1 || simulations > 200) stop("simulations must be in [1,200]")
@@ -128,11 +145,9 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
       stop(Out_error)
     }
 
-    cluster_mean <- floor(molecules_in_clusters / number_of_clusters)
-    cluster_SD <- floor(cluster_mean / 5)
-    if (cluster_mean < 3) print(paste0("cluster_mean is", cluster_mean, ".Weird result is possible."))
-
-    if (molecules_in_clusters == 0) stop("molecules_in_clusters = 0, please change the input(cluster radius or density)")
+    # if there are no molecules just images with noise will be made, otherwise there will be no frames with just noise without PSFs
+    if (!molecules_in_clusters && !background_density) noise_it <- 0
+    else noise_it <- 1
   }
   else {
     if (missing(cluster_mean)) stop("cluster_mean is missing. Select one from [1,1000]. Measure in molecules.")
@@ -158,7 +173,7 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
   cluster_radius <- cluster_radius / pixel_size
 
   output_directory <- paste0(frames, "frames_", clusters_density, "clus density_", background_density, "back density_",
-                             cluster_radius, "nm clusradius_", round(100 * distance_between_clusters, 2), "nm distance between clusters_",
+                             cluster_radius, "nm clusradius_", round(pixel_size * distance_between_clusters, 2), "nm distance between clusters_",
                              "mols in clusters", molecules_in_clusters, sep = '')
 
   if (0 && file.exists(file.path(directory_folder, output_directory)))
@@ -167,7 +182,7 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
     print(paste0("following directory already exists:", output_directory))
     answer <- readline(prompt = "Should it be removed(y/n): ")
     if (answer != '' && length(grep(answer, "Yes", ignore.case = TRUE))) {
-      unlink(output_directory, recursive = TRUE)
+      unlink(file.path(directory_folder, output_directory), recursive = TRUE)
       print("Directory was deleted")
     }
     else {
@@ -175,9 +190,11 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
       return(0)
     }
   }
-  unlink(output_directory, recursive = TRUE) ###!!!!!
+  unlink(file.path(directory_folder, output_directory), recursive = TRUE) ###!!!!!
   dir.create(file.path(directory_folder, output_directory))
-
+  #print(file.exists(file.path(directory_folder, output_directory)))
+  #print(file.path(paste0(file.path(directory_folder, output_directory), '/', 1, '/', 10, '.tiff', sep = '')))
+  #return()
   # create a matrix of a circle, it will be used to create PSF
   # only entries equal to 1 are within a PSF(circle)
   PSF <- ceiling(SD * 3)
@@ -215,13 +232,20 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
     deviation_percent <- 0.001
 
     # as long as there ones in the third column do the mols distribution
-    while (is.element(1, clusters_centers[, 3]))
+    # is used for testing a deviance of a calculated radius from the 'cluster_radius'.
+    radius_not_done <- rep(1, number_of_clusters)
+
+    extra_protection <- 0
+    deviation_percent <- 0.001
+
+    # as long as there ones in the third column do the mols distribution
+    while (is.element(1, radius_not_done))
     {
       extra_protection <- extra_protection + 1
 
       for (i in 1:number_of_clusters)
       {
-        if (clusters_centers[i,][3])
+        if (radius_not_done[i])
         { out <- distribute_molecules_in_cluster_gauss(clusters_centers[i,][1], clusters_centers[i,][2], mol_array[i], cluster_radius) }
         else next
 
@@ -230,7 +254,7 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
           cluster_mols_positions[current_index:(current_index - 1 + mol_array[i]),] <- out$Molecule_positions
           clusters_radiuses <- c(clusters_radiuses, out$True_radius)
           current_index <- current_index + mol_array[i]
-          clusters_centers[i,][3] <- 0
+          radius_not_done[i] <- 0
         }
       }
 
@@ -241,15 +265,13 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
       }
     }
 
-    clusters_centers <- clusters_centers[, -3] # delete the third column
-
-    clusters_density <- molecules_in_clusters / (sum((100 * clusters_radiuses)^2 * pi * 2) * 10^-6)
+    clusters_density <- molecules_in_clusters / (sum((pixel_size * clusters_radiuses)^2 * pi * 2) * 10^-6)
 
     # calculate the number of background molecules and distribute them
-    background_area <- 100 *
+    background_area <- pixel_size *
       (SizeX - 2 * indent) *
-      100 *
-      (SizeY - 2 * indent) - sum((100 * clusters_radiuses)^2 * pi)
+      pixel_size *
+      (SizeY - 2 * indent) - sum((pixel_size * clusters_radiuses)^2 * pi)
     molecules_background <- floor(background_density * background_area * 10^-6)
 
     #if (molecules_background < 500) warning(paste0("there are totally", molecules_background, "molecules in background"))
@@ -280,39 +302,41 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
     n_frame <- 1
     while (n_frame <= frames)
     {
-      # fill the matrix with random rayleigh noise:
-      # distribution's scale = 1.0769
-      # x scale = 129.8, rayleigh was fitted to x [0,10], real data would have over 1000 values for noise
-      # +373 shifts in the valid color space, Min color intensity value was 339
-      # Frame[0:SizeX,] <- floor(((1.0769*(-2*log(runif(SizeX*SizeY)))**0.5)*129.8)+339)
-
-      if (noise) Frame[0:SizeX,] <- floor(rgamma(SizeX * SizeY, shape = 20.8, scale = 0.1) * 25.21 + 351)
+      if (noise) {
+        Frame[1:SizeX,] <- rbinom(SizeX * SizeY, 1, 0.03583402219025985)
+        Frame[1:SizeX,] <- ifelse(Frame[1:SizeX,] == 0, floor(rgamma(SizeX * SizeY - sum(Frame[0:SizeX,]), shape = 17.415731453935443, scale = 3.315823893167215)) + 338,
+                                  floor(rexp(sum(Frame[0:SizeX,]), 0.042)) + 436)
+      }
       else Frame[0:SizeX,] <- 0
 
       # molecules are randomly turned on/off
       mols[, 3] <- ifelse(mols[, 3] == 1, rbinom(sum(mols[, 3] == 1), 1, 1 - off), rbinom(sum(mols[, 3] == 0), 1, on))
 
       # make sure that the current frame contains PSFs.
-      if (!is.element(1, mols[, 3])) next
+      if (noise_it) if (!is.element(1, mols[, 3])) next
 
       mols_on <- mols[, 1:2][mols[, 3] == 1]
       Length <- length(mols_on) / 2
-      for (i in 1:Length)
-      {
-        # matrix indexes start with 1 so positions(start with 0) must be shifted
-        X1 <- floor(mols_on[i]) - PSF + 1
-        Y1 <- floor(mols_on[i + Length]) - PSF + 1
+      if (Length) {
+        for (i in 1:Length)
+        {
+          # matrix indexes start with 1 so positions(start with 0) must be shifted
+          X1 <- floor(mols_on[i]) - PSF + 1
+          Y1 <- floor(mols_on[i + Length]) - PSF + 1
 
-        # 1 is added because of a middle(y axis shift is 0) "circle layer"
-        X2 <- floor(mols_on[i]) + PSF + 1
-        Y2 <- floor(mols_on[i + Length]) + PSF + 1
+          # 1 is added because of a middle(y axis shift is 0) "circle layer"
+          X2 <- floor(mols_on[i]) + PSF + 1
+          Y2 <- floor(mols_on[i + Length]) + PSF + 1
 
-        # deviation of a molecule from pixel's center where it lies
-        X_shift <- mols_on[i] - (floor(mols_on[i] + 0.5))
-        Y_shift <- mols_on[i + Length] - (floor(mols_on[i + Length] + 0.5))
+          # deviation of a molecule from pixel's center where it lies
+          X_shift <- mols_on[i] - (floor(mols_on[i] + 0.5))
+          Y_shift <- mols_on[i + Length] - (floor(mols_on[i + Length] + 0.5))
 
-        Frame[X1:X2,][, Y1:Y2] <- Frame[X1:X2,][, Y1:Y2] +
-          Circle * floor(max_intensity * bivariate_normal_distribution(X_shift + radius_x, Y_shift + PSF_range, SD))
+          #max_intensity <- rgamma(1,shape=3.78, scale=300.05)/bivariate_normal_distribution(0,0,SD)
+
+          Frame[Y1:Y2,][, X1:X2] <- Frame[Y1:Y2,][, X1:X2] +
+            Circle * floor(max_intensity * bivariate_normal_distribution(X_shift + radius_x, Y_shift + PSF_range, SD))
+        }
       }
 
       # a tiff's pixel value has only 2 bytes, which means that values > 65535 would overflow
@@ -347,15 +371,15 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
 
     meta_file <- paste0(file.path(directory_folder, output_directory), '/', n_sim, '/', 'meta.txt')
     write(paste0('"Summary": {\n"Total number of molecules": ', n_mols, ',\n"Molecules in clusters": ', molecules_in_clusters, ',\n"Molecules in background": ', molecules_background,
-                 ',\n"Frames": ', frames, ',\n"Height": ', SizeY, ',\n"Width": ', SizeX, ',\n"Indent": ', indent, ',\n"FWHM": ', 100 * FWHM, 'nm,\n"Max color intensity": ',
+                 ',\n"Frames": ', frames, ',\n"Height": ', SizeY, ',\n"Width": ', SizeX, ',\n"Indent": ', indent, ',\n"FWHM": ', pixel_size * FWHM, 'nm,\n"Max color intensity": ',
                  spare_max_intensity, ',\n"Clusters density(molecules per um^2)": ', clusters_density, ',\n"Background density(molecules per um^2)": ',
                  background_density, ',\n"Noise": ', ifelse(noise, '"Gamma"', '"No noise"'), ',\n"Number of clusters": ', number_of_clusters, ',\n"Max cluster radius": ',
-                 100 * cluster_radius, 'nm,\n"Distance_between clusters": ', 100 * distance_between_clusters,
+                 pixel_size * cluster_radius, 'nm,\n"Distance_between clusters": ', pixel_size * distance_between_clusters,
                  'nm,\n"PixelType": "GRAY16",\n"Exposure-ms": 20,\n"On rate(per frame)": ', on, ',\n"Off rate(per frame)": ', off,
                  ',\n"Camera": "Evolve",\n"PVCAM-CameraHandle": "0",\n"Core-Camera": "Evolve",\n"PVCAM-CameraHandle": "0",\n}', sep = ''), meta_file)
     write("\nClusters' info(position x, position y, number of molecules, radius(nm)):", meta_file, append = TRUE)
     clusters_centers <- clusters_centers[order(clusters_centers[, 1]),]
-    for (pos in 1:number_of_clusters) write(paste0(round(clusters_centers[pos,][1], 3), round(clusters_centers[pos,][2], 3), mol_array[pos], round(100 * clusters_radiuses[pos], 3)), meta_file, append = TRUE)
+    for (pos in 1:number_of_clusters) write(paste0(round(clusters_centers[pos,][1], 3), round(clusters_centers[pos,][2], 3), mol_array[pos], round(pixel_size * clusters_radiuses[pos], 3)), meta_file, append = TRUE)
     print("Total creation time: ")
     print(Sys.time() - start_time)
     n_sim <- n_sim + 1

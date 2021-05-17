@@ -17,21 +17,37 @@
 
 distribute_clusters_uniform <- function(number_of_clusters, cluster_radius, SizeX, SizeY, indent, distance_between_clusters) {
 
-  # error handling
-  if (number_of_clusters <= 1 || number_of_clusters > 300) stop("number_of_clusters must be in range 2-300")
+  #--------------------------error handling----------------------------#
+  if (missing(number_of_clusters)) stop("number_of_clusters is missing")
+  if (number_of_clusters < 0 || number_of_clusters > 1000) stop("number_of_clusters must be in range 0-1000")
   number_of_clusters <- floor(number_of_clusters)
+  if (!number_of_clusters) return(c())
 
-  if (SizeX < 20 || SizeY < 20 || SizeX > 500 || SizeY > 500) stop("SizeX and SizeY must be in range 20-500")
+  if (missing(SizeY) || missing(SizeY)) stop("SizeX or SizeY is missing")
+  if (SizeX < 20 ||
+    SizeY < 20 ||
+    SizeX > 250 ||
+    SizeY > 250) stop("SizeX and SizeY must be in range 1-250")
   SizeX <- floor(SizeX)
   SizeY <- floor(SizeY)
 
+  if (missing(indent)) {
+    indent <- cluster_radius
+    print(paste0("indent was not given. It will be: ", indent))
+  }
   if (indent < 0) stop("indent must be positive")
   indent <- floor(indent)
 
+  if (missing(cluster_radius)) stop("cluster_radius is missing")
   if (cluster_radius < 0) stop("cluster_radius must be positive")
 
+  if (missing(distance_between_clusters)) {
+    print("distance_between_clusters was not defined. It will be 0nm.")
+    distance_between_clusters <- 0
+  }
+
   if (distance_between_clusters < 0 || max(SizeX, SizeY) - 2 * indent - 2 * cluster_radius < distance_between_clusters)
-  { stop("distance between clusters must be positive and smaller then 'max(SizeX,SizeY)-(2*indent+2*cluster_radius)'. Make a matrix bigger or a cluster_radius smaller.") }
+  { stop("distance between clusters must be >= 0 and smaller then 'max(SizeX,SizeY)-(2*indent+2*cluster_radius)'. Make a matrix bigger or a cluster_radius smaller.") }
 
   if (distance_between_clusters < cluster_radius * 2)
   { warning("if distance_between_clusters < cluster_radius*2, then some molecules can belong to several clusters") }
@@ -42,17 +58,21 @@ distribute_clusters_uniform <- function(number_of_clusters, cluster_radius, Size
   Y2 <- SizeY - cluster_radius - indent
 
   if (X1 >= X2 || Y1 >= Y2) stop("indent or cluster_radius is too large")
-
-  #if (floor((X2-X1)/distance_between_clusters+1) * floor((Y2-Y1)/distance_between_clusters+1) < number_of_clusters )
-  #{ stop("It wont work. There is not enough space. Try to reduce distance_between_clusters or cluster_radius or make a matrix larger") }
-  #-----------------------------------------------#
+  #---------------------------------------------------------------------#
 
   cluster_centers <- matrix(0, number_of_clusters, 2)
 
+  if (!distance_between_clusters) {
+    cluster_centers[, 1] <- runif(number_of_clusters, min = X1, max = X2)
+    cluster_centers[, 2] <- runif(number_of_clusters, min = Y1, max = Y2)
+    return(cluster_centers)
+  }
+
   cluster_centers[1,] <- c(runif(1, min = X1, max = X2), runif(1, min = Y1, max = Y2))
 
-  # since there are enough problematic cases(mostly because of the "distance_between_clusters"), some "extra protection" will be used
+  # since there are enough problematic cases(mostly because of the "distance_between_clusters"), some "extra protection" will be used 
   # just to be sure that a procedure call will terminate
+  # start_again and steps_made can be adjusted, so it will try more often to find a distribution with a necessary distance_between_clusters
   start_again <- number_of_clusters * 100
   steps_made <- 0
   real_stop <- 0
@@ -78,6 +98,7 @@ distribute_clusters_uniform <- function(number_of_clusters, cluster_radius, Size
 
     cluster_centers[i + 1,] <- c(runif(1, min = X1, max = X2), runif(1, min = Y1, max = Y2))
 
+    # brute force is very feasible here
     for (k in 1:i)
     {
       if (sqrt(abs(cluster_centers[k,][1] - cluster_centers[i + 1,][1])^2 + abs(cluster_centers[k,][2] - cluster_centers[i + 1,][2])^2)
@@ -85,6 +106,7 @@ distribute_clusters_uniform <- function(number_of_clusters, cluster_radius, Size
       { i <- i - 1
         break }
     }
+
     i <- i + 1
   }
 
@@ -111,24 +133,22 @@ distribute_clusters_uniform <- function(number_of_clusters, cluster_radius, Size
 
 distribute_molecules_in_cluster_gauss <- function(X, Y, number_of_molecules, cluster_radius, distance) {
 
-  #error handling
+  #------------------error handling---------------------#
+  if (missing(X) || missing(Y)) stop("X or Y is missing")
   if (X < 0 || Y < 0) stop("X and Y must be positive")
 
+  if (missing(cluster_radius)) stop("cluster_radius is missing")
   if (cluster_radius < 0) stop("cluster_radius must be positive")
 
-  if (number_of_molecules < 1) stop("number_of_molecules must be positive")
+  if (missing(number_of_molecules)) stop("number_of_molecules is missing")
+  if (number_of_molecules < 0) return(matrix(0, 0, 0))
   number_of_molecules <- floor(number_of_molecules)
 
-  # 100 is pixels size in nm
   if (X / 2 - cluster_radius <= 0 || Y / 2 - cluster_radius <= 0) stop("cluster_radius can't be larger than X/2 or Y/2")
 
   if (missing(distance)) distance <- 0
-
   if (distance < 0 || distance > 2) stop("distance must be in range 0-2")
-
-  #if ((sqrt(cluster_radius^2*pi)*distance+1)^2 < number_of_molecules/10)
-  #{ stop("there is not enough space for molecules. Reduce the distance or number_of_molecules or make a cluster_radius bigger") }
-  #--------------------------------#
+  #-----------------------------------------------------#
 
   mol_array <- matrix(0, number_of_molecules, 2)
 
@@ -214,13 +234,18 @@ distribute_molecules_in_cluster_gauss <- function(X, Y, number_of_molecules, clu
 distribute_molecules_in_clusters <- function(cluster_mean, cluster_SD, number_of_clusters, molecules_in_clusters) {
 
 
-  # error handling
-  if (number_of_clusters < 1 || number_of_clusters > 1000) stop("number_of_clusters must be in range 1-1000")
+  #-------------------------error handling-----------------------------#
+  if (missing(number_of_clusters)) stop("number_of_clusters is missing")
+  if (number_of_clusters < 0 || number_of_clusters > 1000) stop("number_of_clusters must be in range 0-1000")
   number_of_clusters <- floor(number_of_clusters)
+  if (!number_of_clusters) return(c())
 
-  if (cluster_mean < 1 || cluster_mean > 1000) stop("cluster_mean must be in range 1-1000")
+  if (missing(cluster_mean)) cluster_mean <- molecules_in_clusters / number_of_clusters
+
+  if (cluster_mean < 0 || cluster_mean > 1000) stop("cluster_mean must be in range 0-1000")
   cluster_mean <- floor(cluster_mean)
 
+  if (missing(cluster_SD)) cluster_SD <- 0
   if (cluster_SD < 0) stop("cluster_SD must be positive or zero")
 
   if (cluster_mean < cluster_SD * 3) {
@@ -237,6 +262,8 @@ distribute_molecules_in_clusters <- function(cluster_mean, cluster_SD, number_of
     print(paste0("cluster_mean will be: ", cluster_mean))
     print(paste0("cluster_SD will be: ", cluster_SD))
   }
+  #---------------------------------------------------------------------#
+
 
   number_of_molecules <- number_of_clusters * cluster_mean
   molecules_in_clusters_rest <- molecules_in_clusters - number_of_molecules
@@ -250,11 +277,7 @@ distribute_molecules_in_clusters <- function(cluster_mean, cluster_SD, number_of
     for (i in rest_positions) mol_array[i] <- mol_array[i] + 1
     return(mol_array)
   }
-  #if (molecules_in_clusters_rest < 0) stop("there must be at least cluster_mean*number_of_clusters molecules")
-  #if (molecules_in_clusters_rest != 0){
-  #	warning("mean number and SD of molecules in clusters will be different from the input")
 
-  #}
   # because molecules are distributed randomly it can happen that a result would be wrong, so we have to start distributing again
   # some sort of protection from an endless loop is needed
   threshold <- 0.01
@@ -262,7 +285,7 @@ distribute_molecules_in_clusters <- function(cluster_mean, cluster_SD, number_of
   real_stop <- 0
   mol_boundary <- floor(cluster_SD * 3) # used to limit the deviation from mean
 
-  while (cluster_SD && 1)
+  while (1)
   {
     # increase threshold if it did not work out with the previous threshold value
     if (steps_made == 1000)
@@ -380,7 +403,12 @@ distribute_background_molecules_uniform <- function(SizeX, SizeY, indent, cluste
   if (missing(clusters_centers)) stop("matrix with clusters_centers is missing")
   if (missing(clusters_radiuses)) stop("vector with clusters_radiuses is missing")
 
-  if (dim(clusters_centers)[1] != length(clusters_radiuses)) stop("clusters_centers and clusters_radiuses have different lengths")
+  if (!length(clusters_centers) && !length(clusters_radiuses)) do_clusters <- 0
+
+  else {
+    if (dim(clusters_centers)[1] != length(clusters_radiuses)) stop("clusters_centers and clusters_radiuses have different lengths")
+    do_clusters <- 1
+  }
 
   if (number_of_molecules < 0) stop("number_of_molecules can not be negative")
   number_of_molecules <- floor(number_of_molecules)
@@ -407,7 +435,10 @@ distribute_background_molecules_uniform <- function(SizeX, SizeY, indent, cluste
   real_stop <- 0
 
   mol_array <- matrix(0, number_of_molecules, 2)
-  clusters_centers <- clusters_centers[order(clusters_centers[, 1]),] # sort the matrix by x column
+
+  # this check is necessary, otherwise a matrix becomes a vector! This would throw an error later.
+  if (length(clusters_centers) > 2) clusters_centers <- clusters_centers[order(clusters_centers[, 1]),] # sort the matrix by x column
+
   Number_of_clusters <- length(clusters_radiuses)
   i <- 1
 
@@ -427,37 +458,40 @@ distribute_background_molecules_uniform <- function(SizeX, SizeY, indent, cluste
 
 
     mol_array[i,] <- c(runif(1, X1, X2), runif(1, Y1, Y2))
-
-    # find out the nearest clusters to a new molecule
-    Left_Right <- binary_search(clusters_centers, mol_array[i,][1])
-    Left <- Left_Right[1]
-    Right <- Left_Right[2]
     is_fine <- TRUE
 
-    # first check if a new molecule is within a cluster, if so then it must be "thrown away"
-    # check  the distance to the left "neighbors"
-    while (is_fine &&
-      (Left >= 1) &&
-      (abs(clusters_centers[Left,][1] - mol_array[i,][1]) <= clusters_radiuses[Left]))
+    if (do_clusters)
     {
-      # check the distance at the y axis first, just to avoid calling sqrt()
-      if (abs(clusters_centers[Left,][2] - mol_array[i,][2]) <= clusters_radiuses[Left]) {
-        if (sqrt(abs(clusters_centers[Left,][1] - mol_array[i,][1])^2 +
-                   abs(clusters_centers[Left,][2] - mol_array[i,][2])^2) <= clusters_radiuses[Left]) is_fine <- FALSE
-      }
-      Left <- Left - 1
-    }
+      # find out the nearest clusters to a new molecule
+      Left_Right <- binary_search(clusters_centers, mol_array[i,][1])
+      Left <- Left_Right[1]
+      Right <- Left_Right[2]
 
-    # and to the right ones
-    while (is_fine &&
-      (Right <= Number_of_clusters) &&
-      (abs(clusters_centers[Right,][1] - mol_array[i,][1]) <= clusters_radiuses[Right]))
-    {
-      if (abs(clusters_centers[Right,][2] - mol_array[i,][2]) <= clusters_radiuses[Right]) {
-        if (sqrt(abs(clusters_centers[Right,][1] - mol_array[i,][1])^2 +
-                   abs(clusters_centers[Right,][2] - mol_array[i,][2])^2) <= clusters_radiuses[Right]) is_fine <- FALSE
+      # first check if a new molecule is within a cluster, if so then it must be "thrown away"
+      # check  the distance to the left "neighbors"
+      while (is_fine &&
+        (Left >= 1) &&
+        (abs(clusters_centers[Left,][1] - mol_array[i,][1]) <= clusters_radiuses[Left]))
+      {
+        # check the distance at the y axis first, just to avoid calling sqrt()
+        if (abs(clusters_centers[Left,][2] - mol_array[i,][2]) <= clusters_radiuses[Left]) {
+          if (sqrt(abs(clusters_centers[Left,][1] - mol_array[i,][1])^2 +
+                     abs(clusters_centers[Left,][2] - mol_array[i,][2])^2) <= clusters_radiuses[Left]) is_fine <- FALSE
+        }
+        Left <- Left - 1
       }
-      Right <- Right + 1
+
+      # and to the right ones
+      while (is_fine &&
+        (Right <= Number_of_clusters) &&
+        (abs(clusters_centers[Right,][1] - mol_array[i,][1]) <= clusters_radiuses[Right]))
+      {
+        if (abs(clusters_centers[Right,][2] - mol_array[i,][2]) <= clusters_radiuses[Right]) {
+          if (sqrt(abs(clusters_centers[Right,][1] - mol_array[i,][1])^2 +
+                     abs(clusters_centers[Right,][2] - mol_array[i,][2])^2) <= clusters_radiuses[Right]) is_fine <- FALSE
+        }
+        Right <- Right + 1
+      }
     }
 
 
