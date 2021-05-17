@@ -33,6 +33,15 @@ hist_plot <- function(res, nexpname, plotcreation) {
             geom_histogram(binwidth = bw) +
             labs(x = k[1], y = k[2]) +
             theme_bw() +
+            theme(
+              axis.text = element_text(size = 8),
+              plot.title = element_text(size = 8),
+              axis.title = element_text(size = 8),
+              panel.border = element_rect(size = 1),
+              panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.background = element_rect(fill = "white") #
+            ) +
             ggsave(file.path(
               paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".pdf", sep = "")
             ),
@@ -56,6 +65,15 @@ hist_plot <- function(res, nexpname, plotcreation) {
               geom_histogram(binwidth = bw) +
               labs(x = k[1], y = k[2]) +
               theme_bw() +
+              theme(
+                axis.text = element_text(size = 8),
+                plot.title = element_text(size = 8),
+                axis.title = element_text(size = 8),
+                panel.border = element_rect(size = 1),
+                panel.grid.major = element_blank(),
+                panel.grid.minor = element_blank(),
+                panel.background = element_rect(fill = "white") #
+              ) +
               ggsave(file.path(
                 paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".pdf", sep = "")
               ),
@@ -154,6 +172,15 @@ hist_plot_fix_limits <-
             xlim(xminimum, xmaximum) +
             ylim(yminimum, ymaximum) +
             theme_bw() +
+            theme(
+              axis.text = element_text(size = 8),
+              plot.title = element_text(size = 8),
+              axis.title = element_text(size = 8),
+              panel.border = element_rect(size = 1),
+              panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.background = element_rect(fill = "white") #
+            ) +
             ggsave(file.path(
               paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".pdf", sep = "")
             ),
