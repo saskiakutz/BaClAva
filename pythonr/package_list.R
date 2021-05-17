@@ -10,6 +10,7 @@ if (!require(pacman, quietly = TRUE))
 # if (!require(RSMLM))
 #   pacman::p_load("devtools")
 #   install_github("lucabaronti/RSMLM")
+pacman::p_load_gh("saskiakutz/RSMLM")
 pacman::p_load(
   "dplyr",
   "pryr",
@@ -28,4 +29,4 @@ pacman::p_load(
   "rhdf5",
   "grid"
 )
-pacman::p_load_gh("saskiakutz/RSMLM")
+
