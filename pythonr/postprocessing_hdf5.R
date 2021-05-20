@@ -148,10 +148,10 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
           })
 
           # True labels plot
-          plot_truelabels <- cluster_plot(pts, labelstrue, "True labels")
+          plot_truelabels <- cluster_plot(pts, labelstrue, "True labels", flip = flipped)
 
           # Estimated labels plot
-          plot_estimatedlabels <- cluster_plot(pts, labelsbest, "Estimated labels")
+          plot_estimatedlabels <- cluster_plot(pts, labelsbest, "Estimated labels", flip = flipped)
 
           if (separateplots) {
             plot_save(plot_truelabels, expname, paste0(filename_base, "_truelabels"))
@@ -160,7 +160,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots) {
 
           plots_arrange(plot_truelabels, plot_estimatedlabels, 1, expname, paste0(filename_base, "_true_estimate_plot"))
         }else {
-          plot_clustering <- cluster_plot(pts, labelsbest, "Clustering", sds)
+          plot_clustering <- cluster_plot(pts, labelsbest, "Clustering", sds, flip = flipped)
           plot_save(plot_clustering, expname, paste0(filename_base, "_Clustering"))
         }
 
