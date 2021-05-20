@@ -60,7 +60,8 @@ class View_post(qtw.QWidget):
             # "Bayesian computation": qtw.QComboBox(),
             "store plots": qtw.QCheckBox(),
             "superplot": qtw.QCheckBox(),
-            "separate plots": qtw.QCheckBox()
+            "separate plots": qtw.QCheckBox(),
+            "flip y-axis": qtw.QCheckBox()
         }
 
         # datasource = ('simulation', 'experiment')
@@ -178,7 +179,8 @@ class View_post(qtw.QWidget):
             # 'computation': self.p_inputs["Bayesian computation"].currentText(),
             'storeplots': self.p_inputs["store plots"].isChecked(),
             'superplot': self.p_inputs["superplot"].isChecked(),
-            'separateplots': self.p_inputs["separate plots"].isChecked()
+            'separateplots': self.p_inputs["separate plots"].isChecked(),
+            'flipped_y': self.p_inputs["flip y-axis"].isChecked()
         }
 
         self.start_btn.setDisabled(True)
