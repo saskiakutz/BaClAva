@@ -230,7 +230,8 @@ cluster_plot <-
   function(pts,
            colourlabels,
            title,
-           pointsize = 0.03) {
+           pointsize = 0.03,
+           flip = FALSE) {
     dataset <- as_tibble(pts)
     data <- dataset %>%
       mutate(radius_SD = pointsize) %>%
@@ -254,6 +255,11 @@ cluster_plot <-
         panel.grid.minor = element_blank(),
         panel.background = element_rect(fill = "white") #
       )
+
+    if (flip == TRUE) {
+      clusterplot + scale_y_reverse()
+      # + labs(x = "x [µm]", y = "y [µm]")
+    }
 
     clusterplot
 
