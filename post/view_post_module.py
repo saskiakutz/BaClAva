@@ -192,7 +192,7 @@ class View_post(qtw.QWidget):
 
     def show_data(self):
         self.area_canvas.axes.cla()
-        self.draw_scatterplot(self.scatter_canvas, 'x [µm]', 'y [µm]')
+        self.draw_scatterplot(self.scatter_canvas, 'x [µm]', 'y [µm]', self.p_inputs['flip y-axis'].isChecked())
         self.draw_hist(self.area_canvas, 'area', 'cluster area [µm²]', 'number of clusters')
         self.draw_hist(self.number_canvas, 'nclusters', 'number of cluster', 'number of regions')
         self.draw_hist(self.density_canvas, 'density', 'cluster density [µm⁻²]', 'number of clusters')
@@ -224,12 +224,14 @@ class View_post(qtw.QWidget):
             x = [float(y) for y in file_in.read().split(",")]
         return x
 
-    def draw_scatterplot(self, canvas, x_label, y_label):
+    def draw_scatterplot(self, canvas, x_label, y_label, flipped):
 
         canvas.axes.cla()
         data_scatter = self.import_scatterdata()
 
         canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], s=0, clip_on=False)
+        if flipped:
+            canvas.axes.invert_yaxis()
         canvas.axes.set_ylabel(y_label, fontsize='10')
         canvas.axes.set_xlabel(x_label, fontsize='10')
         canvas.draw()
