@@ -122,7 +122,8 @@ class PythonToR:
             # process=input_dic.get('computation'),
             makeplot=BoolVector([input_dic.get('storeplots')]),
             superplot=BoolVector([input_dic.get('superplot')]),
-            separateplots=BoolVector([input_dic.get('separateplots')])
+            separateplots=BoolVector([input_dic.get('separateplots')]),
+            flipped=BoolVector([input_dic.get('flipped_y')])
         )
         numpy2ri.deactivate()
         print("done")
