@@ -2,10 +2,9 @@
 # Objective : convert csv7txt to hdf5
 # Created by: saskia-admin
 # Created on: 2021-01-26
-library(rhdf5)
-library(tidyverse)
 
 convert_hdf5 <- function(directory, convert_list) {
+  source("./pythonr/package_list.R")
   for (file in convert_list) {
     df <- read.csv(file.path(directory, file))
     df_base <- str_split(file, "\\.")[[1]][1]

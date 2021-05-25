@@ -16,6 +16,7 @@ software delivers clustering analysis with actively minimized user-bias and sign
 ## Table of content:
 
 - [Installation](#Installation)
+  - [Developer installation](#Developer-installation)
 - [Software overview](#Software-overview)
   - [Module 1: Simulation tool](#Module-1-Simulation-tools)
   - [Module 2: Bayesian calculations](#Module-2-Bayesian-calculations)
@@ -27,7 +28,31 @@ software delivers clustering analysis with actively minimized user-bias and sign
 
 # Installation:
 
-**This part needs to be written soon**
+## Developer installation
+
+### Requirements
+
+In order to use BaClAva Python 3.8 and R 4.1.0 need to be installed. Furthermore, we recommend installing Anaconda as a
+package manager and PyCharm as the IDE, because it can handle Python and R code.
+
+### Environment
+
+If you use PyCharm, follow the VCS (Version control System) path to install BaClAva directly from GitHub and create a
+Python environment. Install all packages in the `requirements.txt` via `pip install -r requirements.txt`. If you use
+PyCharm, the IDE automatically to install all packages and choose a conda environment, you need to install `rpy2`
+via `pip install rpy2` because it is not part of Anaconda.
+
+If you work on a **Linux** machine, it might be that you need to install the C++ engine
+for [V8](https://ropensci.org/blog/2020/11/12/installing-v8/) separately.
+
+The R packages used in this software are from CRAN, Bioconductor, and GitHub repositories. Since the program often does
+not correctly identify which packages are from the Bioconductor repository, go to R and
+install `BiocManager (install.packages("BiocManager")` and `rhdf5 BiocManager::install("rhdf5")` by hand. For all other
+packages, run `packages_list.R`. If any other packages raises an error message, try to install them individually and/or
+check out the error messages.
+
+In order to use BaClAva, start it from the IDE or terminal, but make sure that you have the correct environment
+activated.
 
 # Software overview:
 
