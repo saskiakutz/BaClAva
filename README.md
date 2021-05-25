@@ -131,22 +131,22 @@ minimum, while keeping the “raw” localizations unchanged. Later access to th
 standard hdf5 library. The following part will explain the file structure for users interested in accessing the file
 with ofter software tools.
 
-The localisation table is stored in ‘data’, and the column names are stored as its attribute ‘colnames’. The labels for
-the different parameter combinations are stored in the ‘label’-group. The scores of the Bayesian analysis are stored in
-a matrix called ‘r_vs_thresh’. The columns are the radius sequence, and the rows are the threshold sequence. In the hdf5
-file, these names are stored as attributes to the ‘r_vs_thresh’ dataset. The parameter set of the best cluster result
-within the chosen parameter space is another attribute to this dataset called ‘best’.
+The localisation table is stored in `data`, and the column names are stored as its attribute `colnames`. The labels for
+the different parameter combinations are stored in the `label`-group. The scores of the Bayesian analysis are stored in
+a matrix called `r_vs_thresh`. The columns are the radius sequence, and the rows are the threshold sequence. In the hdf5
+file, these names are stored as attributes to the `r_vs_thresh` dataset. The parameter set of the best cluster result
+within the chosen parameter space is another attribute to this dataset called `best`.
 
 The simulation of SMLM-like data mimics actual microscopy experimental acquisition. The data is stored either as a
 tiff-stack or in a folder with individual tiff files for each frame. The tiff specifications are the same as for EMCCD
 cameras, and it is possible to load the data into ImageJ or SMAP for further processing.
 
 Since the selected parameters for simulations and the Bayesian analysis are the same for the entire folder, the software
-stores the information stored in two separate files ‘sim_parameters.txt’ or 'sim_smlm_parameters', depending on the
-selected simulation option, and ‘run_config.txt’, respectively. For a new analysis without losing the information of the
+stores the information stored in two separate files `sim_parameters.txt` or `sim_smlm_parameters`, depending on the
+selected simulation option, and `run_config.txt`, respectively. For a new analysis without losing the information of the
 previous analysis, the folder should be duplicated.
 
-The final histograms are stored in a separate folder named ‘postprocessing’.
+The final histograms are stored in a separate folder named `postprocessing`.
 
 # Acknowledgement
 
