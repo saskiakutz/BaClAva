@@ -22,8 +22,10 @@ software delivers clustering analysis with actively minimized user-bias and sign
   - [Module 2: Bayesian calculations](#Module-2-Bayesian-calculations)
   - [Module 3: Bayesian postprocessing](#Module-3-Bayesian-postprocessing)
   - [Data format](#Data-format)
-- [Literature](#Literature)
+- [Contributing](#Contributing)
 - [Acknowledgement](#Acknowledgment)
+- [Citing BaClAva](#Citing-BaClAva)
+- [Literature](#Literature)
 - [Licencing](#Licencing)
 
 # Installation:
@@ -148,9 +150,15 @@ previous analysis, the folder should be duplicated.
 
 The final histograms are stored in a separate folder named `postprocessing`.
 
+# Contributing
+
 # Acknowledgement
 
 **I need to write this part soon**
+
+# Citing BaClAva
+
+If you use BaClAva in your research, please cite: **add bioRxiv**
 
 # Literature:
 
