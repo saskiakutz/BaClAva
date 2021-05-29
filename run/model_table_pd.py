@@ -16,7 +16,7 @@ class DataFrameModel(qtc.QAbstractTableModel):
 
     def __init__(self, file, parent=None):
         super(DataFrameModel, self).__init__(parent)
-        if file.split(".")[1] == "txt" or file.split(".")[1] == "csv":
+        if file.split(".")[-1] == "txt" or file.split(".")[-1] == "csv":
             self._dataframe = pd.read_csv(file, nrows=5)
         else:
             with h5py.File(file, "r") as f:
