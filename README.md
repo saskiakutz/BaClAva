@@ -88,8 +88,8 @@ a storage directory to start the simulation process. This module simulates the S
 stores the results in tiff files. In order to continue module 2, the output files need to be localised by algorithms
 such as SMAP[[3]](#3) or Thunderstorm [[4]](#4).
 
-In order to generate simulations of blinking fluorophores in clusters that resemble the data imaged on the microscope.
-The user is advised to image the PSF and intensity of the dye of interest.
+In order to generate simulations of blinking fluorophores in clusters that best resemble the data imaged on the
+microscope. Therefore, we advise the user to image the PSF and intensity of the dye of interest.
 
 ## Module 2: Bayesian calculations
 
