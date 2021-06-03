@@ -94,9 +94,9 @@ such as SMAP[[3]](#3) or Thunderstorm [[4]](#4).
 
 The clustering of either simulated or experimental data takes place in the second module. The input data for this module
 must be a localisation table of appropriate format. For experimental data and simulations run in other programs, this
-table can come from any common localisation application ( e.g. SMAP [[3]](#3) or Thunderstorm [[4]](#4)) as long as the
-table contains the 2D coordinates and the localisations’ standard deviations. The software can read-in data from CSV and
-text files, however the program copies the data to a hdf5 file for further use.
+table can come from any common localisation application ( e.g. SMAP [[3]](#3) or Thunderstorm [[4]](#4)). The resulting
+table needs to contain the 2D coordinates and standard deviations of the localisations. The software can read-in data
+from CSV and text files, however the program copies the data to a hdf5 file for further use.
 
 In the GUI, the user can choose their preferred clustering algorithm (Ripley's-K-based clustering, DBSCAN,
 ToMATo [[2]](#2)) and other parameters. The radius and threshold sequences, and their step width are essential because
@@ -143,10 +143,10 @@ The simulation of SMLM-like data mimics actual microscopy experimental acquisiti
 tiff-stack or in a folder with individual tiff files for each frame. The tiff specifications are the same as for EMCCD
 cameras, and it is possible to load the data into ImageJ or SMAP for further processing.
 
-Since the selected parameters for simulations and the Bayesian analysis are the same for the entire folder, the software
-stores the information stored in two separate files `sim_parameters.txt` or `sim_smlm_parameters`, depending on the
-selected simulation option, and `run_config.txt`, respectively. For a new analysis without losing the information of the
-previous analysis, the folder should be duplicated.
+The selected parameters for simulations and the Bayesian analysis are the same for the entire folder. Thus, the software
+stores the information in two separate files `sim_parameters.txt` or `sim_smlm_parameters`, depending on the selected
+simulation option, and `run_config.txt`, respectively. For a new analysis without losing the information of the previous
+analysis, the folder should be duplicated.
 
 The final histograms are stored in a separate folder named `postprocessing`.
 
