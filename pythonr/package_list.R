@@ -12,7 +12,6 @@ if (!require(pacman, quietly = TRUE))
 #   install_github("lucabaronti/RSMLM")
 pacman::p_load_gh("saskiakutz/RSMLM")
 pacman::p_load(
-  "dplyr",
   "pryr",
   "ggpubr",
   "splancs",
@@ -21,7 +20,6 @@ pacman::p_load(
   "tictoc",
   "geometry",
   "doParallel",
-  "beepr",
   "data.table",
   "plyr",
   "ggforce",

@@ -1,8 +1,24 @@
-import rpy2.robjects as r_objects
-from rpy2.robjects.packages import importr
-from rpy2.robjects import numpy2ri
-import rpy2.robjects.packages as rpackages
-from rpy2.robjects.vectors import BoolVector
+try:
+    import rpy2.robjects as r_objects
+    from rpy2.robjects.packages import importr
+    from rpy2.robjects import numpy2ri
+    import rpy2.robjects.packages as rpackages
+    from rpy2.robjects.vectors import BoolVector
+except OSError as e:
+    try:
+        import os
+
+        if os.name == 'nt':
+            os.environ['R_HOME'] = 'C:\\Program Files\\R\\R-4.1.0'
+            os.environ['PATH'] += os.pathsep + 'C:\\Program Files\\R\\R-4.1.0\\bin\\x64\\'
+            os.environ['PATH'] += os.pathsep + 'C:\\Program Files\\R\\R-4.1.0\\'
+        import rpy2.robjects as r_objects
+        from rpy2.robjects.packages import importr
+        from rpy2.robjects import numpy2ri
+        import rpy2.robjects.packages as rpackages
+        from rpy2.robjects.vectors import BoolVector
+    except OSError:
+        raise (e)
 import numpy as np
 from os import getcwd, listdir
 from os.path import isfile, join
