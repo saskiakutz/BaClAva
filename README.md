@@ -157,11 +157,9 @@ analysis, the folder should be duplicated.
 The final histograms are stored in a separate folder named `postprocessing`.
 
 # Contributing
-
 For feature requests or bug reports, please post them on the GitHub issue tracker.
 
 # Citing BaClAva
-
 If you use BaClAva in your research, please cite: **add bioRxiv**
 
 # Literature:
