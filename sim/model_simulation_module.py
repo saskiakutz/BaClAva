@@ -3,7 +3,7 @@ from PyQt5 import QtCore as qtc
 from pythonr.Python_to_R import PythonToR
 
 
-class Model_sim(qtc.QObject):
+class ModelSim(qtc.QObject):
     error = qtc.pyqtSignal(str)
     finished = qtc.pyqtSignal()
 
