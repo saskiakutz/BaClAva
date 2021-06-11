@@ -1,3 +1,7 @@
+# Title     : Module 3
+# Objective : Connections GUI module 3
+# Written by: Saskia Kutz
+
 import sys
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
@@ -7,11 +11,14 @@ from post.model_post_module import Model_post
 
 
 class MainWindowPost(qtw.QWidget):
+    """Connecting GUI to module 3"""
+
     started_post = qtc.pyqtSignal(str)
     finished_post = qtc.pyqtSignal(str)
 
     def __init__(self):
         """MainWindow constructor"""
+
         super().__init__()
         # Main UI code goes here
 
@@ -35,32 +42,33 @@ class MainWindowPost(qtw.QWidget):
         self.post_model.finished.connect(self.post_view.show_data)
 
         self.post_view.cancel_signal.connect(self.on_cancel)
-        # status_bar = qtw.QStatusBar()
-        # self.setStatusBar(status_bar)
-        # status_bar.showMessage('Post processing')
-        # TODO: status_bar update messages
 
         # End main UI code
         self.show()
 
     def on_started(self):
+        """Statusbar update upon start"""
+
         self.started_post.emit('Post processing.')
 
     def on_cancel(self):
+        """GUI termination upon cancel:
+        - thread termination
+        -statusbar update
+        """
+
         self.post_thread.quit()
         self.post_thread.deleteLater()
         self.post_view.start_btn.setEnabled(True)
         self.finished_post.emit('Post processing cancelled.')
 
     def on_finished(self):
-        # self.post_model.exit()
+        """GUI preparation upon finish:
+        -thread termination
+        -statusbar update
+        """
+
         self.post_thread.quit()
-        # self.post_thread.deleteLater()
         self.post_model.deleteLater()
         self.post_view.start_btn.setEnabled(True)
         self.finished_post.emit('Post processing finished.')
-
-# if __name__ == '__main__':
-#     app = qtw.QApplication(sys.argv)
-#     mw = MainWindow_post()
-#     sys.exit(app.exec())
