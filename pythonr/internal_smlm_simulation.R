@@ -1,21 +1,19 @@
-# Title     : internal functionalities for SMLM simulation
-# Objective : simulation of clusters of molucules and their blinking behaviour
-# Created by: Roman, Saskia
+# Title     : Internal functionalities for SMLM simulation
+# Objective : Simulation of clusters of molucules and their blinking behaviour
+# Created by: Roman Svetlitckii, Saskia Kutz
 # Created on: 2021-05-06
 
-# This function distributes centers of clusters
-#
-# Input:
-# 1) cluster_radius(in pixels, 1 pixel = 100nm) is used to properly place the centers
-# 2) SizeX and SizeY determine the matrix size
-# 3) indent is used for a void rim around the matrix
-# 4) distance_between_clusters in pixels, 1 pixel = 100nm
-#
-# Output:
-# an Array with randomly(uniformly) distributed centers(x,y) of clusters
-
-
 distribute_clusters_uniform <- function(number_of_clusters, cluster_radius, SizeX, SizeY, indent, distance_between_clusters) {
+  # This function distributes centers of clusters
+  #
+  # Input:
+  # 1) cluster_radius(in pixels, 1 pixel = 100nm) is used to properly place the centers
+  # 2) SizeX and SizeY determine the matrix size
+  # 3) indent is used for a void rim around the matrix
+  # 4) distance_between_clusters in pixels, 1 pixel = 100nm
+  #
+  # Output:
+  # an Array with randomly(uniformly) distributed centers(x,y) of clusters
 
   #--------------------------error handling----------------------------#
   if (missing(number_of_clusters)) stop("number_of_clusters is missing")
@@ -117,21 +115,21 @@ distribute_clusters_uniform <- function(number_of_clusters, cluster_radius, Size
 
 #-------------------------#
 
-# This function distributes the given number of molecules around X/Y point
-#
-# Input parameters:
-# 1) X and Y are coordinates for a cluster center, this X/Y point is where a gauss mean will be "allocated"
-# 2) cluster_radius is just a radius of a cluster, not STD
-# 3) distance: a distance between molecules. 0 by default.
-#			   Be carefull with values larger than 0. It can end up in an endless loop.
-#			   Some protection is needed as in distribute_clusters_uniform() for example. Or some smart error checking.
-#			   If you need this to work then this task is for you stranger :)
-#
-# Output:
-# a matrix with molecules' coordinates and a real radius(<= cluster_radius) of a cluster.
-# This real radius is every time different.
-
 distribute_molecules_in_cluster_gauss <- function(X, Y, number_of_molecules, cluster_radius, distance) {
+
+  # This function distributes the given number of molecules around X/Y point
+  #
+  # Input parameters:
+  # 1) X and Y are coordinates for a cluster center, this X/Y point is where a gauss mean will be "allocated"
+  # 2) cluster_radius is just a radius of a cluster, not STD
+  # 3) distance: a distance between molecules. 0 by default.
+  #			   Be carefull with values larger than 0. It can end up in an endless loop.
+  #			   Some protection is needed as in distribute_clusters_uniform() for example. Or some smart error checking.
+  #			   If you need this to work then this task is for you stranger :)
+  #
+  # Output:
+  # a matrix with molecules' coordinates and a real radius(<= cluster_radius) of a cluster.
+  # This real radius is every time different.
 
   #------------------error handling---------------------#
   if (missing(X) || missing(Y)) stop("X or Y is missing")
@@ -210,29 +208,20 @@ distribute_molecules_in_cluster_gauss <- function(X, Y, number_of_molecules, clu
   return(list("Molecule_positions" = mol_array, "True_radius" = True_radius))
 }
 
-#--------------------------------------------------------------------------------#
-#--------------------------------------------------------------------------------#
-
-#--------------------------------------------------------------------------------#
-
-#--------------------------------------------------------------------------------#
-
-
-# this function creates distributes(gauss) molecules in clusters(decides how many molecules each cluster will have)
-# in the end there are "number_of_clusters*cluster_mean" molecules total in all clusters
-#
-# Input:
-# 1) cluster_mean is a gauss mean(mean number of molecules per cluster)
-# 2) cluster_SD is a standart deviation("measured" in molecules) for gauss
-# 3) molecules_in_clusters is optional, if not given there are total: 'cluster_mean*number_of_clusters' molecules
-#
-# Output:
-# an array, each entry corresponds to a number of molecules per cluster.
-# there is no garantee that an output will be gauss distributed,
-# one can find such parameters which make it very hard to get it gauss-like
 
 distribute_molecules_in_clusters <- function(cluster_mean, cluster_SD, number_of_clusters, molecules_in_clusters) {
-
+  # this function creates distributes(gauss) molecules in clusters(decides how many molecules each cluster will have)
+  # in the end there are "number_of_clusters*cluster_mean" molecules total in all clusters
+  #
+  # Input:
+  # 1) cluster_mean is a gauss mean(mean number of molecules per cluster)
+  # 2) cluster_SD is a standart deviation("measured" in molecules) for gauss
+  # 3) molecules_in_clusters is optional, if not given there are total: 'cluster_mean*number_of_clusters' molecules
+  #
+  # Output:
+  # an array, each entry corresponds to a number of molecules per cluster.
+  # there is no garantee that an output will be gauss distributed,
+  # one can find such parameters which make it very hard to get it gauss-like
 
   #-------------------------error handling-----------------------------#
   if (missing(number_of_clusters)) stop("number_of_clusters is missing")
@@ -347,20 +336,15 @@ distribute_molecules_in_clusters <- function(cluster_mean, cluster_SD, number_of
 
 #-----------------------------------------#
 
-#-----------------------------------------#
-
-#-----------------------------------------#
-
-
-# Binary search for a matrix
-# undefinied behavior if an input-matrix(first column(x-positions)) is not sorted
-#
-# output: a pair with 2 positions, which contain the closest numbers to input "number"
-# "number" is either between Left und Right(if there are numbers smaller and larger as "number")
-# or (Left,Right) = (1,2), if the smallest number in the matrix is larger then "number"
-# or (Left,Right) = (number_of_matrix_columns-1, number_of_matrix_columns), if the largest number in the matrix is smaller then "number"
 
 binary_search <- function(Matrix, number) {
+  # Binary search for a matrix
+  # undefinied behavior if an input-matrix(first column(x-positions)) is not sorted
+  #
+  # output: a pair with 2 positions, which contain the closest numbers to input "number"
+  # "number" is either between Left und Right(if there are numbers smaller and larger as "number")
+  # or (Left,Right) = (1,2), if the smallest number in the matrix is larger then "number"
+  # or (Left,Right) = (number_of_matrix_columns-1, number_of_matrix_columns), if the largest number in the matrix is smaller then "number"
 
   Right <- dim(Matrix)[1]
   Left <- 1
@@ -373,21 +357,21 @@ binary_search <- function(Matrix, number) {
   return(c(Left, Right))
 }
 
-# this function distributes background molecules on a matrix
-#
-# Input:
-# 1) SizeX and SizeY: matrix size
-# 2) indent: an area around matrix which contains no molecules
-# 3) clusters_centers: a matrix with clusters' centers   +
-#														  > these 2 are used to place background molecules outside clusters
-# 4) clusters_radiuses: an array with clusters' radiuses +
-# 5) number_of_molecules: number of background molecules
-# 6) distance: distance between molecules in pixels, 0 by default. Can be used to make molecules look more homogeneous.
-#
-# Output:
-# a matrix with background molecules' positions(x,y)
 
 distribute_background_molecules_uniform <- function(SizeX, SizeY, indent, clusters_centers, clusters_radiuses, number_of_molecules, distance) {
+  # this function distributes background molecules on a matrix
+  #
+  # Input:
+  # 1) SizeX and SizeY: matrix size
+  # 2) indent: an area around matrix which contains no molecules
+  # 3) clusters_centers: a matrix with clusters' centers   +
+  #														  > these 2 are used to place background molecules outside clusters
+  # 4) clusters_radiuses: an array with clusters' radiuses +
+  # 5) number_of_molecules: number of background molecules
+  # 6) distance: distance between molecules in pixels, 0 by default. Can be used to make molecules look more homogeneous.
+  #
+  # Output:
+  # a matrix with background molecules' positions(x,y)
 
   # error checking
   if (SizeX < 20 ||
@@ -552,20 +536,18 @@ distribute_background_molecules_uniform <- function(SizeX, SizeY, indent, cluste
 
 #------------------#
 
-#------------------#
-
-# creates a tiff stack
-# !appends! matrices(frames) to a file, so if a file already contains something then this function will corrupt it!
-# all matrices must have the same size, otherwise undefined behavior
-# only necessary tags are added to meta info
-
-# header has an intel endianness and and a magic number(42) plus shifting(offset) to the first IFD(image file directory)
-# IFD comes before image data
-# IFD has only 5 tags: width, height, BitsPerSample, PhotometricInterpretation, StripOffsets(aka shift to data)
-# BitsPerSample is always grey16 as it is in storm data
-# look here for more information about tiff structure:  https://www.fileformat.info/format/tiff/corion.htm
 
 write_tiff <- function(matrix_stack, file_out) {
+  # creates a tiff stack
+  # !appends! matrices(frames) to a file, so if a file already contains something then this function will corrupt it!
+  # all matrices must have the same size, otherwise undefined behavior
+  # only necessary tags are added to meta info
+
+  # header has an intel endianness and and a magic number(42) plus shifting(offset) to the first IFD(image file directory)
+  # IFD comes before image data
+  # IFD has only 5 tags: width, height, BitsPerSample, PhotometricInterpretation, StripOffsets(aka shift to data)
+  # BitsPerSample is always grey16 as it is in storm data
+  # look here for more information about tiff structure:  https://www.fileformat.info/format/tiff/corion.htm
 
   con <- file(file_out, "ab")
   stack_size <- length(matrix_stack)
