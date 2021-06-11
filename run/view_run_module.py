@@ -2,11 +2,13 @@
 # Objective : View setup of module 2
 # Written by: Saskia Kutz
 
-from PyQt5 import QtWidgets as qtw
+import multiprocessing
+import os
+
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
-import os
-import multiprocessing
+from PyQt5 import QtWidgets as qtw
+
 from run.model_table_pd import DataFrameModel
 
 
