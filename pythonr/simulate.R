@@ -1,4 +1,4 @@
-# Title     : Bayesian run part
+# Title     : Simulation
 # Objective : with hdf5 import
 # Adapted from: Griffié et al.
 # Adapted and written by: Saskia Kutz
