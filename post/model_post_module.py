@@ -1,9 +1,15 @@
+# Title     : Module 3 model
+# Objective : Model view of module 3
+# Written by: Saskia Kutz
+
 from os import path
 from PyQt5 import QtCore as qtc
 from pythonr.Python_to_R import PythonToR
 
 
 class ModelPost(qtc.QObject):
+    """Data check for R backbone"""
+
     error = qtc.pyqtSignal(str)
     finished = qtc.pyqtSignal()
 
@@ -17,6 +23,7 @@ class ModelPost(qtc.QObject):
 
     @qtc.pyqtSlot()
     def check_income(self):
+        """check for correct dicrectory and connection to R"""
         print('save_connected')
         print(self.inputs)
 
