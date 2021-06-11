@@ -1,3 +1,8 @@
+# Title     : Bayesian run part
+# Objective : with hdf5 import
+# Adapted from: Griffié et al.
+# Adapted and written by: Saskia Kutz
+
 # BiocManager::install("rhdf5")
 if (!require(pacman, quietly = TRUE))
   install.packages("pacman")
