@@ -6,7 +6,7 @@ from run.view_run_module import ViewRun
 from run.model_run_module import Model_run
 
 
-class MainWindow_Bayesian(qtw.QWidget):
+class MainWindowBayesian(qtw.QWidget):
     start_bayesian = qtc.pyqtSignal(str)
     finished_bayesian = qtc.pyqtSignal(str)
 
