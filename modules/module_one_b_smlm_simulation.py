@@ -1,3 +1,7 @@
+# Title     : Module 1b
+# Objective : Connections module 1b
+# Written by: saskia Kutz
+
 import sys
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
