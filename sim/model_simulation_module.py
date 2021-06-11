@@ -1,9 +1,15 @@
+# Title     : Model for module 1a
+# Objective : Model setup of module 1a
+# Written by: Saskia Kutz
+
 from os import path, mkdir
 from PyQt5 import QtCore as qtc
 from pythonr.Python_to_R import PythonToR
 
 
 class ModelSim(qtc.QObject):
+    """Data check for R backbone"""
+
     error = qtc.pyqtSignal(str)
     finished = qtc.pyqtSignal()
 
@@ -17,6 +23,8 @@ class ModelSim(qtc.QObject):
 
     @qtc.pyqtSlot()
     def print_income(self):
+        """check for correct directory and connection to R"""
+
         print("save_called")
 
         error = ''
