@@ -10,6 +10,8 @@ import pandas as pd
 
 
 class TableModel(qtc.QAbstractTableModel):
+    """Data preparation for table in Module 3"""
+
     def __init__(self, file):
         super().__init__()
         self.filename = file
@@ -23,6 +25,7 @@ class TableModel(qtc.QAbstractTableModel):
             print(self._headers)
 
     def rowCount(self, parent):
+        """set number of shown rows to 5"""
         # return len(self._data)
         return 5
 
@@ -34,6 +37,7 @@ class TableModel(qtc.QAbstractTableModel):
             return self._data[index.row()][index.column()]
 
     def headerData(self, section, orientation, role):
+        """header preparation for PyQT5 visualization"""
         if (
                 orientation == qtc.Qt.Horizontal and
                 role == qtc.Qt.DisplayRole
