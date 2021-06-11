@@ -7,7 +7,7 @@ from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 
 from run.view_run_module import ViewRun
-from run.model_run_module import Model_run
+from run.model_run_module import ModelRun
 
 
 class MainWindowBayesian(qtw.QWidget):
@@ -21,7 +21,7 @@ class MainWindowBayesian(qtw.QWidget):
         super().__init__()
         # Main UI code goes here
 
-        self.run_model = Model_run()
+        self.run_model = ModelRun()
         self.run_view = ViewRun()
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.run_view)
