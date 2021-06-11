@@ -264,9 +264,9 @@ class ViewPost(qtw.QWidget):
         canvas.draw()
 
     def scatterplot_colour(self, labels):
-        """colour selection for the scatterplot:
+        """colour selection for the scatter plot:
         - clusters in colour
-        - backgorund localizations: silver
+        - background localizations: silver
         """
 
         label_counts = labels.value_counts()
@@ -276,7 +276,7 @@ class ViewPost(qtw.QWidget):
         return scale
 
     def import_scatterdata(self):
-        """import of a random dataset for the scatterplot"""
+        """import of a random dataset for the scatter plot"""
 
         datalist = [name for name in os.listdir(self.dir_line.text()) if
                     os.path.isfile(os.path.join(self.dir_line.text(), name)) and name.endswith('.h5')]
