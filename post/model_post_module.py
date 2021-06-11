@@ -23,7 +23,7 @@ class ModelPost(qtc.QObject):
 
     @qtc.pyqtSlot()
     def check_income(self):
-        """check for correct dicrectory and connection to R"""
+        """check for correct directory and connection to R"""
         print('save_connected')
         print(self.inputs)
 
