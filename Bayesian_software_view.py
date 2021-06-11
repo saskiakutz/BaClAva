@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
-from modules.module_one_simulation import MainWindow_simulation
+from modules.module_one_a_simulation import MainWindowSimulation
 from modules.module_one_b_smlm_simulation import MainWindowSimulationSMLM
 from modules.module_two_Bayesian import MainWindow_Bayesian
 from modules.module_three_post import MainWindow_post
@@ -31,7 +31,7 @@ class ViewSoftware(qtw.QWidget):
         self.grid_layout4 = qtw.QGridLayout()
         self.subwidget_4.setLayout(self.grid_layout4)
         self.tab_widget.addTab(self.subwidget_1, 'Module 1a: Simulation')
-        self.main_simulation = MainWindow_simulation()
+        self.main_simulation = MainWindowSimulation()
         self.subwidget_1.layout().addWidget(self.main_simulation)
         self.tab_widget.addTab(self.subwidget_2, 'Module 1b: SMLM simulation')
         self.main_simulation_STORM = MainWindowSimulationSMLM()
