@@ -1,3 +1,7 @@
+# Title     : View for module 2
+# Objective : View setup of module 2
+# Written by: Saskia Kutz
+
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
@@ -7,11 +11,15 @@ from run.model_table_pd import DataFrameModel
 
 
 class ViewRun(qtw.QWidget):
+    """View part of module 2"""
+
     submitted = qtc.pyqtSignal(object, object)
     startrun = qtc.pyqtSignal()
 
     # noinspection PyArgumentList
     def __init__(self):
+        """Setup of all GUI sections and options"""
+
         super().__init__()
 
         self.model = None
@@ -141,7 +149,6 @@ class ViewRun(qtw.QWidget):
 
         if os.name == 'nt':
             self.b_inputs["parallelization"].setDisabled(True)
-            # TODO: test on Windows system and Mac
 
         self.b_inputs["cores"].setDisabled(True)
         self.b_inputs["parallelization"].toggled.connect(self.b_inputs["cores"].setEnabled)
@@ -222,6 +229,8 @@ class ViewRun(qtw.QWidget):
         self.setLayout(main_layout)
 
     def on_currentIndexChanged(self):
+        """set options depending on experiment or simulation"""
+
         self.dir_line.setText("select data directory")
         self.start_btn.setDisabled(True)
         if self.b_inputs["datasource"].currentText() == "experiment":
@@ -236,6 +245,8 @@ class ViewRun(qtw.QWidget):
             self.roi_y_max.setDisabled(False)
 
     def chooseFile(self):
+        """file selection of calculations"""
+
         filename, _ = qtw.QFileDialog.getOpenFileName(
             self,
             "Select data file",
@@ -259,6 +270,10 @@ class ViewRun(qtw.QWidget):
                     self.dir_line.setText(os.path.dirname(os.path.dirname(filename)))
 
     def start_run(self):
+        """start the Bayesian engine:
+        - data collection from input
+        - data emission
+        """
 
         if self.b_inputs['parallelization'].isChecked():
             parallel = {
@@ -315,6 +330,8 @@ class ViewRun(qtw.QWidget):
         self.submitted.emit(data, parallel)
 
     def show_error(self, error):
+        """error message in separate window"""
+
         qtw.QMessageBox.critical(None, 'Error', error)
 
     # TODO: import option for stored config files
