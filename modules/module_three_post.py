@@ -6,7 +6,7 @@ from post.view_post_module import View_post
 from post.model_post_module import Model_post
 
 
-class MainWindow_post(qtw.QWidget):
+class MainWindowPost(qtw.QWidget):
     started_post = qtc.pyqtSignal(str)
     finished_post = qtc.pyqtSignal(str)
 

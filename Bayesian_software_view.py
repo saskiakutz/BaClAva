@@ -3,7 +3,7 @@ from PyQt5 import QtGui as qtg
 from modules.module_one_a_simulation import MainWindowSimulation
 from modules.module_one_b_smlm_simulation import MainWindowSimulationSMLM
 from modules.module_two_Bayesian import MainWindow_Bayesian
-from modules.module_three_post import MainWindow_post
+from modules.module_three_post import MainWindowPost
 
 
 class ViewSoftware(qtw.QWidget):
@@ -40,7 +40,7 @@ class ViewSoftware(qtw.QWidget):
         self.main_run = MainWindow_Bayesian()
         self.subwidget_3.layout().addWidget(self.main_run)
         self.tab_widget.addTab(self.subwidget_4, 'Module 3: Postprocessing')
-        self.main_post = MainWindow_post()
+        self.main_post = MainWindowPost()
         self.subwidget_4.layout().addWidget(self.main_post)
         # self.tab_widget.currentChanged(self.set_statusbar)
         tab_layout.addWidget(self.tab_widget)
