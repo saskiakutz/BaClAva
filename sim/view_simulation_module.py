@@ -1,5 +1,5 @@
-# Title     : Model for module 1a
-# Objective : Model setup of module 1a
+# Title     : View for module 1a
+# Objective : View setup of module 1a
 # Written by: Saskia Kutz
 
 from PyQt5 import QtCore as qtc
