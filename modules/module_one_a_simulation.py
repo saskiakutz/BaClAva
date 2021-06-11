@@ -6,7 +6,7 @@ import sys
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 
-from sim.view_simulation_module import View_sim
+from sim.view_simulation_module import ViewSim
 from sim.model_simulation_module import ModelSim
 
 
@@ -24,7 +24,7 @@ class MainWindowSimulation(qtw.QWidget):
         # Main UI code goes here
 
         self.model = ModelSim()
-        self.view = View_sim()
+        self.view = ViewSim()
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.view)
 
