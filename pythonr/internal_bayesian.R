@@ -1,7 +1,7 @@
 # Title     : Exporting to hdf5
 # Objective : Exporting datasets and metadata to an existing hdf5 file
 # Adapted from: Griffié et al.
-# Adapted by: Saskia Kutz
+# Adapted and written by: Saskia Kutz
 
 mcgaussprec <- function(pts,
                         sds,

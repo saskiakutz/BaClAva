@@ -1,7 +1,6 @@
 # Title     : Postprocessing functions
 # Objective : Functions for calculations in the postprocessing step
-# Created by: Saskia Kutz
-# Created on: 2021-04-15
+# Written by: Saskia Kutz
 
 cluster_area_density <-
   function(coords, clusterIndices) {
