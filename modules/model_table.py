@@ -1,3 +1,7 @@
+# Title     : Tabel model
+# Objective : Table modelling for GUI model 3
+# Written by: Saskia Kutz
+
 import sys
 from os import path, mkdir
 from PyQt5 import QtWidgets as qtw
