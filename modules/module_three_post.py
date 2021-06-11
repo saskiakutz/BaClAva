@@ -6,7 +6,7 @@ import sys
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 
-from post.view_post_module import View_post
+from post.view_post_module import ViewPost
 from post.model_post_module import ModelPost
 
 
@@ -23,7 +23,7 @@ class MainWindowPost(qtw.QWidget):
         # Main UI code goes here
 
         self.post_model = ModelPost()
-        self.post_view = View_post()
+        self.post_view = ViewPost()
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.post_view)
 

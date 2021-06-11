@@ -29,7 +29,7 @@ class MplCanvas(FigureCanvas):
         FigureCanvas.updateGeometry(self)
 
 
-class View_post(qtw.QWidget):
+class ViewPost(qtw.QWidget):
     submitted = qtc.pyqtSignal(object)
     startpost = qtc.pyqtSignal()
     cancel_signal = qtc.pyqtSignal()
