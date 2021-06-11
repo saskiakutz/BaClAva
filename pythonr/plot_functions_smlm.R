@@ -1,7 +1,6 @@
 # Title     : SMLM simulation plotting
-# Objective : plotting of the underlying molecules
-# Created by: Roman, Saskia
-# Created on: 2021-05-07
+# Objective : Plotting of the underlying molecules
+# Written by: Roman Svetlitckii, Saskia Kutz
 
 mol_plotting <- function(size_x,
                          size_y,
