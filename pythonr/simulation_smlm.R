@@ -141,10 +141,6 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
       Out_error <- paste0(paste0("there too few molecules_in_clusters:", molecules_in_clusters), paste0("number of clusters:", number_of_clusters), "please make a cluster's density larger or adjust cluster_radius with number_of_clusters", sep = "\n")
       stop(Out_error)
     }
-
-    # if there are no molecules just images with noise will be made, otherwise there will be no frames with just noise without PSFs
-    if (!molecules_in_clusters && !background_density) noise_it <- 0
-    else noise_it <- 1
   }
   else {
     if (missing(cluster_mean)) stop("cluster_mean is missing. Select one from [1,1000]. Measure in molecules.")
@@ -223,8 +219,6 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
     clusters_radiuses <- NULL
     current_index <- 1
 
-    # third column is used for testing a deviance of a calculated radius from the 'cluster_radius'.
-    clusters_centers <- cbind(clusters_centers, rep(1, number_of_clusters))
     extra_protection <- 0
     deviation_percent <- 0.001
 
@@ -301,16 +295,13 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
     {
       if (noise) {
         Frame[1:SizeX,] <- rbinom(SizeX * SizeY, 1, 0.03583402219025985)
-        Frame[1:SizeX,] <- ifelse(Frame[1:SizeX,] == 0, floor(rgamma(SizeX * SizeY - sum(Frame[0:SizeX,]), shape = 17.415731453935443, scale = 3.315823893167215)) + 338,
+        Frame[1:SizeX,] <- ifelse(Frame[1:SizeX,] == 0, floor(rgamma(SizeX * SizeY - sum(Frame[0:SizeX,]), shape = 31.81, scale = 2.05)) + 338,
                                   floor(rexp(sum(Frame[0:SizeX,]), 0.042)) + 436)
       }
       else Frame[0:SizeX,] <- 0
 
       # molecules are randomly turned on/off
       mols[, 3] <- ifelse(mols[, 3] == 1, rbinom(sum(mols[, 3] == 1), 1, 1 - off), rbinom(sum(mols[, 3] == 0), 1, on))
-
-      # make sure that the current frame contains PSFs.
-      if (noise_it) if (!is.element(1, mols[, 3])) next
 
       mols_on <- mols[, 1:2][mols[, 3] == 1]
       Length <- length(mols_on) / 2
