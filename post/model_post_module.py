@@ -1,9 +1,15 @@
+# Title     : Module 3 model
+# Objective : Model setup of module 3
+# Written by: Saskia Kutz
+
 from os import path
 from PyQt5 import QtCore as qtc
 from pythonr.Python_to_R import PythonToR
 
 
-class Model_post(qtc.QObject):
+class ModelPost(qtc.QObject):
+    """Data check for R backbone"""
+
     error = qtc.pyqtSignal(str)
     finished = qtc.pyqtSignal()
 
@@ -17,6 +23,7 @@ class Model_post(qtc.QObject):
 
     @qtc.pyqtSlot()
     def check_income(self):
+        """check for correct directory and connection to R"""
         print('save_connected')
         print(self.inputs)
 

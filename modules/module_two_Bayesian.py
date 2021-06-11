@@ -1,12 +1,18 @@
+# Title     : Module 2
+# Objective : Connections GUI module 2
+# Written by: Saskia Kutz
+
 import sys
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 
 from run.view_run_module import ViewRun
-from run.model_run_module import Model_run
+from run.model_run_module import ModelRun
 
 
-class MainWindow_Bayesian(qtw.QWidget):
+class MainWindowBayesian(qtw.QWidget):
+    """Connecting GUI to module 2"""
+
     start_bayesian = qtc.pyqtSignal(str)
     finished_bayesian = qtc.pyqtSignal(str)
 
@@ -15,7 +21,7 @@ class MainWindow_Bayesian(qtw.QWidget):
         super().__init__()
         # Main UI code goes here
 
-        self.run_model = Model_run()
+        self.run_model = ModelRun()
         self.run_view = ViewRun()
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.run_view)
@@ -31,23 +37,22 @@ class MainWindow_Bayesian(qtw.QWidget):
         self.run_view.startrun.connect(self.on_start)
         self.run_view.submitted.connect(self.run_model.check_income)
         self.run_model.error.connect(self.run_view.show_error)
-        # TODO: status_bar update messages
 
         # End main UI code
         self.show()
 
     def on_start(self):
+        """Statusbar update upon start"""
+
         self.start_bayesian.emit('Bayesian clustering running.')
 
     def on_finished(self):
-        # self.run_model.finished.connect(self.on_finished)
+        """GUI preparation after finish:
+        - thread termination
+        - statusbar update
+        """
+
         self.run_thread.quit()
-        # self.run_thread.deleteLater()
         self.run_model.deleteLater()
         self.run_view.start_btn.setEnabled(True)
         self.finished_bayesian.emit('Bayesian clustering finished.')
-
-# if __name__ == '__main__':
-#     app = qtw.QApplication(sys.argv)
-#     mw = MainWindow_Bayesian()
-#     sys.exit(app.exec())

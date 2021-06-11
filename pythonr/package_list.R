@@ -1,15 +1,10 @@
 # Title     : Package list
 # Objective : loading all relevant packages
 # Created by: Saskia Kutz
-# Created on: 2021-04-16
 
 if (!require(pacman, quietly = TRUE))
   install.packages("pacman")
-# if (!require(devtools))
-#   install.packages("devtools")
-# if (!require(RSMLM))
-#   pacman::p_load("devtools")
-#   install_github("lucabaronti/RSMLM")
+
 pacman::p_load_gh("saskiakutz/RSMLM")
 pacman::p_load(
   "pryr",
@@ -27,4 +22,11 @@ pacman::p_load(
   "rhdf5",
   "grid"
 )
+
+# if RSMLM cannot be installed via pacman, run the following part:
+
+# if (!require(devtools))
+#   install.packages("devtools")
+# if (!require(RSMLM))
+#   pacman::p_load("devtools")
 

@@ -1,23 +1,30 @@
+# Title     : Module 1a
+# Objective : Connections GUI module 1a
+# Written by: Saskia Kutz
+
 import sys
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 
-from sim.view_simulation_module import View_sim
-from sim.model_simulation_module import Model_sim
+from sim.view_simulation_module import ViewSim
+from sim.model_simulation_module import ModelSim
 
 
-class MainWindow_simulation(qtw.QWidget):
+class MainWindowSimulation(qtw.QWidget):
+    """Connecting GUI to module 1a"""
+
     finished_sim = qtc.pyqtSignal(str)
     start_sim = qtc.pyqtSignal(str)
 
     # noinspection PyArgumentList,PyTypeChecker
     def __init__(self):
         """MainWindow constructor"""
+
         super().__init__()
         # Main UI code goes here
 
-        self.model = Model_sim()
-        self.view = View_sim()
+        self.model = ModelSim()
+        self.view = ViewSim()
         self.setLayout(qtw.QVBoxLayout())
         self.layout().addWidget(self.view)
 
@@ -34,26 +41,21 @@ class MainWindow_simulation(qtw.QWidget):
 
         self.model.finished.connect(self.on_finished)
 
-        #     status_bar = qtw.QStatusBar()
-        #     self.setStatusBar(status_bar)
-        #     status_bar.showMessage('cluster simulation')
-        #     # TODO: status_bar update messages
-        #
         # End main UI code
         self.show()
 
     def on_started(self):
-        # self.view.start_btn.setEnabled(False)
+        """Status bar update upon start"""
+
         self.start_sim.emit('Simulating clusters.')
 
     def on_finished(self):
-        # self.statusBar().showMessage('Simulation finished.')
+        """GUI preparation after finish of calculations:
+        - thread termination
+        - statusbar update
+        """
+
         self.sim_thread.quit()
         self.model.deleteLater()
         self.view.start_btn.setEnabled(True)
         self.finished_sim.emit('Simulation finished.')
-
-# if __name__ == '__main__':
-#     app = qtw.QApplication(sys.argv)
-#     mw = MainWindow_simulation()
-#     sys.exit(app.exec())

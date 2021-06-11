@@ -1,3 +1,7 @@
+# Title     : View of module 3
+# Objective : View part of module 3
+# Written by: Saskia Kutz
+
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
 from PyQt5 import QtCore as qtc
@@ -16,6 +20,8 @@ from matplotlib.figure import Figure
 
 
 class MplCanvas(FigureCanvas):
+    """policies for figures"""
+
     def __init__(self, parent=None, width=1, height=1, dpi=100):
         # width, height = matplotlib.figure.figaspect(2.)
         self.fig = Figure(figsize=(width, height), dpi=dpi, tight_layout=True)
@@ -29,13 +35,17 @@ class MplCanvas(FigureCanvas):
         FigureCanvas.updateGeometry(self)
 
 
-class View_post(qtw.QWidget):
+class ViewPost(qtw.QWidget):
+    """View part of module 3"""
+
     submitted = qtc.pyqtSignal(object)
     startpost = qtc.pyqtSignal()
     cancel_signal = qtc.pyqtSignal()
 
     # noinspection PyArgumentList
     def __init__(self):
+        """Setup of all GUI sections and options"""
+
         super().__init__()
 
         main_layout = qtw.QVBoxLayout()
@@ -151,6 +161,8 @@ class View_post(qtw.QWidget):
         self.setLayout(main_layout)
 
     def choose_file(self):
+        """hdf5 file selection"""
+
         filename, _ = qtw.QFileDialog.getOpenFileName(
             self,
             "Select data file",
@@ -159,20 +171,12 @@ class View_post(qtw.QWidget):
         )
         self.dir_line.setText(os.path.dirname(filename))
 
-    # def change_plot_options(self):
-    #     if self.p_inputs["datasource"].currentText() == "simulation" and self.p_inputs["store plots"].isChecked():
-    #         self.p_inputs["separate plots"].setEnabled(True)
-    #         self.p_inputs["separate plots"].setChecked(False)
-    #
-    #     elif self.p_inputs["datasource"].currentText() == "experiment" and self.p_inputs["store plots"].isChecked():
-    #         self.p_inputs["separate plots"].setChecked(True)
-    #
-    #     else:
-    #         self.p_inputs["separate plots"].setDisabled(True)
-    #         self.p_inputs["separate plots"].setChecked(False)
-    #         self.p_inputs["superplot"].setChecked(False)
-
     def start_post(self):
+        """Start of the postprocessing:
+        - data collection from input
+        - data emission
+        """
+
         data = {
             'directory': self.dir_line.text(),
             # 'datasource': self.p_inputs["datasource"].currentText(),
@@ -188,9 +192,13 @@ class View_post(qtw.QWidget):
         self.submitted.emit(data)
 
     def show_error(self, error):
+        """error message in separate window"""
+
         qtw.QMessageBox.critical(None, 'Error', error)
 
     def show_data(self):
+        """draw data in GUI in the corresponding plots"""
+
         self.area_canvas.axes.cla()
         self.draw_scatterplot(self.scatter_canvas, 'x [µm]', 'y [µm]', self.p_inputs['flip y-axis'].isChecked())
         self.draw_hist(self.area_canvas, 'area', 'cluster area [µm²]', 'number of clusters')
@@ -202,10 +210,10 @@ class View_post(qtw.QWidget):
                        'number of regions')
 
     def draw_hist(self, canvas, data_type, x_label, y_label):
+        """Histogram plotting in GUI"""
 
         canvas.axes.cla()
         data_in = self.import_postdata(data_type)
-        # data_ax = canvas.figure.subplots()
 
         if len(data_in) > 1:
             bw = 2 * np.subtract.reduce(np.percentile(data_in, [75, 25])) / len(data_in) ** (1 / 3)
@@ -219,12 +227,17 @@ class View_post(qtw.QWidget):
         canvas.draw()
 
     def import_postdata(self, info_type):
+        """import of the data output:
+        - data stored in txt files
+        """
+
         data_dir = self.dir_line.text() + "/postprocessing/" + info_type + ".txt"
         with open(data_dir, 'r') as file_in:
             x = [float(y) for y in file_in.read().split(",")]
         return x
 
     def draw_scatterplot(self, canvas, x_label, y_label, flipped):
+        """Scatterplot of a clustering result"""
 
         canvas.axes.cla()
         data_scatter = self.import_scatterdata()
@@ -251,35 +264,20 @@ class View_post(qtw.QWidget):
         canvas.draw()
 
     def scatterplot_colour(self, labels):
+        """colour selection for the scatter plot:
+        - clusters in colour
+        - background localizations: silver
+        """
+
         label_counts = labels.value_counts()
         cnames = label_counts[label_counts > 1]
         colors = sns.color_palette("CMRmap_r", n_colors=len(cnames))
         scale = ['silver' if label_counts[label] == 1 else colors[label - 1] for label in labels]
         return scale
 
-    def import_scatterdata_old(self):
-        names = ["summary.txt", "labels", "data.txt"]
-        folder_list = [name for name in os.listdir(self.dir_line.text() + "/") if
-                       os.path.isdir(self.dir_line.text() + "/" + name) and name != 'postprocessing']
-
-        folder_os = os.path.join(self.dir_line.text(), random.choice(folder_list))
-
-        file_os = os.path.join(folder_os, names[0])
-        with open(file_os, 'r') as file_in:
-            best_label = file_in.readline().strip().split(": ")[1]
-
-        labels_os = os.path.join(folder_os, names[1], best_label)
-        with open(labels_os, 'r') as file_in:
-            cluster_labels = [int(lab) for lab in file_in.read().split(",")]
-
-        data_os = os.path.join(folder_os, names[2])
-        data = pd.read_csv(data_os, sep=',', header=0, usecols=["x", "y", "sd"])
-        data = data.divide(1000)
-        data["labels"] = cluster_labels
-
-        return data
-
     def import_scatterdata(self):
+        """import of a random dataset for the scatter plot"""
+
         datalist = [name for name in os.listdir(self.dir_line.text()) if
                     os.path.isfile(os.path.join(self.dir_line.text(), name)) and name.endswith('.h5')]
 
@@ -295,7 +293,4 @@ class View_post(qtw.QWidget):
 
         return dataset
 
-        # TODO: extract information
         # TODO: implement a way to rotate over all datafiles
-
-    # TODO: import option for stored config file

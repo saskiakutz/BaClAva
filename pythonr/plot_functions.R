@@ -1,6 +1,11 @@
+# Title     : Histograms and scatterplots for module 3
+# Objective : Creating and storage of histrams and scatterplots for module 3
+# Written by: Saskia Kutz
+
 # histograms --------------------------------------------------------------
 
 hist_plot <- function(res, nexpname, plotcreation) {
+  # histogram preparation and storage
 
   length_res <- length(names(res[[1]]))
   if (length_res == 10)
@@ -11,18 +16,17 @@ hist_plot <- function(res, nexpname, plotcreation) {
       datavec <- c(datavec, unlist(res[[i]][j], use.names = F))
     }
     if (length(datavec) != 0 & !all(is.na(datavec))) {
-      k <-
-        case_when( #need to correct relative density
-          j == 1 ~ c("Cluster radius", "Number of clusters"),
-          j == 2 ~ c("Number of molecules", "Number of clusters"),
-          j == 3 ~ c("Number of clusters", "Number of regions"),
-          j == 4 ~ c("Percentage clustered", "Number of regions"),
-          j == 5 ~ c("Total Mols per ROI", "Number of regions"),
-          j == 6 ~ c("Total Mols per ROI", "Number of regions"),
-          j == 7 ~ c("Cluster area", "Number of clusters"),
-          j == 8 ~ c("Cluster density", "Number of clusters"),
-          j == 9 ~ c("Cluster density/area", "Number of clusters")
-        )
+      k <- case_when(
+        j == 1 ~ c("Cluster radius", "Number of clusters"),
+        j == 2 ~ c("Number of molecules", "Number of clusters"),
+        j == 3 ~ c("Number of clusters", "Number of regions"),
+        j == 4 ~ c("Percentage clustered", "Number of regions"),
+        j == 5 ~ c("Total Mols per ROI", "Number of regions"),
+        j == 6 ~ c("Total Mols per ROI", "Number of regions"),
+        j == 7 ~ c("Cluster area", "Number of clusters"),
+        j == 8 ~ c("Cluster density", "Number of clusters"),
+        j == 9 ~ c("Cluster density/area", "Number of clusters")
+      )
 
       #plot
       if (plotcreation) {
@@ -266,6 +270,7 @@ cluster_plot <-
   }
 
 plots_arrange <- function(plot1, plot2, n_row, expname, gg_plot_name) {
+  # export for figure with two plots side-by-side
 
   arragedplot <- ggarrange(plot1, plot2, nrow = n_row)
   plot_save(arragedplot, expname, gg_plot_name, plot_height = 5, plot_width = 10)
@@ -273,6 +278,8 @@ plots_arrange <- function(plot1, plot2, n_row, expname, gg_plot_name) {
 }
 
 cluster_superplot <- function(results, dirnames, expname, gg_plot_name) {
+  # all clusterplots in one figure
+
   num_sets <- length(results)
   n_rows <- ceiling(sqrt(length(dirnames)))
   plotlist <- lapply(results, function(set) {
@@ -283,6 +290,8 @@ cluster_superplot <- function(results, dirnames, expname, gg_plot_name) {
 }
 
 plot_save <- function(gg_plot, expname, gg_plot_name, plot_height = 45, plot_width = 45, unit = "mm") {
+  # saving a plot in pdf, epx and png format
+
   gg_plot +
     ggsave(file.path(paste0(
       expname, "/", gg_plot_name, ".pdf", sep = ""
@@ -308,6 +317,9 @@ ground_truth_plot <- function(pts, colourlabels, title) {
 }
 
 mkcols <- function(labels) {
+  # taken from Griffié et al.
+  # cluster colors
+
   t <- table(labels)
   cnames <- names(t[t > 1])
   colors <- sample(rainbow(length(cnames)))
@@ -324,12 +336,10 @@ mkcols <- function(labels) {
   s
 }
 
-# summarytable plots
 scatterplot <- function(datatable, col1, col2, col3) {
+  # cluster plot
   scatter_plot <- ggplot(datatable, aes_string(x = col1, y = col2, color = col3)) +
     geom_point() +
-    # labs(x = "x [µm]", y = "y [µm]") +
-    # ggtitle(title) +
     theme_bw() +
     theme(
       axis.text = element_text(size = 8),
@@ -344,7 +354,13 @@ scatterplot <- function(datatable, col1, col2, col3) {
   scatter_plot
 }
 
-summary_plot <- function(data_table, summaryplot_name, exp_name = expname, column1 = "numDetectionsCluster", column2 = "areasCluster", column3 = "densitiesCluster") {
+summary_plot <- function(data_table,
+                         summaryplot_name,
+                         exp_name = expname,
+                         column1 = "numDetectionsCluster",
+                         column2 = "areasCluster",
+                         column3 = "densitiesCluster") {
+  # summary plots
   plot_num_area_density <- scatterplot(data_table, column1, column2, column3)
   plot_num_density_area <- scatterplot(data_table, column1, column3, column2)
   plot_area_density_num <- scatterplot(data_table, column2, column3, column1)
@@ -382,5 +398,3 @@ summary_plot <- function(data_table, summaryplot_name, exp_name = expname, colum
   summaryplot_2 <- ggarrange(plot_num_area_density, plot_num_density_area, plot_area_density_num, plot_num_density_to_area, plot_num_density_to_area_ecdf, nrow = 1)
   plot_save(summaryplot_2, exp_name, summaryplot_name, plot_height = 45, plot_width = 500)
 }
-
-#TODO: 3D plot for summarytable

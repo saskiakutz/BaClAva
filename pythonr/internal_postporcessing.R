@@ -1,11 +1,12 @@
 # Title     : Postprocessing functions
 # Objective : Functions for calculations in the postprocessing step
-# Created by: Saskia Kutz
-# Created on: 2021-04-15
+# Adapted from: Griffié et al., Pike et al.
+# Written by: Saskia Kutz
 
 cluster_area_density <-
   function(coords, clusterIndices) {
-    #based on function by Jeremy Pike
+    # based on function by Pike et al.
+    # calculation of cluster parameters
 
     numDimensions <- dim(coords)[2]
     if (numDimensions != 2) {
@@ -105,10 +106,15 @@ cluster_area_density <-
   }
 
 nClusters <- function(labels) {
+  # cluster number
+
   sum(table(labels) > 1)
 }
 
 percentageInCluster <- function(labels) {
+  # percentage of localisations in clusters
+  # adapted from Griffié et al.
+
   Nb <- sum(table(labels) == 1)
   (length(labels) - Nb) / length(labels) * 100
 }
@@ -118,6 +124,8 @@ nMolsPerCluster <- function(labels) {
 }
 
 clusterRadii <- function(pts, labels) {
+  # taken from griffiö et al.
+
   radii <- tapply(1:(dim(pts)[1]), labels, function(v) {
     if (length(v) == 1)
       -1
@@ -129,6 +137,8 @@ clusterRadii <- function(pts, labels) {
 }
 
 clusterStatistics <- function(pts, labels) {
+  # adapted from Griffié et al.
+
   iscluster <- table(labels) > 1
   if (sum(iscluster) == 0)
     return(-1)
@@ -142,10 +152,11 @@ clusterStatistics <- function(pts, labels) {
 }
 
 reldensity <- function(pts, labels, areaclustered, xlim, ylim) {
+  # adapted from Griffié et al.
+
   rs <- clusterRadii(pts, labels)
   tb <- table(labels)
   nclustered <- sum(tb[tb >= 2])
   nb <- length(labels) - nclustered
-  # areaclustered = unlist(cluster_area_density(pts, labels)[2], use.names = F)
   (nclustered / sum(areaclustered)) / (nb / (diff(xlim) * diff(ylim) - sum(areaclustered)))
 }

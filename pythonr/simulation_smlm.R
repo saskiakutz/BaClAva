@@ -1,35 +1,6 @@
 # Title     : SMLM simulation
-# Objective : creation of TIFF stack/files of SMLM-like experiments
-# Created by: Roman, Saskia
-# Created on: 2021-05-06
-
-# this function creates a tiff stack(or single tiffs) with distributed PSFs
-#
-# input:
-# 1) SizeX, SizeY in pixels is the matrix size
-# 2) indent is a black rim around the matrix. it is a part of a SizeX*SizeX matrix, not an extra area!
-# 2a) pixel_size can in set in nm.
-# 3) cluster radius is measured in nm.
-# 4) distance_between_clusters is measured in nm.
-# 5) FWHM(Full width at half maximum) measured in nm. Defines the PSF's gauss distribution.
-# 6) max_intensity is for the largest color value of PSF.
-# 7) on, off: probabilities of a molecule to be turned on/off per second -> internal conversion to per frame
-# 7a) exposure: exposure time per frame of the camera
-# 8) frames: number of frames(single tiffs or all in a stack)
-# 9) noise: gamma(1) or no noise(0), if omitted gamma is taken
-# 10)density_or_molecules: 1 is for input as density, 0 as number of molecules and mean with SD
-#    for clusters see below 9)
-# 11)clusters_density and background_density are measured as 'number_of_molecules/um^2'
-# 12)cluster_mean, cluster_SD: measured in molecules. mean number of mols per cluster and SD is a deviation from mean.
-#    there will be totally number_of_clusters*mean_cluster molecules
-# 13)molecules_background: nothing interesting just a total number of molecules in background.
-#    these will NOT be placed in clusters.
-# 14)!gamma for psf centers!iscoming
-# 15) directory where the data is supposed to be stored
-#
-# distance between molecules in background is possible, but set by default to zero
-
-
+# Objective : Creation of TIFF stack/files of SMLM-like experiments
+# Written by: Roman Svetlitckii, Saskia Kutz
 
 make_plot <- function(SizeX, SizeY, indent, pixel_size,
                       number_of_clusters, cluster_radius, distance_between_clusters,
@@ -37,6 +8,32 @@ make_plot <- function(SizeX, SizeY, indent, pixel_size,
                       density_or_molecules = 1, clusters_density, background_density,
                       cluster_mean, cluster_SD, molecules_background, directory_folder)
 {
+  # this function creates a tiff stack(or single tiffs) with distributed PSFs
+  #
+  # input:
+  # 1) SizeX, SizeY in pixels is the matrix size
+  # 2) indent is a black rim around the matrix. it is a part of a SizeX*SizeX matrix, not an extra area!
+  # 2a) pixel_size can in set in nm.
+  # 3) cluster radius is measured in nm.
+  # 4) distance_between_clusters is measured in nm.
+  # 5) FWHM(Full width at half maximum) measured in nm. Defines the PSF's gauss distribution.
+  # 6) max_intensity is for the largest color value of PSF.
+  # 7) on, off: probabilities of a molecule to be turned on/off per second -> internal conversion to per frame
+  # 7a) exposure: exposure time per frame of the camera
+  # 8) frames: number of frames(single tiffs or all in a stack)
+  # 9) noise: gamma(1) or no noise(0), if omitted gamma is taken
+  # 10)density_or_molecules: 1 is for input as density, 0 as number of molecules and mean with SD
+  #    for clusters see below 9)
+  # 11)clusters_density and background_density are measured as 'number_of_molecules/um^2'
+  # 12)cluster_mean, cluster_SD: measured in molecules. mean number of mols per cluster and SD is a deviation from mean.
+  #    there will be totally number_of_clusters*mean_cluster molecules
+  # 13)molecules_background: nothing interesting just a total number of molecules in background.
+  #    these will NOT be placed in clusters.
+  # 14)!gamma for psf centers!iscoming
+  # 15) directory where the data is supposed to be stored
+  #
+  # distance between molecules in background is possible, but set by default to zero
+
   source('./pythonr/package_list.R')
   source('./pythonr/internal_smlm_simulation.R')
   source('./pythonr/plot_functions_smlm.R')

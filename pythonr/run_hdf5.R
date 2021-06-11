@@ -1,7 +1,7 @@
 # Title     : Bayesian run part
 # Objective : with hdf5 import
-# Created by: Saskia Kutz
-# Created on: 2021-01-20
+# Adapted from: Griffié et al.
+# Adapted and written by: Saskia Kutz
 
 run_fun <- function(
   newfolder,

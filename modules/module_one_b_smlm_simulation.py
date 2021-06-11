@@ -1,3 +1,7 @@
+# Title     : Module 1b
+# Objective : Connections module 1b
+# Written by: Saskia Kutz
+
 import sys
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
@@ -7,6 +11,8 @@ from sim.model_simulation_module_smlm import ModelSMLM
 
 
 class MainWindowSimulationSMLM(qtw.QWidget):
+    """Module 1b: front-back-end connections"""
+
     finished_STORM_sim = qtc.pyqtSignal(str)
     start_STORM_sim = qtc.pyqtSignal(str)
 
@@ -35,15 +41,21 @@ class MainWindowSimulationSMLM(qtw.QWidget):
         self.model_smlm.finished.connect(self.on_finished)
 
         self.storm_view.cancel_STORM.connect(self.on_cancel)
+
         # End main UI code
         self.show()
 
     def on_started(self):
-        # self.storm_view.start_btn.setEnabled(False)
+        """Statusbar update upon start"""
+
         self.start_STORM_sim.emit('Simulating blinking clusters.')
 
     def on_finished(self):
-        # self.statusBar().showMessage('Simulation finished.')
+        """GUI termination after finish:
+        - thread termination
+        - statusbar update
+        """
+
         self.sim_STORM_thread.quit()
         self.model_smlm.deleteLater()
         self.sim_STORM_thread.deleteLater()
@@ -51,8 +63,12 @@ class MainWindowSimulationSMLM(qtw.QWidget):
         self.finished_STORM_sim.emit('Simulation finished.')
 
     def on_cancel(self):
+        """GUI termination after cancellation:
+        - thread termination
+        - statusbar update
+        """
+
         self.sim_STORM_thread.quit()
         self.model_smlm.deleteLater()
         self.storm_view.start_btn.setEnabled(True)
         self.finished_STORM_sim.emit('SMLM simulation cancelled.')
-

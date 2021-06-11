@@ -1,3 +1,8 @@
+# Title     : Exporting to hdf5
+# Objective : Exporting datasets and metadata to an existing hdf5 file
+# Adapted from: Griffié et al.
+# Adapted and written by: Saskia Kutz
+
 mcgaussprec <- function(pts,
                         sds,
                         xlim = c(0, 1),
@@ -8,6 +13,8 @@ mcgaussprec <- function(pts,
                         minsd = 0.1,
                         maxsd = 100,
                         grid = 100) {
+  # taken from Griffié et al.
+
   N <- dim(pts)[1]
   fsd <- Vectorize(function(sd) {
     wts <- 1 / (sd^2 + sds^2)
@@ -42,6 +49,8 @@ mcgaussprec <- function(pts,
 }
 
 toroid <- function(pts, xlim, ylim, range) {
+  # taken from Griffié et al.
+
   xd <- xlim[2] - xlim[1]
   yd <- ylim[2] - ylim[1]
   R <- pts[pts[, 1] >= (xlim[2] - range), , drop = FALSE]
@@ -117,6 +126,9 @@ Kclust_parallel <- function(pts,
                             report = F,
                             clustermethod = "Ripley' K based",
                             numCores = 1) {
+  # adapted from Griffié et al.
+  # clustering in parallel fashion
+
   N <- dim(pts)[1]
   if (N == 1) {
     rs <- c()
@@ -142,6 +154,7 @@ Kclust_parallel <- function(pts,
     D <- as.matrix(dist(tor))
     D <- D[1:N, 1:N]
   }
+
   registerDoParallel(cores = numCores)
   foreach(r = rseq) %:%
     foreach(th = thseq) %dopar% {
@@ -221,7 +234,7 @@ Kclust_parallel <- function(pts,
     if (rlabel) {
       retlabels <- labels
     }
-    # data.frame(scores=scores, scale=rs, thresh=ths, labels=retlabels) #return argument
+
     list(
       scores = s,
       scale = r,
@@ -248,6 +261,9 @@ Kclust_sequential <- function(pts,
                               rlabel = FALSE,
                               report = FALSE,
                               clustermethod = "Ripley' K based") {
+  # adapted from Griffié et al.
+  # clsutering in sequential fashion
+
   N <- dim(pts)[1]
   if (N == 1) {
     rs <- c()
@@ -287,12 +303,6 @@ Kclust_sequential <- function(pts,
                   (pi * (dim(tor)[1] - 1)))
     }
     for (th in thseq) {
-
-      # if ( th%%RAMmodulo == 0){
-      #   if ( RAMmax < mem_used()){
-      #     abort("too much RAM")
-      #   }
-      # }
 
       if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN2")
         C <- which(L >= th)
@@ -366,7 +376,10 @@ Kclust_sequential <- function(pts,
   ) #return argument
 }
 
-writeRes_seq <- function(res, datah5file, bestonly = FALSE) { # , rfile, labdir,
+writeRes_seq <- function(res, datah5file, bestonly = FALSE) {
+  # adaped from Griffié et al.
+  # exporting of score results to hdf5
+
   scale <- unique(res[["scale"]])
   scale <- scale[order(as.numeric(scale))]
   thresh <- unique(res[["thresh"]])
@@ -402,6 +415,8 @@ writeRes_seq <- function(res, datah5file, bestonly = FALSE) { # , rfile, labdir,
 }
 
 writeRes_r_vs_th <- function(res, rseq, thseq, datah5file) {
+  # exporting of scores to hdf5 from parallel computation
+
   tmp_matrix <- matrix(nrow = length(thseq), ncol = length(rseq))
   rownames(tmp_matrix) <- thseq
   colnames(tmp_matrix) <- rseq
@@ -438,37 +453,17 @@ writeRes_labels <- function(res, rseq, thseq, datah5file) {
   }
 }
 
+plabel <- function(labels, alpha, pb) {
+  # taken from Griffié et al.
 
-  # histnMols <- function(labels) {
-  #   ta <- table(labels)[table(labels) > 1]
-  #   h <- hist(ta, plot = FALSE)
-  #   plot(h,
-  #        xlab = "Number of molecules",
-  #        ylab = "Number of clusters",
-  #        main = "")
-  # }
-
-  # convexHullAreas <- function(pts, labels) {
-  #   areas <- tapply(1:(dim(pts)[1]), labels, function(v) {
-  #     if (length(v) == 1)
-  #       -1
-  #     else {
-  #       i <- chull(pts[v, 1], pts[v, 2])
-  #       areapl(as.matrix(pts[v[i],]))
-  #     }
-  #   })
-  #   areas[areas >= 0]
-  # }
-
-  plabel <- function(labels, alpha, pb) {
-    cnt <- tapply(1:length(labels), labels, length)
-    cl <- cnt[cnt != 1]
-    B <- length(labels) - sum(cl)
-    Bcont <- B * log(pb) + (1 - B) * log(1 - pb)
-    ## Green 2001 p.357, Scand J Statist 28
-    partcont <- 0
-    if (length(cl) > 0)
-      partcont <- length(cl) * log(alpha) +
+  cnt <- tapply(1:length(labels), labels, length)
+  cl <- cnt[cnt != 1]
+  B <- length(labels) - sum(cl)
+  Bcont <- B * log(pb) + (1 - B) * log(1 - pb)
+  ## Green 2001 p.357, Scand J Statist 28
+  partcont <- 0
+  if (length(cl) > 0)
+    partcont <- length(cl) * log(alpha) +
       lgamma(alpha) +
       sum(lgamma(cl)) -
       lgamma(alpha + sum(cl))
@@ -486,6 +481,9 @@ scorewprec <- function(labels,
                        useplabel = TRUE,
                        alpha = NULL,
                        pb = .5) {
+  # taken from Griffié et al.
+  # scoring
+
   s <- sum(tapply(1:(dim(pts)[1]), labels, function(v) {
     if (length(v) > 1)
       mcgaussprec(
@@ -513,6 +511,8 @@ scorewprec <- function(labels,
 }
 
 label_correction <- function(labels) {
+  # label correction for labels calulated with ToMATo
+
   j <- 1
   maxlabel <- max(labels)
   for (bgl in seq(1, length(labels))) {
@@ -523,15 +523,3 @@ label_correction <- function(labels) {
   }
   labels
 }
-
-
-# import_data <- function(foldername) {
-#   dataset_locs <- list.files(file.path(foldername), pattern = "*.txt")
-#   dataset_locs <- dataset_locs[dataset_locs != "r_vs_thresh.txt" &
-#                                  dataset_locs != "../config.txt" &
-#                                  dataset_locs != "summary.txt" &
-#                                  dataset_locs != "cluster-statistics.txt" &
-#                                  dataset_locs != "summary_ground_truth.txt"]
-#   data_locs <- read.csv(file.path(paste0(foldername, "/", dataset_locs, sep = "")))
-#   data_locs
-# }

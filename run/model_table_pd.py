@@ -1,16 +1,15 @@
-import sys
-from os import path, mkdir
-from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
-from PyQt5 import QtCore as qtc
-# from Python_to_R import r_bayesian_run
-# from Python_to_R import r_test
-import csv
+# Title     : Tabel for model for module 2
+# Objective : Model table of module 2
+# Written by: Saskia Kutz
+
 import h5py
 import pandas as pd
+from PyQt5 import QtCore as qtc
 
 
 class DataFrameModel(qtc.QAbstractTableModel):
+    """data to table for GUI presentation"""
+
     DtypeRole = qtc.Qt.UserRole + 1000
     ValueRole = qtc.Qt.UserRole + 1001
 

@@ -1,7 +1,7 @@
-# Title     : postprocessing for Bayesian analysis
-# Objective : hdf5 datasource
-# Created by: saskia-admin
-# Created on: 2021-01-27
+# Title     : Postprocessing for Bayesian analysis
+# Objective : Batch analysis for data from hdf5
+# Adapted from: Griffié et al.
+# Apated and written by: Saskia Kutz
 
 post_fun <- function(newfolder, makeplot, superplot, separateplots, flipped) {
   source("./pythonr/package_list.R")

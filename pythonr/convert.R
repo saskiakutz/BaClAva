@@ -1,9 +1,11 @@
-# Title     : import csv/txt export hdf5
-# Objective : convert csv7txt to hdf5
-# Created by: saskia-admin
-# Created on: 2021-01-26
+# Title     : Import csv/txt export hdf5
+# Objective : Convert csv/txt to hdf5
+# Written by: Saskia Kutz
 
 convert_hdf5 <- function(directory, convert_list) {
+  # converting csv/txt file to the "data" dataset in a hdf5 file
+  # hdf5 file gets the same name as the csv/txt file
+
   source("./pythonr/package_list.R")
   for (file in convert_list) {
     df <- read.csv(file.path(directory, file))

@@ -1,3 +1,7 @@
+# Title     : Python to R connection
+# Objective : Data preparation for and connection to R
+# Written by: Saskia Kutz
+
 try:
     import rpy2.robjects as r_objects
     from rpy2.robjects.packages import importr
@@ -19,9 +23,10 @@ except OSError as e:
         from rpy2.robjects.vectors import BoolVector
     except OSError:
         raise (e)
-import numpy as np
-from os import getcwd, listdir
+from os import listdir
 from os.path import isfile, join
+
+import numpy as np
 
 
 class PythonToR:
@@ -29,7 +34,8 @@ class PythonToR:
     r = r_objects.r
 
     def r_simulation(self, input_dic):
-        # call R simulation
+        """Data preparation and connection to simulation part in module 1a"""
+
         self.r.source('./pythonr/simulate.R')
 
         numpy2ri.activate()
@@ -55,6 +61,8 @@ class PythonToR:
         # TODO: multimerisation not ready yet
 
     def r_smlm_simulation(self, input_dic):
+        """Data preparation and connection to data simulation part in module 1b"""
+
         self.r.source('./pythonr/simulation_smlm.R')
         numpy2ri.activate()
         self.r.make_plot(
@@ -83,6 +91,8 @@ class PythonToR:
         print('done')
 
     def r_bayesian_run(self, input_dic, status):
+        """data preparation and connection to Bayesian engine in module 2"""
+
         self.r.source('./pythonr/run_hdf5.R')
         if len(status) == 2:
             ncores = status.get('cores')
@@ -130,6 +140,8 @@ class PythonToR:
         print("done")
 
     def r_post_processing(self, input_dic):
+        """data preparation and connection to postprocessing part of module 3"""
+
         self.r.source("./pythonr/postprocessing_hdf5.R")
         numpy2ri.activate()
         self.r.post_fun(
@@ -145,6 +157,8 @@ class PythonToR:
         print("done")
 
     def check_dataset_type(self, directory):
+        """check for data type and converting to hdf5 if necessary"""
+
         onlyfiles = [f for f in listdir(directory) if
                      isfile(join(directory, f)) and f not in ['sim_parameters.txt', 'run_config.txt', ]]
         convertfiles = [f for f in onlyfiles if

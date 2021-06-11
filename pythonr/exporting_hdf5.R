@@ -1,10 +1,10 @@
-# Title     : exporting to hdf5
-# Objective : exporting datasets and metadata to an existing hdf5 file
-# Created by: saskia Kutz
-# Created on: 2021-04-16
+# Title     : Exporting to hdf5
+# Objective : Exporting datasets and metadata to an existing hdf5 file
+# Written by: Saskia Kutz
 
-# write dataset to hdf5
 write_df_hdf5 <- function(hdf5_file, dataset, dataset_name) {
+  # write dataset to hdf5
+
   tryCatch(
   {
     h5write(dataset, hdf5_file, dataset_name) },
