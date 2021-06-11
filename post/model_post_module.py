@@ -1,5 +1,5 @@
 # Title     : Module 3 model
-# Objective : Model view of module 3
+# Objective : Model setup of module 3
 # Written by: Saskia Kutz
 
 from os import path
