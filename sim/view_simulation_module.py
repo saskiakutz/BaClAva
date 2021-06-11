@@ -1,23 +1,24 @@
-import sys
-from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
+# Title     : Model for module 1a
+# Objective : Model setup of module 1a
+# Written by: Saskia Kutz
+
 from PyQt5 import QtCore as qtc
+from PyQt5 import QtGui as qtg
+from PyQt5 import QtWidgets as qtw
 
 
 class ViewSim(qtw.QWidget):
+    """View part of module 1a"""
+
     submitted = qtc.pyqtSignal(object)
     startsim = qtc.pyqtSignal()
 
     # noinspection PyArgumentList
     def __init__(self):
+        """Setup of all GUI sections and options"""
+
         super().__init__()
         self.setLayout(qtw.QFormLayout())
-
-        # heading = qtw.QLabel("Simulation")
-        # self.layout().addRow(heading)
-        # heading_font = qtg.QFont('Arial', 20, qtg.QFont.Bold)
-        # heading_font.setStretch(qtg.QFont.ExtraExpanded)
-        # heading.setFont(heading_font)
 
         self.roi_x_min = qtw.QSpinBox(
             self,
@@ -158,6 +159,8 @@ class ViewSim(qtw.QWidget):
         self.layout().addRow(self.start_btn)
 
     def saveFile(self):
+        """directory selection for storage"""
+
         filename = qtw.QFileDialog.getExistingDirectory(
             self,
             "Select directory",
@@ -166,6 +169,11 @@ class ViewSim(qtw.QWidget):
         self.dir_line.setText(filename)
 
     def start_sim(self):
+        """start simulation:
+        - data collection from input
+        - data emission
+        """
+
         data = {
             'directory': self.dir_line.text(),
             'nclusters': self.inputs['number of clusters'].value(),
@@ -189,7 +197,8 @@ class ViewSim(qtw.QWidget):
         self.submitted.emit(data)
 
     def show_error(self, error):
+        """error message in separate window"""
+
         qtw.QMessageBox.critical(None, 'Error', error)
 
     # TODO: multimerisation as a checkbox option, if chosen: option to state number of molecules, proportion multimers,
-    # import stored sim_parameters.txt
