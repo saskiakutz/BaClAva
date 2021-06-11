@@ -1,17 +1,17 @@
-# Project name: BaClAva
+# BaClAva
 
 ![alt text](readme_images/logo.png "BaClAva logo")
 
 ## About the Bayesian software BaClAva:
 
 Bayesian software BaClAva (Bayesian Cluster Analysis and Visualisation Application) is a software tool with a graphic
-user interface for the analysis of clustering in data from single-molecule localisation microscopy (SMLM). It uses a
+user interface for the analysis of clustering in data from single-molecule localization microscopy (SMLM). It uses a
 Bayesian engine for user-independent investigation of spatial distributions based on the code published in
 Rubin-Delaunchy et al. [[1]](#1) and includes a number of clustering algorithms published therein and in [[2]](#2). This
-tool offers the option to generate artificial ground-truth data, to analyze the spatial distribution localisations with
+tool offers the option to generate artificial ground-truth data, to analyze the spatial distribution localizations with
 a Bayesian model to determine the degree of clustering and other quantitative measures of nonrandom distribution. It
-specifically offers batch processing of several experiments, and the fast turnover of large field of view data. Our
-software delivers clustering analysis with actively minimized user-bias and significantly accelerated computation.
+offers batch processing of several experiments, and the fast turnover of data taken from a large field of view. Our
+software delivers clustering analysis with actively minimized user bias and significantly accelerated computation.
 
 ## Table of content:
 
@@ -34,37 +34,40 @@ software delivers clustering analysis with actively minimized user-bias and sign
 
 ### Requirements
 
-In order to use BaClAva Python 3.8 and R 4.1.0 need to be installed. Furthermore, we recommend installing Anaconda as a
-package manager and PyCharm as the IDE, because it can handle Python and R code.
+In order to use BaClAva, Python 3.8 and R 4.1.0 need to be installed. Furthermore, we recommend installing Anaconda as a
+package manager and PyCharm as the IDE because it can handle Python and R code.
 
 ### Environment
 
-If you use PyCharm, follow the VCS (Version control System) path to install BaClAva directly from GitHub and create a
+If you use PyCharm, follow the VCS (Version Control System) path to install BaClAva directly from GitHub and create a
 Python environment. Install all packages in the `requirements.txt` via `pip install -r requirements.txt`. If you use
 PyCharm, the IDE automatically to install all packages and choose a conda environment, you need to install `rpy2`
-via `pip install rpy2` because it is not part of Anaconda.
+via `pip install rpy2` because it is currently not part of Anaconda.
 
 If you work on a **Linux** machine, it might be that you need to install the C++ engine
 for [V8](https://ropensci.org/blog/2020/11/12/installing-v8/) separately.
 
-The R packages used in this software are from CRAN, Bioconductor, and GitHub repositories. Since the program often does
-not correctly identify which packages are from the Bioconductor repository, go to R and
-install `BiocManager (install.packages("BiocManager")` and `rhdf5 BiocManager::install("rhdf5")` by hand. For all other
-packages, run `packages_list.R`. If any other packages raises an error message, try to install them individually and/or
-check out the error messages.
+**Windows** users need to have [Rtools40](https://cran.r-project.org/bin/windows/Rtools/) installed for proper
+installation of the `RSMLM` package.
+
+The R packages used in this software are from CRAN, Bioconductor, and GitHub repositories. Running the
+file `packages_list.R` installs all R packages. The package for the hdf5 handling might not raise an error during
+installation. Therefore, install `BiocManager (install.packages("BiocManager")`
+and `rhdf5 BiocManager::install("rhdf5")` by hand. If any other packages raise an error message, check out the error
+messages and install them individually.
 
 In order to use BaClAva, start it from the IDE or terminal, but make sure that you have the correct environment
 activated.
 
 # Software overview:
 
-The software offers three analysis modules integrated in a single GUI. The first module allows simulating datasets.
-These datasets or experimentally acquired SMLM data are processed by the second module. This module starts by
-calculating cluster inclusion of each single molecule localization and provides Bayesian scores for a wide parameter
-space. The Bayesian analysis of parameter values assists the user in applying unbiased clustering analysis to their
-data. The final module performs a calculations based on these parameters and generates quantitative output for a number
-of essential characteristics of clusters, i.e. the cluster area or density. This can also be done in batches of datasets
-using parallel computing. For ease of use, each module can also be used independently.
+The software offers three analysis modules integrated into a single GUI. The first module allows simulating datasets.
+The second module processes these simulated datasets or experimentally acquired SMLM. This module starts by calculating
+the cluster inclusion of each single-molecule localization and provides Bayesian scores for a wide parameter space. The
+Bayesian analysis of parameter values assists the user in applying unbiased clustering analysis to their data. Parallel
+computation can decrease the processing time of batches of datasets. The final module performs calculations based on
+these parameters and generates quantitative output for several essential characteristics of clusters, i.e., the cluster
+area or density. For ease of use, each module can also be used independently.
 
 ## Module 1: Simulation tools
 
@@ -76,16 +79,16 @@ localisations, and Module 1b enables the user to simulate blinking fluorophores.
 
 Upon starting the simulation module 1a, the user is prompted to adjust several simulation parameters, the number of
 datasets, and the storage directory. The user can only start the simulation process after choosing a proper directory.
-The tool simulates the final localisations assuming that each molecule is represented by a single localisation. For each
-simulation, the final table of localisations with the 2D coordinates ('x', 'y'), the localisation's standard deviation (
+The tool simulates the final localisations assuming that each molecule is represented by a single localization. For each
+simulation, the final table of localisations with the 2D coordinates ('x', 'y'), the localization's standard deviation (
 ' sd') and its label ('clusterID') are stored as a dataset ('data') in a hdf5 file.
 
 ![alt text](readme_images/module_1b.png "Screenshot of the simulation module for smlm-like data")
 
 In module 1b, the GUI prompts the user to adjust the parameters for the simulation of the underlying molecule
 distribution, the fluorophores' blinking and the camera parameters, and the storage directory. The user needs to select
-a storage directory to start the simulation process. This module simulates the SMLM-like behaviour of blinking dyes and
-stores the results in tiff files. In order to continue module 2, the output files need to be localised by algorithms
+a storage directory to start the simulation process. This module simulates the SMLM-like behavior of blinking dyes and
+stores the results in tiff files. In order to continue module 2, the output files need to be localized by algorithms
 such as SMAP[[3]](#3) or Thunderstorm [[4]](#4).
 
 In order to generate simulations of blinking fluorophores in clusters that best resemble the data imaged on the
@@ -96,23 +99,23 @@ microscope. Therefore, we advise the user to image the PSF and intensity of the 
 ![alt text](readme_images/run_20.png "Screenshot of the Bayesian module")
 
 The clustering of either simulated or experimental data takes place in the second module. The input data for this module
-must be a localisation table of appropriate format. For experimental data and simulations run in other programs, this
-table can come from any common localisation application ( e.g. SMAP [[3]](#3) or Thunderstorm [[4]](#4)). The resulting
-table needs to contain the 2D coordinates and standard deviations of the localisations. The software can read-in data
-from CSV and text files, however the program copies the data to a hdf5 file for further use.
+must be a localization table of the appropriate format. For experimental data and simulations run in other programs,
+this table can come from any common localization application ( e.g., SMAP [[3]](#3) or Thunderstorm [[4]](#4)). The
+resulting table needs to contain the 2D coordinates and standard deviations of the localizations. The software can read
+data from CSV and text files. However, the program copies the data to a hdf5 file for further use.
 
 In the GUI, the user can choose their preferred clustering algorithm (Ripley's-K-based clustering, DBSCAN,
-ToMATo [[2]](#2)) and other parameters. The radius and threshold sequences, and their step width are essential because
+ToMATo [[2]](#2)) and other parameters. The radius and threshold sequences and their step width are essential because
 they determine the Bayesian engine's parameter space. Note here that it has been shown that Ripley's-K-based clustering
-and DBSCAN clustering are more sensitive to the parameter selection compared to ToMATo [[2]](#2). Instead of choosing
-single datasets for the analysis, the user chooses an entire folder of datasets by picking a random dataset within this
-folder. The GUI then helps the user select the correct columns for the analysis by displaying the selected dataset's top
-part. The program loops through the given radius and threshold sequences after the user presses the start button. For
-each set of parameters, the program clusters the localisations and assigns to each localisation a (cluster) label. Then,
-the software scores each calculated cluster result against a Gaussian model. The scores ('r_vs_thresh') and labels are
+and DBSCAN clustering are more sensitive to parameter selection compared to ToMATo [[2]](#2). Instead of choosing single
+datasets for the analysis, the user chooses an entire dataset folder by picking a random dataset within this folder. The
+GUI then helps the user select the correct columns for the analysis by displaying the selected dataset's top part. The
+program loops through the given radius and threshold sequences after the user presses the start button. For each set of
+parameters, the program clusters the localisations and assigns a (cluster) label to each localization. Then, the
+software scores each calculated cluster result against a Gaussian model. The scores ('r_vs_thresh') and labels are
 stored in the hdf5 file along with the dataset information.
 
-On Unix systems (any Linux or OS distribution) with multiple cores, the processing time can be improved by parallelising
+On Unix systems (any Linux or OS distribution) with multiple cores, the processing time can be improved by parallelizing
 the clustering calculations. Note here that this option is not available on Windows machines right now.
 
 ## Module 3: Bayesian postprocessing
@@ -120,23 +123,23 @@ the clustering calculations. Note here that this option is not available on Wind
 ![alt text](readme_images/post_20.png "Screenshot of the postprocessing module")
 
 In the third module of this software for Bayesian clustering, various clustering parameters, e.i. the area of the
-clusters or their density, are calculated for the best cluster parameter set. This application can analyse an entire
+clusters or their density, are calculated for the best cluster parameter set. This application can analyze an entire
 folder of datasets with the same experimental conditions and therefore may offer histograms summarising the respective
 condition. The GUI displays the clustered localisations of a random dataset in the folder as a scatter plot and
 histograms for the different cluster parameters. The software automatically stores the data for these plots in the hdf5
-file. However, the user must tell the software whether it should automatically create and store the corresponding
-scatterplots and histograms as png, eps and pdf files. Since the GUI displays the plotted data and allows for their
-formatting, the user can save the plots individually as well.
+file. However, the user must tell the software whether to automatically create and store the corresponding scatterplots
+and histograms as png, eps, and pdf files. Since the GUI displays the plotted data and allows for their formatting, the
+user also can save the plots individually.
 
 ## Data format
 
-The Bayesian software uses the hdf5 file format to manage and store the datasets, and the data gathered during the
+The Bayesian software uses the hdf5 file format to manage and store the datasets and the data gathered during the
 Bayesian analysis. Each dataset has all its information stored in a single file, keeping the number of stored files to a
-minimum, while keeping the “raw” localizations unchanged. Later access to the data in the hdf5 file is possible with any
+minimum while keeping the “raw” localizations unchanged. Later access to the data in the hdf5 file is possible with any
 standard hdf5 library. The following part will explain the file structure for users interested in accessing the file
-with ofter software tools.
+with other software tools.
 
-The localisation table is stored in `data`, and the column names are stored as its attribute `colnames`. The labels for
+The localization table is stored in `data`, and the column names are stored as its attribute `colnames`. The labels for
 the different parameter combinations are stored in the `label`-group. The scores of the Bayesian analysis are stored in
 a matrix called `r_vs_thresh`. The columns are the radius sequence, and the rows are the threshold sequence. In the hdf5
 file, these names are stored as attributes to the `r_vs_thresh` dataset. The parameter set of the best cluster result
@@ -154,13 +157,9 @@ analysis, the folder should be duplicated.
 The final histograms are stored in a separate folder named `postprocessing`.
 
 # Contributing
-
-# Acknowledgement
-
-**I need to write this part soon**
+For feature requests or bug reports, please post them on the GitHub issue tracker.
 
 # Citing BaClAva
-
 If you use BaClAva in your research, please cite: **add bioRxiv**
 
 # Literature:
