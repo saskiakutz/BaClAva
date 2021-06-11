@@ -1,16 +1,23 @@
-import sys
-from PyQt5 import QtWidgets as qtw
-from PyQt5 import QtGui as qtg
+# Title     : View for module 1b
+# Objective : View setup of module 1b
+# Written by: Saskia Kutz
+
 from PyQt5 import QtCore as qtc
+from PyQt5 import QtGui as qtg
+from PyQt5 import QtWidgets as qtw
 
 
 class ViewSMLM(qtw.QWidget):
+    """View part of module 1b"""
+
     submitted = qtc.pyqtSignal(object)
     start_STORM = qtc.pyqtSignal()
     cancel_STORM = qtc.pyqtSignal()
 
     # noinspection PyArgumentList
     def __init__(self):
+        """Setup of all GUI sections and options"""
+
         super().__init__()
         self.setLayout(qtw.QFormLayout())
 
@@ -173,6 +180,8 @@ class ViewSMLM(qtw.QWidget):
         self.layout().addRow(button_layout)
 
     def save_file(self):
+        """storage directory"""
+
         filename = qtw.QFileDialog.getExistingDirectory(
             self,
             "Select directory",
@@ -181,6 +190,11 @@ class ViewSMLM(qtw.QWidget):
         self.dir_line.setText(filename)
 
     def start_sim(self):
+        """start the simulation:
+        - data collection from input
+        - data emission
+        """
+
         data = {
             'directory': self.dir_line.text(),
             'n_clusters': self.inputs['number of clusters'].value(),
@@ -207,7 +221,6 @@ class ViewSMLM(qtw.QWidget):
         self.submitted.emit(data)
 
     def show_error(self, error):
-        qtw.QMessageBox.critical(None, 'Error', error)
+        """error message in separate window"""
 
-    # TODO: cancel button?
-    # import stored sim_parameters.txt
+        qtw.QMessageBox.critical(None, 'Error', error)
