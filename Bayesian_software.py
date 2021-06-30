@@ -59,11 +59,6 @@ class MainWindow(qtw.QMainWindow):
         # End main UI code
         self.show()
 
-    # def set_statusbar(self):
-    #     # self.message = message
-    #     print('Simulation finished')
-    #     self.view.status_bar.showMessage('Simulation finished')
-
 
 if __name__ == '__main__':
     app = qtw.QApplication(sys.argv)
