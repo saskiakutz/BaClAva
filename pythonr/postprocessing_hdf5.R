@@ -134,7 +134,7 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots, flipped) {
       colnames(trans_s) <- c("x", "y", "sd", "nmol")
       if (!is.null(s) & s[1] != -1) {
         write_df_hdf5(file, trans_s, 'cluster-statistics')
-        write_metadata_df(file, names(trans_s), 'cluster-statistics', 'colnames')
+        write_metadata_df(file, colnames(trans_s), 'cluster-statistics', 'colnames')
       }
 
       if (makeplot == TRUE) {
