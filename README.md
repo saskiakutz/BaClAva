@@ -2,8 +2,6 @@
 
 ![alt text](readme_images/logo.png "BaClAva logo")
 
-![alt text](readme_images/logo.png "BaClAva logo")
-
 ## About the Bayesian software BaClAva:
 
 Bayesian software BaClAva (Bayesian Cluster Analysis and Visualisation Application) is a software tool with a graphic
