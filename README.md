@@ -2,6 +2,8 @@
 
 ![alt text](readme_images/logo.png "BaClAva logo")
 
+![alt text](readme_images/logo.png "BaClAva logo")
+
 ## About the Bayesian software BaClAva:
 
 Bayesian software BaClAva (Bayesian Cluster Analysis and Visualisation Application) is a software tool with a graphic
@@ -160,7 +162,11 @@ The final histograms are stored in a separate folder named `postprocessing`.
 For feature requests or bug reports, please post them on the GitHub issue tracker.
 
 # Citing BaClAva
-If you use BaClAva in your research, please cite: **add bioRxiv**
+If you use BaClAva in your research, please cite the pre-print:
+
+An efficient GUI-based clustering software for simulation and Bayesian cluster analysis of single-molecule localization microscopy data<br/>
+Saskia Kutz, Ando C. Zehrer, Roman Svetlitckii, Gülce S. Gülcüler Balta, Lucrezia Galli, Susanne Kleber, Ana Martin-Villalba, Helge Ewers<br/>
+bioRxiv 2021.06.11.447933; doi: https://doi.org/10.1101/2021.06.11.447933 
 
 # Literature:
 
