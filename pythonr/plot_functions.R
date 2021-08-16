@@ -79,36 +79,6 @@ hist_plot <- function(res, nexpname, plotcreation) {
 
           den_name <- paste0('densityplot_', names(res[[1]][j]))
           plot_save(den_plot, nexpname, den_name)
-          # ggsave(file.path(
-          #     paste0(
-          #       nexpname,
-          #       "/",
-          #       "densityplot_",
-          #       names(res[[1]][j]),
-          #       ".pdf",
-          #       sep = ""
-          #     )
-          #   ),
-          #          width = 5,
-          #          height = 5)
-          # ggsave(file.path(
-          #     paste0(
-          #       nexpname,
-          #       "/",
-          #       "densityplot_",
-          #       names(res[[1]][j]),
-          #       ".eps",
-          #       sep = ""
-          #     )
-          #   ),
-          #
-          #          width = 5,
-          #          height = 5)
-          # ggsave(file.path(paste0(
-          #     nexpname, "/", "densityplot_", names(res[[1]][j]), ".png", sep = ""
-          #   )),
-          #          width = 5,
-          #          height = 5)
         }
       }
 
