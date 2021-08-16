@@ -66,26 +66,16 @@ class ViewPost(qtw.QWidget):
         parameter_layout.addRow(self.dir_btn, self.dir_line)
 
         self.p_inputs = {
-            # "datasource": qtw.QComboBox(),
-            # "Bayesian computation": qtw.QComboBox(),
             "store plots": qtw.QCheckBox(),
             "superplot": qtw.QCheckBox(),
             "separate plots": qtw.QCheckBox(),
             "flip y-axis": qtw.QCheckBox()
         }
 
-        # datasource = ('simulation', 'experiment')
-        # self.p_inputs["datasource"].addItems(datasource)
-
-        # computation = ('sequential', 'parallel')
-        # self.p_inputs["Bayesian computation"].addItems(computation)
-
         self.p_inputs["superplot"].setDisabled(True)
         self.p_inputs["separate plots"].setDisabled(True)
         self.p_inputs["store plots"].toggled.connect(self.p_inputs["superplot"].setEnabled)
         self.p_inputs["store plots"].toggled.connect(self.p_inputs["separate plots"].setEnabled)
-        # self.p_inputs["store plots"].toggled.connect(self.change_plot_options)
-        # self.p_inputs["datasource"].currentIndexChanged.connect(self.change_plot_options)
 
         for label, widget in self.p_inputs.items():
             parameter_layout.addRow(label, widget)
@@ -111,7 +101,6 @@ class ViewPost(qtw.QWidget):
         button_layout.addWidget(self.cancel_btn)
         main_layout.addLayout(button_layout)
 
-        # plot_layout = qtw.QVBoxLayout()
         plot_layout = qtw.QGridLayout()
 
         # area_number_layout = qtw.QHBoxLayout()
