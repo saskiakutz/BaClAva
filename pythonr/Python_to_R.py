@@ -125,9 +125,12 @@ class PythonToR:
 
         self.r.source("./pythonr/postprocessing_hdf5.R")
         numpy2ri.activate()
+        storage_endings = np.array(input_dic.get('options'))
+        print(storage_endings)
         self.r.post_fun(
             newfolder=input_dic.get('directory'),
             makeplot=BoolVector([input_dic.get('storeplots')]),
+            storage=storage_endings,
             superplot=BoolVector([input_dic.get('superplot')]),
             separateplots=BoolVector([input_dic.get('separateplots')]),
             flipped=BoolVector([input_dic.get('flipped_y')])
