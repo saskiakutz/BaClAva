@@ -200,10 +200,8 @@ class ViewPost(qtw.QWidget):
             # 'datasource': self.p_inputs["datasource"].currentText(),
             # 'computation': self.p_inputs["Bayesian computation"].currentText(),
             'storeplots': self.p_inputs["store plots"].isChecked(),
-            'png': self.storage_inputs[0].isChecked(),
-            'pdf': self.storage_inputs[1].isChecked(),
-            'eps': self.storage_inputs[2].isChecked(),
-            'svg': self.storage_inputs[3].isChecked(),
+            'options': [self.storage_inputs[0].isChecked(), self.storage_inputs[1].isChecked(),
+                        self.storage_inputs[2].isChecked(), self.storage_inputs[3].isChecked()],
             'superplot': self.p_inputs["superplot"].isChecked(),
             'separateplots': self.p_inputs["separate plots"].isChecked(),
             'flipped_y': self.p_inputs["flip y-axis"].isChecked()
