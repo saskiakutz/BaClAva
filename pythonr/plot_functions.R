@@ -45,18 +45,19 @@ hist_plot <- function(res, nexpname, plotcreation) {
               panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(),
               panel.background = element_rect(fill = "white") #
-            ) +
-            ggsave(file.path(
+            )
+
+          ggsave(file.path(
               paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".pdf", sep = "")
             ),
                    width = 5,
-                   height = 5) +
-            ggsave(file.path(
+                   height = 5)
+          ggsave(file.path(
               paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".eps", sep = "")
             ),
                    width = 5,
-                   height = 5) +
-            ggsave(file.path(
+                   height = 5)
+          ggsave(file.path(
               paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".png", sep = "")
             ),
                    width = 5,
@@ -77,18 +78,18 @@ hist_plot <- function(res, nexpname, plotcreation) {
                 panel.grid.major = element_blank(),
                 panel.grid.minor = element_blank(),
                 panel.background = element_rect(fill = "white") #
-              ) +
-              ggsave(file.path(
+              )
+            ggsave(file.path(
                 paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".pdf", sep = "")
               ),
                      width = 5,
-                     height = 5) +
-              ggsave(file.path(
+                     height = 5)
+            ggsave(file.path(
                 paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".eps", sep = "")
               ),
                      width = 5,
-                     height = 5) +
-              ggsave(file.path(
+                     height = 5)
+            ggsave(file.path(
                 paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".png", sep = "")
               ),
                      width = 5,
@@ -100,9 +101,9 @@ hist_plot <- function(res, nexpname, plotcreation) {
             aes(datavec) +
             geom_density() +
             labs(x = k[1]) +
-            theme_bw() +
+            theme_bw()
             #geom_vline(xintercept = density(datavec)$x[which.max(density(datavec)$y)]) +
-            ggsave(file.path(
+          ggsave(file.path(
               paste0(
                 nexpname,
                 "/",
@@ -113,8 +114,8 @@ hist_plot <- function(res, nexpname, plotcreation) {
               )
             ),
                    width = 5,
-                   height = 5) +
-            ggsave(file.path(
+                   height = 5)
+          ggsave(file.path(
               paste0(
                 nexpname,
                 "/",
@@ -126,8 +127,8 @@ hist_plot <- function(res, nexpname, plotcreation) {
             ),
 
                    width = 5,
-                   height = 5) +
-            ggsave(file.path(paste0(
+                   height = 5)
+          ggsave(file.path(paste0(
               nexpname, "/", "densityplot_", names(res[[1]][j]), ".png", sep = ""
             )),
                    width = 5,
@@ -184,18 +185,19 @@ hist_plot_fix_limits <-
               panel.grid.major = element_blank(),
               panel.grid.minor = element_blank(),
               panel.background = element_rect(fill = "white") #
-            ) +
-            ggsave(file.path(
+            )
+
+          ggsave(file.path(
               paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".pdf", sep = "")
             ),
                    width = 5,
-                   height = 5) +
-            ggsave(file.path(
+                   height = 5)
+          ggsave(file.path(
               paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".eps", sep = "")
             ),
                    width = 5,
-                   height = 5) +
-            ggsave(file.path(
+                   height = 5)
+          ggsave(file.path(
               paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".png", sep = "")
             ),
                    width = 5,
@@ -209,18 +211,18 @@ hist_plot_fix_limits <-
               labs(x = k[1], y = k[2]) +
               xlim(xminimum, xmaximum) +
               ylim(yminimum, ymaximum) +
-              theme_bw(base_size = 24) +
-              ggsave(file.path(
+              theme_bw(base_size = 24)
+            ggsave(file.path(
                 paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".pdf", sep = "")
               ),
                      width = 5,
-                     height = 5) +
-              ggsave(file.path(
+                     height = 5)
+            ggsave(file.path(
                 paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".eps", sep = "")
               ),
                      width = 5,
-                     height = 5) +
-              ggsave(file.path(
+                     height = 5)
+            ggsave(file.path(
                 paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".png", sep = "")
               ),
                      width = 5,
@@ -290,15 +292,15 @@ cluster_superplot <- function(results, dirnames, expname, gg_plot_name) {
 }
 
 plot_save <- function(gg_plot, expname, gg_plot_name, plot_height = 45, plot_width = 45, unit = "mm") {
-  # saving a plot in pdf, epx and png format
-
-  gg_plot +
+  # saving a plot in pdf, eps, svg, and png format
     ggsave(file.path(paste0(
       expname, "/", gg_plot_name, ".pdf", sep = ""
-    )), width = plot_width, height = plot_height, units = unit) +
+    )), width = plot_width, height = plot_height, units = unit)
+
     ggsave(file.path(paste0(
       expname, "/", gg_plot_name, ".eps", sep = ""
-    )), width = plot_width, height = plot_height, units = unit) +
+    )), width = plot_width, height = plot_height, units = unit)
+
     ggsave(file.path(paste0(
       expname, "/", gg_plot_name, ".png", sep = ""
     )), width = plot_width, height = plot_height, units = unit)
