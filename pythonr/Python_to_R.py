@@ -117,37 +117,33 @@ class PythonToR:
             bayes_background=input_dic.get('background')
         )
 
-    numpy2ri.deactivate()
-    print("done")
-
-
-def r_post_processing(self, input_dic):
-    """data preparation and connection to postprocessing part of module 3"""
-
-    self.r.source("./pythonr/postprocessing_hdf5.R")
-    numpy2ri.activate()
-    self.r.post_fun(
-        newfolder=input_dic.get('directory'),
-        # datasource=input_dic.get('datasource'),
-        # process=input_dic.get('computation'),
-        makeplot=BoolVector([input_dic.get('storeplots')]),
-        superplot=BoolVector([input_dic.get('superplot')]),
-        separateplots=BoolVector([input_dic.get('separateplots')]),
-        flipped=BoolVector([input_dic.get('flipped_y')])
-    )
-    numpy2ri.deactivate()
-    print("done")
-
-
-def check_dataset_type(self, directory):
-    """check for data type and converting to hdf5 if necessary"""
-
-    onlyfiles = [f for f in listdir(directory) if
-                 isfile(join(directory, f)) and f not in ['sim_parameters.txt', 'run_config.txt', ]]
-    convertfiles = [f for f in onlyfiles if
-                    (f.endswith('.txt') or f.endswith('.csv')) and not f.endswith('summary.txt')]
-    if convertfiles:
-        self.r.source('./pythonr/convert.R')
-        numpy2ri.activate()
-        self.r.convert_hdf5(directory, convertfiles)
         numpy2ri.deactivate()
+        print("done")
+
+    def r_post_processing(self, input_dic):
+        """data preparation and connection to postprocessing part of module 3"""
+
+        self.r.source("./pythonr/postprocessing_hdf5.R")
+        numpy2ri.activate()
+        self.r.post_fun(
+            newfolder=input_dic.get('directory'),
+            makeplot=BoolVector([input_dic.get('storeplots')]),
+            superplot=BoolVector([input_dic.get('superplot')]),
+            separateplots=BoolVector([input_dic.get('separateplots')]),
+            flipped=BoolVector([input_dic.get('flipped_y')])
+        )
+        numpy2ri.deactivate()
+        print("done")
+
+    def check_dataset_type(self, directory):
+        """check for data type and converting to hdf5 if necessary"""
+
+        onlyfiles = [f for f in listdir(directory) if
+                     isfile(join(directory, f)) and f not in ['sim_parameters.txt', 'run_config.txt', ]]
+        convertfiles = [f for f in onlyfiles if
+                        (f.endswith('.txt') or f.endswith('.csv')) and not f.endswith('summary.txt')]
+        if convertfiles:
+            self.r.source('./pythonr/convert.R')
+            numpy2ri.activate()
+            self.r.convert_hdf5(directory, convertfiles)
+            numpy2ri.deactivate()
