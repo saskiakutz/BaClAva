@@ -16,12 +16,13 @@ software delivers clustering analysis with actively minimized user bias and sign
 ## Table of content:
 
 - [Installation](#Installation)
-  - [Developer installation](#Developer-installation)
+    - [Developer installation](#Developer-installation)
 - [Software overview](#Software-overview)
-  - [Module 1: Simulation tool](#Module-1-Simulation-tools)
-  - [Module 2: Bayesian calculations](#Module-2-Bayesian-calculations)
-  - [Module 3: Bayesian postprocessing](#Module-3-Bayesian-postprocessing)
-  - [Data format](#Data-format)
+    - [Module 1: Simulation tool](#Module-1-Simulation-tools)
+    - [Module 2: Bayesian calculations](#Module-2-Bayesian-calculations)
+    - [Module 3: Bayesian postprocessing](#Module-3-Bayesian-postprocessing)
+    - [Data format](#Data-format)
+- [Usage](#Usage)
 - [Contributing](#Contributing)
 - [Acknowledgement](#Acknowledgment)
 - [Citing BaClAva](#Citing-BaClAva)
@@ -40,8 +41,12 @@ package manager and PyCharm as the IDE because it can handle Python and R code.
 ### Environment
 
 If you use PyCharm, follow the VCS (Version Control System) path to install BaClAva directly from GitHub and create a
-Python environment. Install all packages in the `requirements.txt` via `pip install -r requirements.txt`. If you use
-PyCharm, the IDE automatically to install all packages and choose a conda environment, you need to install `rpy2`
+Python environment. An Anaconda environment can be created via `conda create --name baclava_environment`
+where `baclava_environment` can be your preferred name. Afterwards, start your environment
+via `conda activate baclava_environment`.
+
+Install all packages in the `requirements.txt` via `pip install -r requirements.txt`. If you use PyCharm, the IDE
+automatically to install all packages and choose a conda environment, you need to install `rpy2`
 via `pip install rpy2` because it is currently not part of Anaconda.
 
 If you work on a **Linux** machine, it might be that you need to install the C++ engine
@@ -55,9 +60,6 @@ file `packages_list.R` installs all R packages. The package for the hdf5 handlin
 installation. Therefore, install `BiocManager (install.packages("BiocManager")`
 and `rhdf5 BiocManager::install("rhdf5")` by hand. If any other packages raise an error message, check out the error
 messages and install them individually.
-
-In order to use BaClAva, start it from the IDE or terminal, but make sure that you have the correct environment
-activated.
 
 # Software overview:
 
@@ -156,15 +158,27 @@ analysis, the folder should be duplicated.
 
 The final histograms are stored in a separate folder named `postprocessing`.
 
+# Usage
+
+You can use BaClAva via your terminal or your preferred IDE. In either case, you first need to make sure that you have
+the correct python environment activated. You can start your python environment by
+writing `conda activate baclava_environment` when Anaconda is installed on your computer. Then,
+start `Bayesian_software.py` from the IDE or type `python Bayesian_software.py` in the terminal. A GUI interface with a
+tab for each module will pop up on your screen.
+
 # Contributing
+
 For feature requests or bug reports, please post them on the GitHub issue tracker.
 
 # Citing BaClAva
+
 If you use BaClAva in your research, please cite the pre-print:
 
-An efficient GUI-based clustering software for simulation and Bayesian cluster analysis of single-molecule localization microscopy data<br/>
-Saskia Kutz, Ando C. Zehrer, Roman Svetlitckii, Gülce S. Gülcüler Balta, Lucrezia Galli, Susanne Kleber, Ana Martin-Villalba, Helge Ewers<br/>
-bioRxiv 2021.06.11.447933; doi: https://doi.org/10.1101/2021.06.11.447933 
+An efficient GUI-based clustering software for simulation and Bayesian cluster analysis of single-molecule localization
+microscopy data<br/>
+Saskia Kutz, Ando C. Zehrer, Roman Svetlitckii, Gülce S. Gülcüler Balta, Lucrezia Galli, Susanne Kleber, Ana
+Martin-Villalba, Helge Ewers<br/>
+bioRxiv 2021.06.11.447933; doi: https://doi.org/10.1101/2021.06.11.447933
 
 # Literature:
 
