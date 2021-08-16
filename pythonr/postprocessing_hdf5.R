@@ -3,7 +3,7 @@
 # Adapted from: Griffié et al.
 # Apated and written by: Saskia Kutz
 
-post_fun <- function(newfolder, makeplot, superplot, separateplots, flipped) {
+post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, flipped) {
   source("./pythonr/package_list.R")
   source("./pythonr/exporting_hdf5.R")
   source("./pythonr/internal_postporcessing.R")
