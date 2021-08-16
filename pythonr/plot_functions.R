@@ -32,7 +32,7 @@ hist_plot <- function(res, nexpname, plotcreation) {
       if (plotcreation) {
         tryCatch({
           bw <- 2 * IQR(datavec) / length(datavec)^(1 / 3)
-          ggplot() +
+          hist_data <- ggplot() +
             aes(datavec) +
             geom_histogram(binwidth = bw) +
             labs(x = k[1], y = k[2]) +
@@ -46,26 +46,27 @@ hist_plot <- function(res, nexpname, plotcreation) {
               panel.grid.minor = element_blank(),
               panel.background = element_rect(fill = "white") #
             )
-
-          ggsave(file.path(
-              paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".pdf", sep = "")
-            ),
-                   width = 5,
-                   height = 5)
-          ggsave(file.path(
-              paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".eps", sep = "")
-            ),
-                   width = 5,
-                   height = 5)
-          ggsave(file.path(
-              paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".png", sep = "")
-            ),
-                   width = 5,
-                   height = 5)
+          hist_name <- paste0('histogram_', names(res[[1]][j]))
+          plot_save(hist_data, nexpname, hist_name)
+          # ggsave(file.path(
+          #     paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".pdf", sep = "")
+          #   ),
+          #          width = 5,
+          #          height = 5)
+          # ggsave(file.path(
+          #     paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".eps", sep = "")
+          #   ),
+          #          width = 5,
+          #          height = 5)
+          # ggsave(file.path(
+          #     paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".png", sep = "")
+          #   ),
+          #          width = 5,
+          #          height = 5)
         },
           warning = function(w) {
             bw <- 1
-            ggplot() +
+            hist_data_w <- ggplot() +
               aes(datavec) +
               geom_histogram(binwidth = bw) +
               labs(x = k[1], y = k[2]) +
@@ -79,21 +80,23 @@ hist_plot <- function(res, nexpname, plotcreation) {
                 panel.grid.minor = element_blank(),
                 panel.background = element_rect(fill = "white") #
               )
-            ggsave(file.path(
-                paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".pdf", sep = "")
-              ),
-                     width = 5,
-                     height = 5)
-            ggsave(file.path(
-                paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".eps", sep = "")
-              ),
-                     width = 5,
-                     height = 5)
-            ggsave(file.path(
-                paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".png", sep = "")
-              ),
-                     width = 5,
-                     height = 5)
+            hist_name_w <- paste0('histogram_', names(res[[1]][j]))
+            plot_save(hist_data_w, nexpname, hist_name_w)
+            # ggsave(file.path(
+            #     paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".pdf", sep = "")
+            #   ),
+            #          width = 5,
+            #          height = 5)
+            # ggsave(file.path(
+            #     paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".eps", sep = "")
+            #   ),
+            #          width = 5,
+            #          height = 5)
+            # ggsave(file.path(
+            #     paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".png", sep = "")
+            #   ),
+            #          width = 5,
+            #          height = 5)
           })
 
         if (length(datavec) > 1) {
