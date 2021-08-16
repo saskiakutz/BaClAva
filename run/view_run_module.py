@@ -45,7 +45,7 @@ class ViewRun(qtw.QWidget):
         roi_layout_x = qtw.QHBoxLayout()
         roi_layout_x.layout().addWidget(self.roi_x_min)
         roi_layout_x.layout().addWidget(self.roi_x_max)
-        #
+
         self.roi_y_min = qtw.QSpinBox(
             self,
             minimum=0,
@@ -146,7 +146,7 @@ class ViewRun(qtw.QWidget):
         datasources = ('simulation', 'experiment')
         self.b_inputs["datasource"].addItems(datasources)
 
-        clustermethods = ("ToMATo", "DBSCAN", "Ripley' K based", "DMSCBAN 2")
+        clustermethods = ("ToMATo", "DBSCAN", "Ripley' K based", "DBSCAN 2")
         self.b_inputs["clustermethod"].addItems(clustermethods)
 
         if os.name == 'nt':
