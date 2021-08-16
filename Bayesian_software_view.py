@@ -7,9 +7,9 @@ from modules.module_three_post import MainWindowPost
 
 
 class ViewSoftware(qtw.QWidget):
-
     # noinspection PyArgumentList
     def __init__(self):
+        """setting up the layout of the GUI and connecting the modules to each tab"""
         super().__init__()
 
         self.main_layout = qtw.QVBoxLayout()
