@@ -7,6 +7,11 @@ from Bayesian_software_view import ViewSoftware
 
 
 class ModuleWindow(qtw.QMainWindow):
+    """
+    Main class for
+    - starting the main GUI window and its menubar
+    - connecting all modules start and finish signals with the statusbar update
+    """
 
     def __init__(self):
         super().__init__()
