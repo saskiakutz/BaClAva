@@ -246,19 +246,32 @@ cluster_superplot <- function(results, dirnames, expname, gg_plot_name) {
   plot_save(super_plot, expname, gg_plot_name, plot_height = 5, plot_width = 10)
 }
 
-plot_save <- function(gg_plot, expname, gg_plot_name, plot_height = 45, plot_width = 45, unit = "mm") {
+plot_save <- function(gg_plot, expname, gg_plot_name, storage_opt = list(), plot_height = 45, plot_width = 45, unit = "mm") {
   # saving a plot in pdf, eps, svg, and png format
-  ggsave(file.path(paste0(
-    expname, "/", gg_plot_name, ".pdf", sep = ""
-  )), width = plot_width, height = plot_height, units = unit)
-
-  ggsave(file.path(paste0(
-    expname, "/", gg_plot_name, ".eps", sep = ""
-  )), width = plot_width, height = plot_height, units = unit)
-
-  ggsave(file.path(paste0(
-    expname, "/", gg_plot_name, ".png", sep = ""
-  )), width = plot_width, height = plot_height, units = unit)
+  for (ind in seq_along(storage_opt)) {
+    if (storage_opt[[ind]] == TRUE) {
+      ending <- case_when(
+        ind == 1 ~ '.png',
+        ind == 2 ~ '.pdf',
+        ind == 3 ~ '.eps',
+        ind == 4 ~ '.svg'
+      )
+      ggsave(file.path(paste0(
+        expname, "/", gg_plot_name, ending, sep = ""
+      )), width = plot_width, height = plot_height, units = unit)
+    }
+  }
+  # ggsave(file.path(paste0(
+  #   expname, "/", gg_plot_name, ".pdf", sep = ""
+  # )), width = plot_width, height = plot_height, units = unit)
+  #
+  # ggsave(file.path(paste0(
+  #   expname, "/", gg_plot_name, ".eps", sep = ""
+  # )), width = plot_width, height = plot_height, units = unit)
+  #
+  # ggsave(file.path(paste0(
+  #   expname, "/", gg_plot_name, ".png", sep = ""
+  # )), width = plot_width, height = plot_height, units = unit)
 }
 
 ground_truth_plot <- function(pts, colourlabels, title) {
