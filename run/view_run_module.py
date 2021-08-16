@@ -110,7 +110,7 @@ class ViewRun(qtw.QWidget):
         self.b_inputs["model"].addItems(models)
         self.b_inputs["model"].model().item(1).setEnabled(False)
 
-        datasources = ('simulation', 'experiment')
+        datasources = ('simulation (module 1a)', 'localised data (experiment or module 1b)')
         self.b_inputs["datasource"].addItems(datasources)
 
         clustermethods = ("ToMATo", "DBSCAN", "Ripley' K based", "DBSCAN 2")
@@ -216,7 +216,7 @@ class ViewRun(qtw.QWidget):
             # self.model = TableModel(filename)
             self.model = DataFrameModel(filename)
             self.tableview.setModel(self.model)
-            if self.b_inputs['datasource'].currentText() == "simulation":
+            if self.b_inputs['datasource'].currentText() == "simulation (module 1a)":
                 if filename.split('.')[1] == 'h5':
                     self.dir_line.setText(os.path.dirname(filename))
                 else:
