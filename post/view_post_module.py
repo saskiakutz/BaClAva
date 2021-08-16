@@ -65,8 +65,25 @@ class ViewPost(qtw.QWidget):
 
         parameter_layout.addRow(self.dir_btn, self.dir_line)
 
+        storage_options = qtw.QHBoxLayout()
+
+        self.storage_inputs = [
+            qtw.QCheckBox("png"),
+            qtw.QCheckBox("pdf"),
+            qtw.QCheckBox("eps"),
+            qtw.QCheckBox("svg")
+        ]
+
+        for widget in self.storage_inputs:
+            widget.setSizePolicy(
+                qtw.QSizePolicy.Fixed,
+                qtw.QSizePolicy.Fixed
+            )
+            storage_options.addWidget(widget)
+
         self.p_inputs = {
             "store plots": qtw.QCheckBox(),
+            "options": storage_options,
             "superplot": qtw.QCheckBox(),
             "separate plots": qtw.QCheckBox(),
             "flip y-axis": qtw.QCheckBox()
