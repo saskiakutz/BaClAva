@@ -70,42 +70,45 @@ hist_plot <- function(res, nexpname, plotcreation) {
           })
 
         if (length(datavec) > 1) {
-          ggplot() +
+          den_plot <- ggplot() +
             aes(datavec) +
             geom_density() +
             labs(x = k[1]) +
             theme_bw()
-            #geom_vline(xintercept = density(datavec)$x[which.max(density(datavec)$y)]) +
-          ggsave(file.path(
-              paste0(
-                nexpname,
-                "/",
-                "densityplot_",
-                names(res[[1]][j]),
-                ".pdf",
-                sep = ""
-              )
-            ),
-                   width = 5,
-                   height = 5)
-          ggsave(file.path(
-              paste0(
-                nexpname,
-                "/",
-                "densityplot_",
-                names(res[[1]][j]),
-                ".eps",
-                sep = ""
-              )
-            ),
+            #geom_vline(xintercept = density(datavec)$x[which.max(density(datavec)$y)])
 
-                   width = 5,
-                   height = 5)
-          ggsave(file.path(paste0(
-              nexpname, "/", "densityplot_", names(res[[1]][j]), ".png", sep = ""
-            )),
-                   width = 5,
-                   height = 5)
+          den_name <- paste0('densityplot_', names(res[[1]][j]))
+          plot_save(den_plot, nexpname, den_name)
+          # ggsave(file.path(
+          #     paste0(
+          #       nexpname,
+          #       "/",
+          #       "densityplot_",
+          #       names(res[[1]][j]),
+          #       ".pdf",
+          #       sep = ""
+          #     )
+          #   ),
+          #          width = 5,
+          #          height = 5)
+          # ggsave(file.path(
+          #     paste0(
+          #       nexpname,
+          #       "/",
+          #       "densityplot_",
+          #       names(res[[1]][j]),
+          #       ".eps",
+          #       sep = ""
+          #     )
+          #   ),
+          #
+          #          width = 5,
+          #          height = 5)
+          # ggsave(file.path(paste0(
+          #     nexpname, "/", "densityplot_", names(res[[1]][j]), ".png", sep = ""
+          #   )),
+          #          width = 5,
+          #          height = 5)
         }
       }
 
