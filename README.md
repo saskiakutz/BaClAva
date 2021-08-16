@@ -167,7 +167,7 @@ start `Bayesian_software.py` from the IDE or type `python Bayesian_software.py` 
 tab for each module will pop up on your screen.
 
 Go to the tab of your choice, choose your parameters and press start. The status bar will indicate the state of your
-operation. Keep in mind, that none of the module will work without a storage directory.
+operation. Keep in mind, that none of the modules will work without a storage directory.
 
 # Contributing
 
