@@ -74,8 +74,17 @@ hist_plot <- function(res, nexpname, plotcreation) {
             aes(datavec) +
             geom_density() +
             labs(x = k[1]) +
-            theme_bw()
-            #geom_vline(xintercept = density(datavec)$x[which.max(density(datavec)$y)])
+            theme_bw() +
+            theme(
+              axis.text = element_text(size = 8),
+              plot.title = element_text(size = 8),
+              axis.title = element_text(size = 8),
+              panel.border = element_rect(size = 1),
+              panel.grid.major = element_blank(),
+              panel.grid.minor = element_blank(),
+              panel.background = element_rect(fill = "white") #
+            )
+          #geom_vline(xintercept = density(datavec)$x[which.max(density(datavec)$y)])
 
           den_name <- paste0('densityplot_', names(res[[1]][j]))
           plot_save(den_plot, nexpname, den_name)
@@ -134,20 +143,20 @@ hist_plot_fix_limits <-
             )
 
           ggsave(file.path(
-              paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".pdf", sep = "")
-            ),
-                   width = 5,
-                   height = 5)
+            paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".pdf", sep = "")
+          ),
+                 width = 5,
+                 height = 5)
           ggsave(file.path(
-              paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".eps", sep = "")
-            ),
-                   width = 5,
-                   height = 5)
+            paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".eps", sep = "")
+          ),
+                 width = 5,
+                 height = 5)
           ggsave(file.path(
-              paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".png", sep = "")
-            ),
-                   width = 5,
-                   height = 5)
+            paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".png", sep = "")
+          ),
+                 width = 5,
+                 height = 5)
         },
           warning = function(w) {
             bw <- 2
@@ -159,20 +168,20 @@ hist_plot_fix_limits <-
               ylim(yminimum, ymaximum) +
               theme_bw(base_size = 24)
             ggsave(file.path(
-                paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".pdf", sep = "")
-              ),
-                     width = 5,
-                     height = 5)
+              paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".pdf", sep = "")
+            ),
+                   width = 5,
+                   height = 5)
             ggsave(file.path(
-                paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".eps", sep = "")
-              ),
-                     width = 5,
-                     height = 5)
+              paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".eps", sep = "")
+            ),
+                   width = 5,
+                   height = 5)
             ggsave(file.path(
-                paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".png", sep = "")
-              ),
-                     width = 5,
-                     height = 5)
+              paste0(nexpname, "/", names(res[[1]][j]), "_fixlimits", ".png", sep = "")
+            ),
+                   width = 5,
+                   height = 5)
           })
       }
     }
@@ -239,17 +248,17 @@ cluster_superplot <- function(results, dirnames, expname, gg_plot_name) {
 
 plot_save <- function(gg_plot, expname, gg_plot_name, plot_height = 45, plot_width = 45, unit = "mm") {
   # saving a plot in pdf, eps, svg, and png format
-    ggsave(file.path(paste0(
-      expname, "/", gg_plot_name, ".pdf", sep = ""
-    )), width = plot_width, height = plot_height, units = unit)
+  ggsave(file.path(paste0(
+    expname, "/", gg_plot_name, ".pdf", sep = ""
+  )), width = plot_width, height = plot_height, units = unit)
 
-    ggsave(file.path(paste0(
-      expname, "/", gg_plot_name, ".eps", sep = ""
-    )), width = plot_width, height = plot_height, units = unit)
+  ggsave(file.path(paste0(
+    expname, "/", gg_plot_name, ".eps", sep = ""
+  )), width = plot_width, height = plot_height, units = unit)
 
-    ggsave(file.path(paste0(
-      expname, "/", gg_plot_name, ".png", sep = ""
-    )), width = plot_width, height = plot_height, units = unit)
+  ggsave(file.path(paste0(
+    expname, "/", gg_plot_name, ".png", sep = ""
+  )), width = plot_width, height = plot_height, units = unit)
 }
 
 ground_truth_plot <- function(pts, colourlabels, title) {
