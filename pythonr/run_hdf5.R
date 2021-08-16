@@ -70,11 +70,11 @@ run_fun <- function(
       # columns in data
       pts <- datah5$data[, c(datacol[1], datacol[2])]
       sds <- datah5$data[, datacol[3]]
-      if (datasource == "experiment") {
+      # if (datasource == "experiment") {
         # limits of dataset set by the min/max of the localisations
         xlim <- c(min(pts[, 1]), max(pts[, 1]))
         ylim <- c(min(pts[, 2]), max(pts[, 2]))
-      }
+      # }
 
       write_metadata_df(datah5, datacol, 'data', 'datacolumns')
       # did <- H5Dopen(datah5, 'data')

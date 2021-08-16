@@ -11,24 +11,25 @@ post_fun <- function(newfolder, makeplot, superplot, separateplots, flipped) {
   l_ply(newfolder, function(expname) {
     nexpname <- expname
 
-    r <- readLines(con = file.path(paste0(nexpname, "/run_config.txt", sep = "")))
+    run_con <- readLines(con = file.path(paste0(nexpname, "/run_config.txt", sep = "")))
 
-    get <- function(type) {
-      i <- grep(type, r)
-      strsplit(r[i], "=")[[1]][2]
+    get <- function(type, file_name) {
+      i <- grep(type, file_name)
+      strsplit(file_name[i], "=")[[1]][2]
     }
 
-    datasource <- get("datasource")
+    datasource <- get("datasource", run_con)
 
     if (datasource == 'simulation') {
-      xlim <- c(as.numeric(get("roixmin")), as.numeric(get("roixmax")))
-      ylim <- c(as.numeric(get("roiymin")), as.numeric(get("roiymax")))
+      sim_con <- readLines(con = file.path(paste0(nexpname, "/sim_parameters.txt", sep = "")))
+      xlim <- c(as.numeric(get("roixmin", sim_con)), as.numeric(get("roixmax", sim_con)))
+      ylim <- c(as.numeric(get("roiymin", sim_con)), as.numeric(get("roiymax", sim_con)))
     }
-    xcol <- as.numeric(get("xcol"))
-    ycol <- as.numeric(get("ycol"))
-    sdcol <- as.numeric(get("sdcol"))
+    xcol <- as.numeric(get("xcol", run_con))
+    ycol <- as.numeric(get("ycol", run_con))
+    sdcol <- as.numeric(get("sdcol", run_con))
 
-    computation <- as.numeric(get("parallel"))
+    computation <- as.numeric(get("parallel", run_con))
     if (computation == 0) {
       process <- "sequential"
     } else {
