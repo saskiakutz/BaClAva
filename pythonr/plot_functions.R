@@ -1,5 +1,5 @@
 # Title     : Histograms and scatterplots for module 3
-# Objective : Creating and storage of histrams and scatterplots for module 3
+# Objective : Creating and storage of histograms and scatterplots for module 3
 # Written by: Saskia Kutz
 
 # histograms --------------------------------------------------------------
