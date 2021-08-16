@@ -160,6 +160,15 @@ The final histograms are stored in a separate folder named `postprocessing`.
 
 # Usage
 
+## Preparation
+
+For simulation work, there is no preparation necessary.
+
+When working with microscopy or module 1b data, the localisation files should be in one or more folders without any
+additional files. Otherwise, BaClAva might show you an error message.
+
+## Starting BaClAva
+
 You can use BaClAva via your terminal or your preferred IDE. In either case, you first need to make sure that you have
 the correct python environment activated. You can start your python environment by
 writing `conda activate baclava_environment` when Anaconda is installed on your computer. Then,
