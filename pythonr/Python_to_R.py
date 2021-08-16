@@ -99,72 +99,55 @@ class PythonToR:
         else:
             ncores = 0
         numpy2ri.activate()
-        # if input_dic.get('datasource') == 'simulation':
-        #     xlim = np.array([input_dic.get('roixmin'), input_dic.get('roixmax')])
-        #     ylim = np.array([input_dic.get('roiymin'), input_dic.get('roiymax')])
         rseq = np.array([input_dic.get('rmin'), input_dic.get('rmax'), input_dic.get('rstep')])
         thseq = np.array([input_dic.get('thmin'), input_dic.get('thmax'), input_dic.get('thstep')])
         cols = np.array([input_dic.get('xcol'), input_dic.get('ycol'), input_dic.get('sdcol')])
 
-        if input_dic.get('datasource') == 'simulation':
-            self.r.run_fun(
-                newfolder=input_dic.get('directory'),
-                bayes_model=input_dic.get('model'),
-                datasource=input_dic.get('datasource'),
-                clustermethod=input_dic.get('clustermethod'),
-                parallel=status.get('parallel'),
-                cores=ncores,
-                # xlim=xlim,
-                # ylim=ylim,
-                rpar=rseq,
-                thpar=thseq,
-                datacol=cols,
-                dirichlet_alpha=input_dic.get('alpha'),
-                bayes_background=input_dic.get('background')
-            )
-        else:
-            self.r.run_fun(
-                newfolder=input_dic.get('directory'),
-                bayes_model=input_dic.get('model'),
-                datasource=input_dic.get('datasource'),
-                clustermethod=input_dic.get('clustermethod'),
-                parallel=status.get('parallel'),
-                cores=ncores,
-                rpar=rseq,
-                thpar=thseq,
-                datacol=cols,
-                dirichlet_alpha=input_dic.get('alpha'),
-                bayes_background=input_dic.get('background')
-            )
-        numpy2ri.deactivate()
-        print("done")
-
-    def r_post_processing(self, input_dic):
-        """data preparation and connection to postprocessing part of module 3"""
-
-        self.r.source("./pythonr/postprocessing_hdf5.R")
-        numpy2ri.activate()
-        self.r.post_fun(
+        self.r.run_fun(
             newfolder=input_dic.get('directory'),
-            # datasource=input_dic.get('datasource'),
-            # process=input_dic.get('computation'),
-            makeplot=BoolVector([input_dic.get('storeplots')]),
-            superplot=BoolVector([input_dic.get('superplot')]),
-            separateplots=BoolVector([input_dic.get('separateplots')]),
-            flipped=BoolVector([input_dic.get('flipped_y')])
+            bayes_model=input_dic.get('model'),
+            datasource=input_dic.get('datasource'),
+            clustermethod=input_dic.get('clustermethod'),
+            parallel=status.get('parallel'),
+            cores=ncores,
+            rpar=rseq,
+            thpar=thseq,
+            datacol=cols,
+            dirichlet_alpha=input_dic.get('alpha'),
+            bayes_background=input_dic.get('background')
         )
+
+    numpy2ri.deactivate()
+    print("done")
+
+
+def r_post_processing(self, input_dic):
+    """data preparation and connection to postprocessing part of module 3"""
+
+    self.r.source("./pythonr/postprocessing_hdf5.R")
+    numpy2ri.activate()
+    self.r.post_fun(
+        newfolder=input_dic.get('directory'),
+        # datasource=input_dic.get('datasource'),
+        # process=input_dic.get('computation'),
+        makeplot=BoolVector([input_dic.get('storeplots')]),
+        superplot=BoolVector([input_dic.get('superplot')]),
+        separateplots=BoolVector([input_dic.get('separateplots')]),
+        flipped=BoolVector([input_dic.get('flipped_y')])
+    )
+    numpy2ri.deactivate()
+    print("done")
+
+
+def check_dataset_type(self, directory):
+    """check for data type and converting to hdf5 if necessary"""
+
+    onlyfiles = [f for f in listdir(directory) if
+                 isfile(join(directory, f)) and f not in ['sim_parameters.txt', 'run_config.txt', ]]
+    convertfiles = [f for f in onlyfiles if
+                    (f.endswith('.txt') or f.endswith('.csv')) and not f.endswith('summary.txt')]
+    if convertfiles:
+        self.r.source('./pythonr/convert.R')
+        numpy2ri.activate()
+        self.r.convert_hdf5(directory, convertfiles)
         numpy2ri.deactivate()
-        print("done")
-
-    def check_dataset_type(self, directory):
-        """check for data type and converting to hdf5 if necessary"""
-
-        onlyfiles = [f for f in listdir(directory) if
-                     isfile(join(directory, f)) and f not in ['sim_parameters.txt', 'run_config.txt', ]]
-        convertfiles = [f for f in onlyfiles if
-                        (f.endswith('.txt') or f.endswith('.csv')) and not f.endswith('summary.txt')]
-        if convertfiles:
-            self.r.source('./pythonr/convert.R')
-            numpy2ri.activate()
-            self.r.convert_hdf5(directory, convertfiles)
-            numpy2ri.deactivate()
