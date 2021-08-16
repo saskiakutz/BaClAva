@@ -29,38 +29,38 @@ class ViewRun(qtw.QWidget):
 
         parameter_layout = qtw.QFormLayout()
 
-        self.roi_x_min = qtw.QSpinBox(
-            self,
-            minimum=0,
-            maximum=10000,
-            value=0
-        )
-        self.roi_x_max = qtw.QSpinBox(
-            self,
-            minimum=1,
-            maximum=100000,
-            value=3000
-        )
-
-        roi_layout_x = qtw.QHBoxLayout()
-        roi_layout_x.layout().addWidget(self.roi_x_min)
-        roi_layout_x.layout().addWidget(self.roi_x_max)
-
-        self.roi_y_min = qtw.QSpinBox(
-            self,
-            minimum=0,
-            maximum=10000,
-            value=0
-        )
-        self.roi_y_max = qtw.QSpinBox(
-            self,
-            minimum=1,
-            maximum=100000,
-            value=3000
-        )
-        roi_layout_y = qtw.QHBoxLayout()
-        roi_layout_y.layout().addWidget(self.roi_y_min)
-        roi_layout_y.layout().addWidget(self.roi_y_max)
+        # self.roi_x_min = qtw.QSpinBox(
+        #     self,
+        #     minimum=0,
+        #     maximum=10000,
+        #     value=0
+        # )
+        # self.roi_x_max = qtw.QSpinBox(
+        #     self,
+        #     minimum=1,
+        #     maximum=100000,
+        #     value=3000
+        # )
+        #
+        # roi_layout_x = qtw.QHBoxLayout()
+        # roi_layout_x.layout().addWidget(self.roi_x_min)
+        # roi_layout_x.layout().addWidget(self.roi_x_max)
+        #
+        # self.roi_y_min = qtw.QSpinBox(
+        #     self,
+        #     minimum=0,
+        #     maximum=10000,
+        #     value=0
+        # )
+        # self.roi_y_max = qtw.QSpinBox(
+        #     self,
+        #     minimum=1,
+        #     maximum=100000,
+        #     value=3000
+        # )
+        # roi_layout_y = qtw.QHBoxLayout()
+        # roi_layout_y.layout().addWidget(self.roi_y_min)
+        # roi_layout_y.layout().addWidget(self.roi_y_max)
 
         self.th_min = qtw.QSpinBox(
             self,
@@ -119,8 +119,8 @@ class ViewRun(qtw.QWidget):
                 maximum=multiprocessing.cpu_count(),
                 value=multiprocessing.cpu_count() / 2
             ),
-            "ROI x size [nm]": roi_layout_x,
-            "ROI y size [nm]": roi_layout_y,
+            # "ROI x size [nm]": roi_layout_x,
+            # "ROI y size [nm]": roi_layout_y,
             "Radius sequence": radius_layout,
             "Threshold sequence": threshold_layout,
             "Dirichlet process: \u03B1": qtw.QDoubleSpinBox(
@@ -155,13 +155,13 @@ class ViewRun(qtw.QWidget):
         self.b_inputs["cores"].setDisabled(True)
         self.b_inputs["parallelization"].toggled.connect(self.b_inputs["cores"].setEnabled)
 
-        self.b_inputs["datasource"].currentIndexChanged[int].connect(self.on_currentIndexChanged)
+        self.b_inputs["datasource"].currentIndexChanged[int].connect(self.on_current_index_changed)
 
         for label, widget in self.b_inputs.items():
             parameter_layout.addRow(label, widget)
 
         self.dir_btn = qtw.QPushButton("Select data directory")
-        self.dir_btn.clicked.connect(self.chooseFile)
+        self.dir_btn.clicked.connect(self.choose_file)
         self.dir_line = qtw.QLineEdit("select data directory")
         self.dir_line.setReadOnly(True)
         self.dir_line.textChanged.connect(lambda x: self.dir_line.setReadOnly(x == ''))
@@ -230,23 +230,23 @@ class ViewRun(qtw.QWidget):
 
         self.setLayout(main_layout)
 
-    def on_currentIndexChanged(self):
+    def on_current_index_changed(self):
         """set options depending on experiment or simulation"""
 
         self.dir_line.setText("select data directory")
         self.start_btn.setDisabled(True)
-        if self.b_inputs["datasource"].currentText() == "experiment":
-            self.roi_x_min.setDisabled(True)
-            self.roi_x_max.setDisabled(True)
-            self.roi_y_min.setDisabled(True)
-            self.roi_y_max.setDisabled(True)
-        else:
-            self.roi_x_min.setDisabled(False)
-            self.roi_x_max.setDisabled(False)
-            self.roi_y_min.setDisabled(False)
-            self.roi_y_max.setDisabled(False)
+        # if self.b_inputs["datasource"].currentText() == "experiment":
+        #     self.roi_x_min.setDisabled(True)
+        #     self.roi_x_max.setDisabled(True)
+        #     self.roi_y_min.setDisabled(True)
+        #     self.roi_y_max.setDisabled(True)
+        # else:
+        #     self.roi_x_min.setDisabled(False)
+        #     self.roi_x_max.setDisabled(False)
+        #     self.roi_y_min.setDisabled(False)
+        #     self.roi_y_max.setDisabled(False)
 
-    def chooseFile(self):
+    def choose_file(self):
         """file selection of calculations"""
 
         filename, _ = qtw.QFileDialog.getOpenFileName(
@@ -286,46 +286,46 @@ class ViewRun(qtw.QWidget):
             parallel = {
                 "parallel": 0
             }
-        if self.b_inputs["datasource"].currentText() == "simulation":
-            data = {
-                'directory': self.dir_line.text(),
-                'model': self.b_inputs['model'].currentText(),
-                'datasource': self.b_inputs['datasource'].currentText(),
-                'clustermethod': self.b_inputs['clustermethod'].currentText(),
-                'rmin': self.r_min.value(),
-                'rmax': self.r_max.value(),
-                'rstep': self.r_step.value(),
-                'thmin': self.th_min.value(),
-                'thmax': self.th_max.value(),
-                'thstep': self.th_step.value(),
-                'roixmin': self.roi_x_min.value(),
-                'roixmax': self.roi_x_max.value(),
-                'roiymin': self.roi_y_min.value(),
-                'roiymax': self.roi_y_max.value(),
-                'xcol': self.col_inputs['x column'].value(),
-                'ycol': self.col_inputs['y column'].value(),
-                'sdcol': self.col_inputs['SD column'].value(),
-                'alpha': self.b_inputs['Dirichlet process: \u03B1'].value(),
-                'background': self.b_inputs['background proportion'].value()
-            }
-        else:
-            data = {
-                'directory': self.dir_line.text(),
-                'model': self.b_inputs['model'].currentText(),
-                'datasource': self.b_inputs['datasource'].currentText(),
-                'clustermethod': self.b_inputs['clustermethod'].currentText(),
-                'rmin': self.r_min.value(),
-                'rmax': self.r_max.value(),
-                'rstep': self.r_step.value(),
-                'thmin': self.th_min.value(),
-                'thmax': self.th_max.value(),
-                'thstep': self.th_step.value(),
-                'xcol': self.col_inputs['x column'].value(),
-                'ycol': self.col_inputs['y column'].value(),
-                'sdcol': self.col_inputs['SD column'].value(),
-                'alpha': self.b_inputs['Dirichlet process: \u03B1'].value(),
-                'background': self.b_inputs['background proportion'].value()
-            }
+        # if self.b_inputs["datasource"].currentText() == "simulation":
+        data = {
+            'directory': self.dir_line.text(),
+            'model': self.b_inputs['model'].currentText(),
+            'datasource': self.b_inputs['datasource'].currentText(),
+            'clustermethod': self.b_inputs['clustermethod'].currentText(),
+            'rmin': self.r_min.value(),
+            'rmax': self.r_max.value(),
+            'rstep': self.r_step.value(),
+            'thmin': self.th_min.value(),
+            'thmax': self.th_max.value(),
+            'thstep': self.th_step.value(),
+            # 'roixmin': self.roi_x_min.value(),
+            # 'roixmax': self.roi_x_max.value(),
+            # 'roiymin': self.roi_y_min.value(),
+            # 'roiymax': self.roi_y_max.value(),
+            'xcol': self.col_inputs['x column'].value(),
+            'ycol': self.col_inputs['y column'].value(),
+            'sdcol': self.col_inputs['SD column'].value(),
+            'alpha': self.b_inputs['Dirichlet process: \u03B1'].value(),
+            'background': self.b_inputs['background proportion'].value()
+        }
+        # else:
+        #     data = {
+        #         'directory': self.dir_line.text(),
+        #         'model': self.b_inputs['model'].currentText(),
+        #         'datasource': self.b_inputs['datasource'].currentText(),
+        #         'clustermethod': self.b_inputs['clustermethod'].currentText(),
+        #         'rmin': self.r_min.value(),
+        #         'rmax': self.r_max.value(),
+        #         'rstep': self.r_step.value(),
+        #         'thmin': self.th_min.value(),
+        #         'thmax': self.th_max.value(),
+        #         'thstep': self.th_step.value(),
+        #         'xcol': self.col_inputs['x column'].value(),
+        #         'ycol': self.col_inputs['y column'].value(),
+        #         'sdcol': self.col_inputs['SD column'].value(),
+        #         'alpha': self.b_inputs['Dirichlet process: \u03B1'].value(),
+        #         'background': self.b_inputs['background proportion'].value()
+        #     }
 
         self.start_btn.setDisabled(True)
         self.startrun.emit()

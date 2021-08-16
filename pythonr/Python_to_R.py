@@ -99,9 +99,9 @@ class PythonToR:
         else:
             ncores = 0
         numpy2ri.activate()
-        if input_dic.get('datasource') == 'simulation':
-            xlim = np.array([input_dic.get('roixmin'), input_dic.get('roixmax')])
-            ylim = np.array([input_dic.get('roiymin'), input_dic.get('roiymax')])
+        # if input_dic.get('datasource') == 'simulation':
+        #     xlim = np.array([input_dic.get('roixmin'), input_dic.get('roixmax')])
+        #     ylim = np.array([input_dic.get('roiymin'), input_dic.get('roiymax')])
         rseq = np.array([input_dic.get('rmin'), input_dic.get('rmax'), input_dic.get('rstep')])
         thseq = np.array([input_dic.get('thmin'), input_dic.get('thmax'), input_dic.get('thstep')])
         cols = np.array([input_dic.get('xcol'), input_dic.get('ycol'), input_dic.get('sdcol')])
@@ -114,8 +114,8 @@ class PythonToR:
                 clustermethod=input_dic.get('clustermethod'),
                 parallel=status.get('parallel'),
                 cores=ncores,
-                xlim=xlim,
-                ylim=ylim,
+                # xlim=xlim,
+                # ylim=ylim,
                 rpar=rseq,
                 thpar=thseq,
                 datacol=cols,
