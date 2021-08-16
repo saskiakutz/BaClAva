@@ -89,10 +89,12 @@ class ViewPost(qtw.QWidget):
             "flip y-axis": qtw.QCheckBox()
         }
 
+        self.storage_option()
         self.p_inputs["superplot"].setDisabled(True)
         self.p_inputs["separate plots"].setDisabled(True)
         self.p_inputs["store plots"].toggled.connect(self.p_inputs["superplot"].setEnabled)
         self.p_inputs["store plots"].toggled.connect(self.p_inputs["separate plots"].setEnabled)
+        self.p_inputs["store plots"].toggled.connect(self.storage_option)
 
         for label, widget in self.p_inputs.items():
             parameter_layout.addRow(label, widget)
@@ -165,6 +167,15 @@ class ViewPost(qtw.QWidget):
 
         # show final layout
         self.setLayout(main_layout)
+
+    def storage_option(self):
+        """enable and disable the check boxes for storing plots with different file endings"""
+        if self.p_inputs["store plots"].isChecked():
+            for item in range(len(self.storage_inputs)):
+                self.storage_inputs[item].setDisabled(False)
+        else:
+            for item in range(len(self.storage_inputs)):
+                self.storage_inputs[item].setDisabled(True)
 
     def choose_file(self):
         """hdf5 file selection"""
