@@ -48,21 +48,6 @@ hist_plot <- function(res, nexpname, plotcreation) {
             )
           hist_name <- paste0('histogram_', names(res[[1]][j]))
           plot_save(hist_data, nexpname, hist_name)
-          # ggsave(file.path(
-          #     paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".pdf", sep = "")
-          #   ),
-          #          width = 5,
-          #          height = 5)
-          # ggsave(file.path(
-          #     paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".eps", sep = "")
-          #   ),
-          #          width = 5,
-          #          height = 5)
-          # ggsave(file.path(
-          #     paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".png", sep = "")
-          #   ),
-          #          width = 5,
-          #          height = 5)
         },
           warning = function(w) {
             bw <- 1
@@ -82,21 +67,6 @@ hist_plot <- function(res, nexpname, plotcreation) {
               )
             hist_name_w <- paste0('histogram_', names(res[[1]][j]))
             plot_save(hist_data_w, nexpname, hist_name_w)
-            # ggsave(file.path(
-            #     paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".pdf", sep = "")
-            #   ),
-            #          width = 5,
-            #          height = 5)
-            # ggsave(file.path(
-            #     paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".eps", sep = "")
-            #   ),
-            #          width = 5,
-            #          height = 5)
-            # ggsave(file.path(
-            #     paste0(nexpname, "/", "histogram_", names(res[[1]][j]), ".png", sep = "")
-            #   ),
-            #          width = 5,
-            #          height = 5)
           })
 
         if (length(datavec) > 1) {
