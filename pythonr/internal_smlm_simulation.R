@@ -4,16 +4,18 @@
 # Created on: 2021-05-06
 
 distribute_clusters_uniform <- function(number_of_clusters, cluster_radius, SizeX, SizeY, indent, distance_between_clusters) {
+
   # This function distributes centers of clusters
-  #
+
   # Input:
-  # 1) cluster_radius(in pixels, 1 pixel = 100nm) is used to properly place the centers
+  # 1) cluster_radius(in pixels) is used to properly place the centers
   # 2) SizeX and SizeY determine the matrix size
-  # 3) indent is used for a void rim around the matrix
-  # 4) distance_between_clusters in pixels, 1 pixel = 100nm
-  #
-  # Output:
+  # 3) indent is used for a void rim around the matrix 
+  # 4) distance defines the minimal valid distance between clusters
+
+  # Output: 
   # an Array with randomly(uniformly) distributed centers(x,y) of clusters
+  # This function distributes centers of clusters
 
   #--------------------------error handling----------------------------#
   if (missing(number_of_clusters)) stop("number_of_clusters is missing")
@@ -58,57 +60,54 @@ distribute_clusters_uniform <- function(number_of_clusters, cluster_radius, Size
   if (X1 >= X2 || Y1 >= Y2) stop("indent or cluster_radius is too large")
   #---------------------------------------------------------------------#
 
-  cluster_centers <- matrix(0, number_of_clusters, 2)
+  clusters <- matrix(0, number_of_clusters, 2)
 
-  if (!distance_between_clusters) {
-    cluster_centers[, 1] <- runif(number_of_clusters, min = X1, max = X2)
-    cluster_centers[, 2] <- runif(number_of_clusters, min = Y1, max = Y2)
-    return(cluster_centers)
-  }
+	# special case, where any distance is allowed
+	if (!distance){
+		clusters[,1] <- runif(number_of_clusters, min=X1, max=X2)
+		clusters[,2] <- runif(number_of_clusters, min=Y1, max=Y2)
+		return (clusters)
+	}
 
-  cluster_centers[1,] <- c(runif(1, min = X1, max = X2), runif(1, min = Y1, max = Y2))
+	# since there are enough problematic cases(mostly because of the "distance"), some protection will be used 
+	# just to be sure that a procedure call will terminate
+	# start_again can be adjusted, so it will try more often to find a distribution with a necessary distance
+	start_again <- number_of_clusters*100
+	steps_made <- 0
+	real_stop <- 0
 
-  # since there are enough problematic cases(mostly because of the "distance_between_clusters"), some "extra protection" will be used 
-  # just to be sure that a procedure call will terminate
-  # start_again and steps_made can be adjusted, so it will try more often to find a distribution with a necessary distance_between_clusters
-  start_again <- number_of_clusters * 100
-  steps_made <- 0
-  real_stop <- 0
+  # put the first center into the array, it can be placed anywhere
+	clusters[1,] <- c(runif(1, min=X1, max=X2), runif(1, min=Y1, max=Y2))
+	
+	i <- 2
+	while (i <= number_of_clusters){
 
-  i = 1
-  while (i < number_of_clusters)
-  {
-    steps_made <- steps_made + 1
+		if (steps_made >= start_again){
 
-    if (steps_made == start_again)
-    {
-      i <- 1
-      steps_made <- 1
-      if (real_stop == 10) {
-        warning("distance_between_clusters will be less then in input(distance 0 is also possible).")
-        cluster_centers[, 1] <- runif(number_of_clusters, min = X1, max = X2)
-        cluster_centers[, 2] <- runif(number_of_clusters, min = Y1, max = Y2)
-        return(cluster_centers)
-      }
-      cluster_centers[1,] <- c(runif(1, min = X1, max = X2), runif(1, min = Y1, max = Y2))
-      real_stop <- real_stop + 1
-    }
+			if (real_stop == 10){
+			  warning("distance will be less then in input(distance 0 is also possible).")
+			  clusters[,1] <- runif(number_of_clusters, min=X1, max=X2)
+			  clusters[,2] <- runif(number_of_clusters, min=Y1, max=Y2)
+			  return (clusters)
+			}
+			i <- 2
+			steps_made <- 0
+			clusters[1,] <- c(runif(1, min=X1, max=X2), runif(1, min=Y1, max=Y2))
+			real_stop <- real_stop+1
+		}
 
-    cluster_centers[i + 1,] <- c(runif(1, min = X1, max = X2), runif(1, min = Y1, max = Y2))
-
-    # brute force is very feasible here
-    for (k in 1:i)
-    {
-      if (sqrt(abs(cluster_centers[k,][1] - cluster_centers[i + 1,][1])^2 + abs(cluster_centers[k,][2] - cluster_centers[i + 1,][2])^2)
-        < distance_between_clusters)
-      { i <- i - 1
-        break }
-    }
-
-    i <- i + 1
-  }
-
-  return(cluster_centers)
+		# try to find a valid spot, each failed attempt will increase our 'steps_made' counter
+		while (steps_made < start_again){
+		
+			clusters[i,] <- c(runif(1, min=X1, max=X2), runif(1, min=Y1, max=Y2))
+			if (any(sqrt((clusters[,1][1:(i-1)]-clusters[i,][1])**2+(clusters[,2][1:(i-1)]-clusters[i,][2])**2) < distance)) steps_made <- steps_made+1
+			else{
+				i <- i+1
+				break
+			}
+		}
+	}
+	return (clusters)
 }
 
 #-------------------------#
