@@ -151,7 +151,7 @@ clusterStatistics <- function(pts, labels) {
   })
 }
 
-reldensity <- function(pts, labels, areaclustered, xlim, ylim) {
+relative_density <- function(pts, labels, areaclustered, xlim, ylim) {
   # adapted from Griffié et al.
 
   rs <- clusterRadii(pts, labels)
