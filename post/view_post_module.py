@@ -71,7 +71,7 @@ class ViewPost(qtw.QWidget):
             qtw.QCheckBox("png"),
             qtw.QCheckBox("pdf"),
             qtw.QCheckBox("eps"),
-            qtw.QCheckBox("svg")
+            qtw.QCheckBox("tiff")
         ]
 
         for widget in self.storage_inputs:
