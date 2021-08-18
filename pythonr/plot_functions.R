@@ -316,6 +316,7 @@ scatterplot <- function(datatable, col1, col2, col3) {
 summary_plot <- function(data_table,
                          summaryplot_name,
                          exp_name = expname,
+                         storage_file_endings,
                          column1 = "numDetectionsCluster",
                          column2 = "areasCluster",
                          column3 = "densitiesCluster") {
@@ -355,7 +356,7 @@ summary_plot <- function(data_table,
   #   scale_x_continuous(limits = c(0, 0.15))
 
   summaryplot_2 <- ggarrange(plot_num_area_density, plot_num_density_area, plot_area_density_num, plot_num_density_to_area, plot_num_density_to_area_ecdf, nrow = 1)
-  plot_save(summaryplot_2, exp_name, summaryplot_name, plot_height = 45, plot_width = 500)
+  plot_save(summaryplot_2, exp_name, summaryplot_name, storage_opt = storage_file_endings, plot_height = 45, plot_width = 500)
 }
 
 plot_save_test <- function(expname, ggplot_name='test', storage_opt = list(), plot_height = 45, plot_width = 45, unit = "mm") {
