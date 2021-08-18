@@ -167,7 +167,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
         }else {
 
           plot_clustering <- cluster_plot(pts, labelsbest, "Clustering", sds, flip = flipped)
-#           # plot_save(plot_clustering, expname, paste0(filename_base, "_Clustering"))
+          plot_save(plot_clustering, expname, paste0(filename_base, "_Clustering"), storage_opt = storage)
         }
 #
 #         # summary_plot(summarytable, paste0(filename_base, "_summarytable_plots"), exp_name = expname)
@@ -210,7 +210,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
     if (makeplot & superplot)
       cluster_superplot(res, filenames, postprocessing_folder, "ROIs_together")
 
-    hist_plot(res, postprocessing_folder, makeplot)
+    hist_plot(res, postprocessing_folder, makeplot, storage_ends = storage)
     h5closeAll()
   })
 }
