@@ -261,17 +261,6 @@ plot_save <- function(gg_plot, expname, gg_plot_name, storage_opt = list(), plot
       )), width = plot_width, height = plot_height, units = unit)
     }
   }
-  # ggsave(file.path(paste0(
-  #   expname, "/", gg_plot_name, ".pdf", sep = ""
-  # )), width = plot_width, height = plot_height, units = unit)
-  #
-  # ggsave(file.path(paste0(
-  #   expname, "/", gg_plot_name, ".eps", sep = ""
-  # )), width = plot_width, height = plot_height, units = unit)
-  #
-  # ggsave(file.path(paste0(
-  #   expname, "/", gg_plot_name, ".png", sep = ""
-  # )), width = plot_width, height = plot_height, units = unit)
 }
 
 ground_truth_plot <- function(pts, colourlabels, title) {
