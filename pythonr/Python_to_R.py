@@ -126,7 +126,6 @@ class PythonToR:
         self.r.source("./pythonr/postprocessing_hdf5.R")
         numpy2ri.activate()
         storage_endings = np.array(input_dic.get('options'))
-        print(storage_endings)
         self.r.post_fun(
             newfolder=input_dic.get('directory'),
             makeplot=BoolVector([input_dic.get('storeplots')]),
@@ -150,3 +149,12 @@ class PythonToR:
             numpy2ri.activate()
             self.r.convert_hdf5(directory, convertfiles)
             numpy2ri.deactivate()
+    #
+    # def test_function(self, input_dic):
+    #     self.r.source("./pythonr/plot_functions.R")
+    #     self.r.source("./pythonr/package_list.R")
+    #
+    #     numpy2ri.activate()
+    #     storage_endings = np.array(input_dic.get('options'))
+    #     self.r.plot_save_test(expname=input_dic.get('directory'), ggplot_name='test2', storage_opt=storage_endings)
+    #     numpy2ri.deactivate()
