@@ -1,9 +1,9 @@
 # Title     : Postprocessing for Bayesian analysis
 # Objective : Batch analysis for data from hdf5
 # Adapted from: Griffié et al.
-# Apated and written by: Saskia Kutz
+# Adapted and written by: Saskia Kutz
 
-post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, flipped) {
+post_fun <- function(newfolder, makeplot, superplot, separateplots, flipped) {
   source("./pythonr/package_list.R")
   source("./pythonr/exporting_hdf5.R")
   source("./pythonr/internal_postporcessing.R")
@@ -22,9 +22,10 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
 
     if (datasource == 'simulation') {
       sim_con <- readLines(con = file.path(paste0(nexpname, "/sim_parameters.txt", sep = "")))
-      xlim <- c(as.numeric(get("roixmin", sim_con)), as.numeric(get("roixmax", sim_con)))
-      ylim <- c(as.numeric(get("roiymin", sim_con)), as.numeric(get("roiymax", sim_con)))
+      x_limit <- c(as.numeric(get("roixmin", sim_con)), as.numeric(get("roixmax", sim_con)))
+      y_limit <- c(as.numeric(get("roiymin", sim_con)), as.numeric(get("roiymax", sim_con)))
     }
+
     xcol <- as.numeric(get("xcol", run_con))
     ycol <- as.numeric(get("ycol", run_con))
     sdcol <- as.numeric(get("sdcol", run_con))
@@ -49,8 +50,8 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
       if (datasource == 'experiment') {
         names(pts)[1] <- "x"
         names(pts)[2] <- "y"
-        xlim <- c(min(pts[, 1]), max(pts[, 1]))
-        ylim <- c(min(pts[, 2]), max(pts[, 2]))
+        x_limit <- c(min(pts[, 1]), max(pts[, 1]))
+        y_limit <- c(min(pts[, 2]), max(pts[, 2]))
       }
 
       # read in r_vs_thresh
@@ -93,18 +94,19 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
       filename_base <- str_split(filename, "\\.")[[1]][1]
       wfile <- file.path(expname, paste0(filename_base, "_summary.txt"))
       if (datasource == "simulation") {
-        cat(
-          "The best: clusterscale", bestcs, "_thresh", bestthr,
-          "labels.txt\nNumber of clusters: ", nClusters(labelsbest),
-          "\nPercentage in clusters: ", percentageInCluster(labelsbest),
-          "%\nMean number of molecules per cluster: ", nMolsPerCluster(labelsbest),
-          "\nMean area per cluster: ", mean(summarytable$areasCluster),
-          " nm²\nMean density per cluster: ", mean(summarytable$densitiesCluster),
-          "\nMean radius: ", mean(clusterRadii(pts, labelsbest)), " nm (simulation)",
-          sep = "",
-          file = wfile
-
-        )
+        #TODO: test this part
+#         cat(
+#           "The best: clusterscale", bestcs, "_thresh", bestthr,
+#           "labels.txt\nNumber of clusters: ", nClusters(labelsbest),
+#           "\nPercentage in clusters: ", percentageInCluster(labelsbest),
+#           "%\nMean number of molecules per cluster: ", nMolsPerCluster(labelsbest),
+#           "\nMean area per cluster: ", mean(summarytable$areasCluster),
+#           " nm²\nMean density per cluster: ", mean(summarytable$densitiesCluster),
+#           "\nMean radius: ", mean(clusterRadii(pts, labelsbest)), " nm (simulation)",
+#           sep = "",
+#           file = wfile
+#
+#         )
       } else {
         cat(
           "The best: clusterscale",
@@ -139,33 +141,36 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
       }
 
       if (makeplot == TRUE) {
+
         if ("clusterID" %in% colnames(data) & !superplot) {
-          labelstrue <- sapply(as.numeric(data[, 4]), function(n) {
-            if (n == 0)
-              paste0(runif(1))
-            else {
-              paste0(n)
-            }
-          })
-
-          # True labels plot
-          plot_truelabels <- cluster_plot(pts, labelstrue, "True labels", flip = flipped)
-
-          # Estimated labels plot
-          plot_estimatedlabels <- cluster_plot(pts, labelsbest, "Estimated labels", flip = flipped)
-
-          if (separateplots) {
-            plot_save(plot_truelabels, expname, paste0(filename_base, "_truelabels"))
-            plot_save(plot_estimatedlabels, expname, paste0(filename_base, "_estimatedlabels"))
-          }
-
-          plots_arrange(plot_truelabels, plot_estimatedlabels, 1, expname, paste0(filename_base, "_true_estimate_plot"))
+            # TODO: fix this if clause
+#           labelstrue <- sapply(as.numeric(data[, 4]), function(n) {
+#             if (n == 0)
+#               paste0(runif(1))
+#             else {
+#               paste0(n)
+#             }
+#           })
+#
+#           # True labels plot
+#           plot_truelabels <- cluster_plot(pts, labelstrue, "True labels", flip = flipped)
+#
+#           # Estimated labels plot
+#           plot_estimatedlabels <- cluster_plot(pts, labelsbest, "Estimated labels", flip = flipped)
+#
+#           if (separateplots) {
+#             plot_save(plot_truelabels, expname, paste0(filename_base, "_truelabels"))
+#             plot_save(plot_estimatedlabels, expname, paste0(filename_base, "_estimatedlabels"))
+#           }
+#
+#           plots_arrange(plot_truelabels, plot_estimatedlabels, 1, expname, paste0(filename_base, "_true_estimate_plot"))
         }else {
-          plot_clustering <- cluster_plot(pts, labelsbest, "Clustering", sds, flip = flipped)
-          plot_save(plot_clustering, expname, paste0(filename_base, "_Clustering"))
-        }
 
-        summary_plot(summarytable, paste0(filename_base, "_summarytable_plots"), exp_name = expname)
+          plot_clustering <- cluster_plot(pts, labelsbest, "Clustering", sds, flip = flipped)
+#           # plot_save(plot_clustering, expname, paste0(filename_base, "_Clustering"))
+        }
+#
+#         # summary_plot(summarytable, paste0(filename_base, "_summarytable_plots"), exp_name = expname)
       }
 
       # H5Fclose(file)
@@ -177,7 +182,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
           nclusters = nClusters(labelsbest),
           pclustered = percentageInCluster(labelsbest),
           totalmols = length(labelsbest),
-          reldensity = reldensity(pts, labelsbest, summarytable$areasCluster, xlim, ylim),
+          reldensity = relative_density(pts, labelsbest, summarytable$areasCluster, x_limit, y_limit),
           area = summarytable$areasCluster,
           density = summarytable$densitiesCluster,
           density_area = summarytable$densitiesCluster / summarytable$areasCluster,
@@ -190,10 +195,11 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
           nclusters = nClusters(labelsbest),
           pclustered = percentageInCluster(labelsbest),
           totalmols = length(labelsbest),
-          reldensity = reldensity(pts, labelsbest, summarytable$areasCluster, xlim, ylim),
+          reldensity = relative_density(pts, labelsbest, summarytable$areasCluster, x_limit, y_limit),
           area = summarytable$areasCluster,
           density = summarytable$densitiesCluster,
-          density_area = summarytable$densitiesCluster / summarytable$areasCluster)
+          density_area = summarytable$densitiesCluster / summarytable$areasCluster
+        )
       }
     })
 
