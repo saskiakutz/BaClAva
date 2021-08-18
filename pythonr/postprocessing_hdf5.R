@@ -208,7 +208,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
       ""))
     dir.create(postprocessing_folder, showWarnings = F)
     if (makeplot & superplot)
-      cluster_superplot(res, filenames, postprocessing_folder, "ROIs_together")
+      cluster_superplot(res, filenames, postprocessing_folder, "ROIs_together", stor_ends = storage)
 
     hist_plot(res, postprocessing_folder, makeplot, storage_ends = storage)
     h5closeAll()
