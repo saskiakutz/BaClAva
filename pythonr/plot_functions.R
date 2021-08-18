@@ -4,7 +4,7 @@
 
 # histograms --------------------------------------------------------------
 
-hist_plot <- function(res, nexpname, plotcreation) {
+hist_plot <- function(res, nexpname, plotcreation, storage_ends) {
   # histogram preparation and storage
 
   length_res <- length(names(res[[1]]))
@@ -47,7 +47,7 @@ hist_plot <- function(res, nexpname, plotcreation) {
               panel.background = element_rect(fill = "white") #
             )
           hist_name <- paste0('histogram_', names(res[[1]][j]))
-          plot_save(hist_data, nexpname, hist_name)
+          plot_save(hist_data, nexpname, hist_name, storage_opt = storage_ends)
         },
           warning = function(w) {
             bw <- 1
@@ -66,7 +66,7 @@ hist_plot <- function(res, nexpname, plotcreation) {
                 panel.background = element_rect(fill = "white") #
               )
             hist_name_w <- paste0('histogram_', names(res[[1]][j]))
-            plot_save(hist_data_w, nexpname, hist_name_w)
+            plot_save(hist_data_w, nexpname, hist_name_w, storage_opt = storage_ends)
           })
 
         if (length(datavec) > 1) {
@@ -87,7 +87,7 @@ hist_plot <- function(res, nexpname, plotcreation) {
           #geom_vline(xintercept = density(datavec)$x[which.max(density(datavec)$y)])
 
           den_name <- paste0('densityplot_', names(res[[1]][j]))
-          plot_save(den_plot, nexpname, den_name)
+          plot_save(den_plot, nexpname, den_name, storage_opt = storage_ends)
         }
       }
 
