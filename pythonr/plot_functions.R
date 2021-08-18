@@ -254,7 +254,7 @@ plot_save <- function(gg_plot, expname, gg_plot_name, storage_opt = list(), plot
         ind == 1 ~ '.png',
         ind == 2 ~ '.pdf',
         ind == 3 ~ '.eps',
-        ind == 4 ~ '.svg'
+        ind == 4 ~ '.tiff'
       )
       ggsave(file.path(paste0(
         expname, "/", gg_plot_name, ending, sep = ""
@@ -367,4 +367,33 @@ summary_plot <- function(data_table,
 
   summaryplot_2 <- ggarrange(plot_num_area_density, plot_num_density_area, plot_area_density_num, plot_num_density_to_area, plot_num_density_to_area_ecdf, nrow = 1)
   plot_save(summaryplot_2, exp_name, summaryplot_name, plot_height = 45, plot_width = 500)
+}
+
+plot_save_test <- function(expname, ggplot_name='test', storage_opt = list(), plot_height = 45, plot_width = 45, unit = "mm") {
+  # saving a plot in pdf, eps, svg, and png format
+  ggplot(mpg, aes(displ, hwy, colour = class)) + geom_point()
+
+  for (ind in seq_along(storage_opt)) {
+    if (storage_opt[[ind]] == TRUE) {
+      ending <- case_when(
+        ind == 1 ~ '.png',
+        ind == 2 ~ '.pdf',
+        ind == 3 ~ '.eps',
+        ind == 4 ~ '.tiff'
+      )
+      ggsave(file.path(paste0(expname, '/', ggplot_name, ending, sep = ""
+      )), width = plot_width, height = plot_height, units = unit)
+    }
+  }
+  # ggsave(file.path(paste0(
+  #   expname, "/", gg_plot_name, ".pdf", sep = ""
+  # )), width = plot_width, height = plot_height, units = unit)
+  #
+  # ggsave(file.path(paste0(
+  #   expname, "/", gg_plot_name, ".eps", sep = ""
+  # )), width = plot_width, height = plot_height, units = unit)
+  #
+  # ggsave(file.path(paste0(
+  #   expname, "/", gg_plot_name, ".png", sep = ""
+  # )), width = plot_width, height = plot_height, units = unit)
 }
