@@ -92,9 +92,7 @@ class ViewPost(qtw.QWidget):
         self.storage_option()
         self.p_inputs["superplot"].setDisabled(True)
         self.p_inputs["separate plots"].setDisabled(True)
-        self.p_inputs["store plots"].toggled.connect(self.p_inputs["superplot"].setEnabled)
-        self.p_inputs["store plots"].toggled.connect(self.p_inputs["separate plots"].setEnabled)
-        self.p_inputs["store plots"].toggled.connect(self.storage_option)
+        self.p_inputs["store plots"].toggled.connect(lambda x: self.checkbox_states(x))
 
         for label, widget in self.p_inputs.items():
             parameter_layout.addRow(label, widget)
@@ -167,6 +165,18 @@ class ViewPost(qtw.QWidget):
 
         # show final layout
         self.setLayout(main_layout)
+
+    def checkbox_states(self, check_box):
+        if check_box:
+            print('yes')
+            self.p_inputs["superplot"].setEnabled(True)
+            self.p_inputs["separate plots"].setEnabled(True)
+            self.storage_option()
+        else:
+            print('no')
+            self.p_inputs["superplot"].setDisabled(True)
+            self.p_inputs["separate plots"].setDisabled(True)
+            self.storage_option()
 
     def storage_option(self):
         """enable and disable the check boxes for storing plots with different file endings"""
