@@ -145,7 +145,6 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
       if (makeplot == TRUE) {
 
         if (length(cluster_id) > 0 & !superplot) {
-            # TODO: fix this if clause. There is not data anymore and thus, also no 'clusterID'
           labelstrue <- sapply(as.numeric(cluster_id), function(n) {
             if (n == 0)
               paste0(runif(1))
