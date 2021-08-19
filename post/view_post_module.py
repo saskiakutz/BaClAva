@@ -184,8 +184,10 @@ class ViewPost(qtw.QWidget):
         if self.p_inputs["store plots"].isChecked():
             for item in range(len(self.storage_inputs)):
                 self.storage_inputs[item].setDisabled(False)
+            self.storage_inputs[0].setChecked(True)
         else:
             for item in range(len(self.storage_inputs)):
+                self.storage_inputs[item].setChecked(False)
                 self.storage_inputs[item].setDisabled(True)
 
     def choose_file(self):
