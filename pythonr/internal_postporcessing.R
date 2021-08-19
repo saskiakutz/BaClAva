@@ -151,12 +151,12 @@ clusterStatistics <- function(pts, labels) {
   })
 }
 
-reldensity <- function(pts, labels, areaclustered, xlim, ylim) {
+relative_density <- function(pts, labels, areaclustered, x_lim, y_lim) {
   # adapted from Griffié et al.
 
   rs <- clusterRadii(pts, labels)
   tb <- table(labels)
   nclustered <- sum(tb[tb >= 2])
   nb <- length(labels) - nclustered
-  (nclustered / sum(areaclustered)) / (nb / (diff(xlim) * diff(ylim) - sum(areaclustered)))
+  result <-  (nclustered / sum(areaclustered)) / (nb / (diff(x_lim) * diff(y_lim) - sum(areaclustered)))
 }
