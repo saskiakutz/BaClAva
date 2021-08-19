@@ -95,18 +95,18 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
       wfile <- file.path(expname, paste0(filename_base, "_summary.txt"))
       if (datasource == "simulation") {
         #TODO: test this part
-#         cat(
-#           "The best: clusterscale", bestcs, "_thresh", bestthr,
-#           "labels.txt\nNumber of clusters: ", nClusters(labelsbest),
-#           "\nPercentage in clusters: ", percentageInCluster(labelsbest),
-#           "%\nMean number of molecules per cluster: ", nMolsPerCluster(labelsbest),
-#           "\nMean area per cluster: ", mean(summarytable$areasCluster),
-#           " nm²\nMean density per cluster: ", mean(summarytable$densitiesCluster),
-#           "\nMean radius: ", mean(clusterRadii(pts, labelsbest)), " nm (simulation)",
-#           sep = "",
-#           file = wfile
-#
-#         )
+        cat(
+          "The best: clusterscale", bestcs, "_thresh", bestthr,
+          "labels.txt\nNumber of clusters: ", nClusters(labelsbest),
+          "\nPercentage in clusters: ", percentageInCluster(labelsbest),
+          "%\nMean number of molecules per cluster: ", nMolsPerCluster(labelsbest),
+          "\nMean area per cluster: ", mean(summarytable$areasCluster),
+          " nm²\nMean density per cluster: ", mean(summarytable$densitiesCluster),
+          "\nMean radius: ", mean(clusterRadii(pts, labelsbest)), " nm (simulation)",
+          sep = "",
+          file = wfile
+
+        )
       } else {
         cat(
           "The best: clusterscale",
@@ -143,7 +143,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
       if (makeplot == TRUE) {
 
         if ("clusterID" %in% colnames(data) & !superplot) {
-            # TODO: fix this if clause
+            # TODO: fix this if clause. There is not data anymore and thus, also no 'clusterID'
 #           labelstrue <- sapply(as.numeric(data[, 4]), function(n) {
 #             if (n == 0)
 #               paste0(runif(1))
