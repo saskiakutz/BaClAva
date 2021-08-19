@@ -19,7 +19,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
     }
 
     datasource <- get("datasource", run_con)
-    cluster_id <- 0
+    cluster_id <- list()
 
     if (datasource == 'simulation') {
       sim_con <- readLines(con = file.path(paste0(nexpname, "/sim_parameters.txt", sep = "")))
@@ -55,7 +55,6 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
         y_limit <- c(min(pts[, 2]), max(pts[, 2]))
       }else{
         cluster_id <- datafile[, 4]
-        print(cluster_id)
       }
 
       # read in r_vs_thresh
@@ -145,28 +144,28 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
 
       if (makeplot == TRUE) {
 
-        if ("clusterID" %in% colnames(data) & !superplot) {
+        if (length(cluster_id) > 0 & !superplot) {
             # TODO: fix this if clause. There is not data anymore and thus, also no 'clusterID'
-#           labelstrue <- sapply(as.numeric(data[, 4]), function(n) {
-#             if (n == 0)
-#               paste0(runif(1))
-#             else {
-#               paste0(n)
-#             }
-#           })
-#
-#           # True labels plot
-#           plot_truelabels <- cluster_plot(pts, labelstrue, "True labels", flip = flipped)
-#
-#           # Estimated labels plot
-#           plot_estimatedlabels <- cluster_plot(pts, labelsbest, "Estimated labels", flip = flipped)
-#
-#           if (separateplots) {
-#             plot_save(plot_truelabels, expname, paste0(filename_base, "_truelabels"), storage_opt = storage)
-#             plot_save(plot_estimatedlabels, expname, paste0(filename_base, "_estimatedlabels"), storage_opt = storage)
-#           }
-#
-          # plots_arrange(plot_truelabels, plot_estimatedlabels, 1, expname, paste0(filename_base, "_true_estimate_plot"), storage_ends = storage)
+          labelstrue <- sapply(as.numeric(cluster_id), function(n) {
+            if (n == 0)
+              paste0(runif(1))
+            else {
+              paste0(n)
+            }
+          })
+
+          # True labels plot
+          plot_truelabels <- cluster_plot(pts, labelstrue, "True labels", flip = flipped)
+
+          # Estimated labels plot
+          plot_estimatedlabels <- cluster_plot(pts, labelsbest, "Estimated labels", flip = flipped)
+
+          if (separateplots) {
+            plot_save(plot_truelabels, expname, paste0(filename_base, "_truelabels"), storage_opt = storage)
+            plot_save(plot_estimatedlabels, expname, paste0(filename_base, "_estimatedlabels"), storage_opt = storage)
+          }
+
+          plots_arrange(plot_truelabels, plot_estimatedlabels, 1, expname, paste0(filename_base, "_true_estimate_plot"), storage_ends = storage)
         }else {
 
           plot_clustering <- cluster_plot(pts, labelsbest, "Clustering", sds, flip = flipped)
