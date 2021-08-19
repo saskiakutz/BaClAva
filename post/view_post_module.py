@@ -65,17 +65,36 @@ class ViewPost(qtw.QWidget):
 
         parameter_layout.addRow(self.dir_btn, self.dir_line)
 
+        storage_options = qtw.QHBoxLayout()
+
+        self.storage_inputs = [
+            qtw.QCheckBox("png"),
+            qtw.QCheckBox("pdf"),
+            qtw.QCheckBox("eps"),
+            qtw.QCheckBox("tiff")
+        ]
+
+        for widget in self.storage_inputs:
+            widget.setSizePolicy(
+                qtw.QSizePolicy.Fixed,
+                qtw.QSizePolicy.Fixed
+            )
+            storage_options.addWidget(widget)
+
         self.p_inputs = {
             "store plots": qtw.QCheckBox(),
+            "options": storage_options,
             "superplot": qtw.QCheckBox(),
             "separate plots": qtw.QCheckBox(),
             "flip y-axis": qtw.QCheckBox()
         }
 
+        self.storage_option()
         self.p_inputs["superplot"].setDisabled(True)
         self.p_inputs["separate plots"].setDisabled(True)
         self.p_inputs["store plots"].toggled.connect(self.p_inputs["superplot"].setEnabled)
         self.p_inputs["store plots"].toggled.connect(self.p_inputs["separate plots"].setEnabled)
+        self.p_inputs["store plots"].toggled.connect(self.storage_option)
 
         for label, widget in self.p_inputs.items():
             parameter_layout.addRow(label, widget)
@@ -149,6 +168,16 @@ class ViewPost(qtw.QWidget):
         # show final layout
         self.setLayout(main_layout)
 
+    def storage_option(self):
+        """enable and disable the check boxes for storing plots with different file endings"""
+
+        if self.p_inputs["store plots"].isChecked():
+            for item in range(len(self.storage_inputs)):
+                self.storage_inputs[item].setDisabled(False)
+        else:
+            for item in range(len(self.storage_inputs)):
+                self.storage_inputs[item].setDisabled(True)
+
     def choose_file(self):
         """hdf5 file selection"""
 
@@ -171,6 +200,8 @@ class ViewPost(qtw.QWidget):
             # 'datasource': self.p_inputs["datasource"].currentText(),
             # 'computation': self.p_inputs["Bayesian computation"].currentText(),
             'storeplots': self.p_inputs["store plots"].isChecked(),
+            'options': [self.storage_inputs[0].isChecked(), self.storage_inputs[1].isChecked(),
+                        self.storage_inputs[2].isChecked(), self.storage_inputs[3].isChecked()],
             'superplot': self.p_inputs["superplot"].isChecked(),
             'separateplots': self.p_inputs["separate plots"].isChecked(),
             'flipped_y': self.p_inputs["flip y-axis"].isChecked()

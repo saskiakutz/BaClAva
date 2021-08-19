@@ -4,7 +4,7 @@
 
 # histograms --------------------------------------------------------------
 
-hist_plot <- function(res, nexpname, plotcreation) {
+hist_plot <- function(res, nexpname, plotcreation, storage_ends) {
   # histogram preparation and storage
 
   length_res <- length(names(res[[1]]))
@@ -47,7 +47,7 @@ hist_plot <- function(res, nexpname, plotcreation) {
               panel.background = element_rect(fill = "white") #
             )
           hist_name <- paste0('histogram_', names(res[[1]][j]))
-          plot_save(hist_data, nexpname, hist_name)
+          plot_save(hist_data, nexpname, hist_name, storage_opt = storage_ends)
         },
           warning = function(w) {
             bw <- 1
@@ -66,7 +66,7 @@ hist_plot <- function(res, nexpname, plotcreation) {
                 panel.background = element_rect(fill = "white") #
               )
             hist_name_w <- paste0('histogram_', names(res[[1]][j]))
-            plot_save(hist_data_w, nexpname, hist_name_w)
+            plot_save(hist_data_w, nexpname, hist_name_w, storage_opt = storage_ends)
           })
 
         if (length(datavec) > 1) {
@@ -87,7 +87,7 @@ hist_plot <- function(res, nexpname, plotcreation) {
           #geom_vline(xintercept = density(datavec)$x[which.max(density(datavec)$y)])
 
           den_name <- paste0('densityplot_', names(res[[1]][j]))
-          plot_save(den_plot, nexpname, den_name)
+          plot_save(den_plot, nexpname, den_name, storage_opt = storage_ends)
         }
       }
 
@@ -226,15 +226,15 @@ cluster_plot <-
 
   }
 
-plots_arrange <- function(plot1, plot2, n_row, expname, gg_plot_name) {
+plots_arrange <- function(plot1, plot2, n_row, expname, gg_plot_name, storage_ends) {
   # export for figure with two plots side-by-side
 
   arragedplot <- ggarrange(plot1, plot2, nrow = n_row)
-  plot_save(arragedplot, expname, gg_plot_name, plot_height = 5, plot_width = 10)
+  plot_save(arragedplot, expname, gg_plot_name, storage_opt = storage_ends, plot_height = 45, plot_width = 90)
 
 }
 
-cluster_superplot <- function(results, dirnames, expname, gg_plot_name) {
+cluster_superplot <- function(results, dirnames, expname, gg_plot_name, stor_ends) {
   # all clusterplots in one figure
 
   num_sets <- length(results)
@@ -243,22 +243,24 @@ cluster_superplot <- function(results, dirnames, expname, gg_plot_name) {
     set[[9]]
   })
   super_plot <- do.call("ggarrange", c(plotlist, ncol = n_rows))
-  plot_save(super_plot, expname, gg_plot_name, plot_height = 5, plot_width = 10)
+  plot_save(super_plot, expname, gg_plot_name,storage_opt = stor_ends, plot_height = 45, plot_width = 90)
 }
 
-plot_save <- function(gg_plot, expname, gg_plot_name, plot_height = 45, plot_width = 45, unit = "mm") {
+plot_save <- function(gg_plot, expname, gg_plot_name, storage_opt = list(), plot_height = 45, plot_width = 45, unit = "mm") {
   # saving a plot in pdf, eps, svg, and png format
-  ggsave(file.path(paste0(
-    expname, "/", gg_plot_name, ".pdf", sep = ""
-  )), width = plot_width, height = plot_height, units = unit)
-
-  ggsave(file.path(paste0(
-    expname, "/", gg_plot_name, ".eps", sep = ""
-  )), width = plot_width, height = plot_height, units = unit)
-
-  ggsave(file.path(paste0(
-    expname, "/", gg_plot_name, ".png", sep = ""
-  )), width = plot_width, height = plot_height, units = unit)
+  for (ind in seq_along(storage_opt)) {
+    if (storage_opt[[ind]] == TRUE) {
+      ending <- case_when(
+        ind == 1 ~ '.png',
+        ind == 2 ~ '.pdf',
+        ind == 3 ~ '.eps',
+        ind == 4 ~ '.tiff'
+      )
+      ggsave(file.path(paste0(
+        expname, "/", gg_plot_name, ending, sep = ""
+      )), width = plot_width, height = plot_height, units = unit)
+    }
+  }
 }
 
 ground_truth_plot <- function(pts, colourlabels, title) {
@@ -314,6 +316,7 @@ scatterplot <- function(datatable, col1, col2, col3) {
 summary_plot <- function(data_table,
                          summaryplot_name,
                          exp_name = expname,
+                         storage_file_endings,
                          column1 = "numDetectionsCluster",
                          column2 = "areasCluster",
                          column3 = "densitiesCluster") {
@@ -353,5 +356,34 @@ summary_plot <- function(data_table,
   #   scale_x_continuous(limits = c(0, 0.15))
 
   summaryplot_2 <- ggarrange(plot_num_area_density, plot_num_density_area, plot_area_density_num, plot_num_density_to_area, plot_num_density_to_area_ecdf, nrow = 1)
-  plot_save(summaryplot_2, exp_name, summaryplot_name, plot_height = 45, plot_width = 500)
+  plot_save(summaryplot_2, exp_name, summaryplot_name, storage_opt = storage_file_endings, plot_height = 45, plot_width = 500)
+}
+
+plot_save_test <- function(expname, ggplot_name='test', storage_opt = list(), plot_height = 45, plot_width = 45, unit = "mm") {
+  # saving a plot in pdf, eps, svg, and png format
+  ggplot(mpg, aes(displ, hwy, colour = class)) + geom_point()
+
+  for (ind in seq_along(storage_opt)) {
+    if (storage_opt[[ind]] == TRUE) {
+      ending <- case_when(
+        ind == 1 ~ '.png',
+        ind == 2 ~ '.pdf',
+        ind == 3 ~ '.eps',
+        ind == 4 ~ '.tiff'
+      )
+      ggsave(file.path(paste0(expname, '/', ggplot_name, ending, sep = ""
+      )), width = plot_width, height = plot_height, units = unit)
+    }
+  }
+  # ggsave(file.path(paste0(
+  #   expname, "/", gg_plot_name, ".pdf", sep = ""
+  # )), width = plot_width, height = plot_height, units = unit)
+  #
+  # ggsave(file.path(paste0(
+  #   expname, "/", gg_plot_name, ".eps", sep = ""
+  # )), width = plot_width, height = plot_height, units = unit)
+  #
+  # ggsave(file.path(paste0(
+  #   expname, "/", gg_plot_name, ".png", sep = ""
+  # )), width = plot_width, height = plot_height, units = unit)
 }

@@ -243,10 +243,14 @@ class ViewRun(qtw.QWidget):
             parallel = {
                 "parallel": 0
             }
+        if self.b_inputs['datasource'].currentText() == 'simulation (module 1a)':
+            self.b_inputs['datasource'] = 'simulation'
+        else:
+            self.b_inputs['datasource'] = 'experiment'
         data = {
             'directory': self.dir_line.text(),
             'model': self.b_inputs['model'].currentText(),
-            'datasource': self.b_inputs['datasource'].currentText(),
+            'datasource': self.b_inputs['datasource'],
             'clustermethod': self.b_inputs['clustermethod'].currentText(),
             'rmin': self.r_min.value(),
             'rmax': self.r_max.value(),
