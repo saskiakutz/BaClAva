@@ -230,7 +230,7 @@ plots_arrange <- function(plot1, plot2, n_row, expname, gg_plot_name, storage_en
   # export for figure with two plots side-by-side
 
   arragedplot <- ggarrange(plot1, plot2, nrow = n_row)
-  plot_save(arragedplot, expname, gg_plot_name, storage_opt = storage_ends, plot_height = 5, plot_width = 10)
+  plot_save(arragedplot, expname, gg_plot_name, storage_opt = storage_ends, plot_height = 45, plot_width = 90)
 
 }
 
@@ -243,7 +243,7 @@ cluster_superplot <- function(results, dirnames, expname, gg_plot_name, stor_end
     set[[9]]
   })
   super_plot <- do.call("ggarrange", c(plotlist, ncol = n_rows))
-  plot_save(super_plot, expname, gg_plot_name,storage_opt = stor_ends, plot_height = 5, plot_width = 10)
+  plot_save(super_plot, expname, gg_plot_name,storage_opt = stor_ends, plot_height = 45, plot_width = 90)
 }
 
 plot_save <- function(gg_plot, expname, gg_plot_name, storage_opt = list(), plot_height = 45, plot_width = 45, unit = "mm") {
