@@ -94,7 +94,6 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
       filename_base <- str_split(filename, "\\.")[[1]][1]
       wfile <- file.path(expname, paste0(filename_base, "_summary.txt"))
       if (datasource == "simulation") {
-        #TODO: test this part
         cat(
           "The best: clusterscale", bestcs, "_thresh", bestthr,
           "labels.txt\nNumber of clusters: ", nClusters(labelsbest),
