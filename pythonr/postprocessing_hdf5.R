@@ -19,6 +19,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
     }
 
     datasource <- get("datasource", run_con)
+    cluster_id <- 0
 
     if (datasource == 'simulation') {
       sim_con <- readLines(con = file.path(paste0(nexpname, "/sim_parameters.txt", sep = "")))
@@ -52,6 +53,9 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
         names(pts)[2] <- "y"
         x_limit <- c(min(pts[, 1]), max(pts[, 1]))
         y_limit <- c(min(pts[, 2]), max(pts[, 2]))
+      }else{
+        cluster_id <- datafile[, 4]
+        print(cluster_id)
       }
 
       # read in r_vs_thresh
