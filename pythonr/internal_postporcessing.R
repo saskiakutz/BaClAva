@@ -154,7 +154,6 @@ clusterStatistics <- function(pts, labels) {
 relative_density <- function(pts, labels, areaclustered, x_lim, y_lim) {
   # adapted from Griffié et al.
 
-  print('internal')
   rs <- clusterRadii(pts, labels)
   tb <- table(labels)
   nclustered <- sum(tb[tb >= 2])
