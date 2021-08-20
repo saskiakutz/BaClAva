@@ -167,7 +167,6 @@ class ViewPost(qtw.QWidget):
         self.setLayout(main_layout)
 
     def checkbox_states(self, check_box):
-        #TODO: write function similar to storage_option() for superplot and separate plots
         if check_box:
             print('yes')
             self.further_plot_options()
