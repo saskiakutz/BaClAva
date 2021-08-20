@@ -167,15 +167,14 @@ class ViewPost(qtw.QWidget):
         self.setLayout(main_layout)
 
     def checkbox_states(self, check_box):
+        #TODO: write function similar to storage_option() for superplot and separate plots
         if check_box:
             print('yes')
-            self.p_inputs["superplot"].setEnabled(True)
-            self.p_inputs["separate plots"].setEnabled(True)
+            self.further_plot_options()
             self.storage_option()
         else:
             print('no')
-            self.p_inputs["superplot"].setDisabled(True)
-            self.p_inputs["separate plots"].setDisabled(True)
+            self.further_plot_options()
             self.storage_option()
 
     def storage_option(self):
@@ -189,6 +188,18 @@ class ViewPost(qtw.QWidget):
             for item in range(len(self.storage_inputs)):
                 self.storage_inputs[item].setChecked(False)
                 self.storage_inputs[item].setDisabled(True)
+
+    def further_plot_options(self):
+        """enable and disable te check boxes for storing separate plots for simulation work and superplots"""
+
+        if self.p_inputs["store plots"].isChecked():
+            self.p_inputs["superplot"].setEnabled(True)
+            self.p_inputs["separate plots"].setEnabled(True)
+        else:
+            self.p_inputs["superplot"].setDisabled(True)
+            self.p_inputs["superplot"].setChecked(False)
+            self.p_inputs["separate plots"].setDisabled(True)
+            self.p_inputs["separate plots"].setChecked(False)
 
     def choose_file(self):
         """hdf5 file selection"""
