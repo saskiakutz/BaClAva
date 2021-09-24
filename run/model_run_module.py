@@ -44,7 +44,7 @@ class ModelRun(qtc.QObject):
             except Exception as e:
                 error = f'Directory creation failed'
         elif (source_ == 'simulation') and (not any(f_name.endswith('.h5') for f_name in listdir(dir_))):
-            error = f'There is not any hdf5 in your directory'
+            error = f'You are in the simulation branch, but there is not any hdf5 in your directory'
         else:
             try:
                 dir_file = dir_ + '/' + 'run_config.txt'
