@@ -156,10 +156,10 @@ Kclust_parallel <- function(pts,
   }
 
   if (.Platform$OS.type == 'windows'){
-    cl <- makeCluster(numCores, type = 'PSOCK')
-    registerDoParallel(cl)
+    cl <- parallel::makeCluster(numCores, type = 'PSOCK')
+    doParallel::registerDoParallel(cl)
   }else{
-    registerDoParallel(cores = numCores)
+    doParallel::registerDoParallel(cores = numCores)
   }
 
   x <- foreach(r = rseq, .export = c('label_correction', 'scorewprec', 'plabel', 'mcgaussprec')) %:%
@@ -249,7 +249,7 @@ Kclust_parallel <- function(pts,
     )
   }
   if (.Platform$OS.type == 'windows'){
-    stopCluster(cl)
+    parallel::stopCluster(cl)
   }
   return(x)
 }
