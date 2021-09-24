@@ -155,8 +155,14 @@ Kclust_parallel <- function(pts,
     D <- D[1:N, 1:N]
   }
 
-  registerDoParallel(cores = numCores)
-  foreach(r = rseq) %:%
+  if (.Platform$OS.type == 'windows'){
+    cl <- makeCluster(numCores, type = 'PSOCK')
+    registerDoParallel(cl)
+  }else{
+    registerDoParallel(cores = numCores)
+  }
+
+  x <- foreach(r = rseq, .export = c('label_correction', 'scorewprec', 'plabel', 'mcgaussprec')) %:%
     foreach(th = thseq) %dopar% {
 
     if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN2") {
@@ -199,12 +205,12 @@ Kclust_parallel <- function(pts,
     }
 
     if (clustermethod == "ToMATo") {
-      labels <- clusterTomato(pts, r, th)
+      labels <- RSMLM::clusterTomato(pts, r, th)
       labels <- label_correction(labels)
     }
 
     if (clustermethod == "DBSCAN2") {
-      labels <- clusterDBSCAN(pts, r, th)
+      labels <- RSMLM::clusterDBSCAN(pts, r, th)
       labels <- label_correction(labels)
     }
 
@@ -242,6 +248,10 @@ Kclust_parallel <- function(pts,
       labels = retlabels
     )
   }
+  if (.Platform$OS.type == 'windows'){
+    stopCluster(cl)
+  }
+  return(x)
 }
 
 
