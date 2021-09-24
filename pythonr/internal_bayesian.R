@@ -162,8 +162,8 @@ Kclust_parallel <- function(pts,
     doParallel::registerDoParallel(cores = numCores)
   }
 
-  x <- foreach(r = rseq, .export = c('label_correction', 'scorewprec', 'plabel', 'mcgaussprec')) %:%
-    foreach(th = thseq) %dopar% {
+  x <- foreach::foreach(r = rseq, .export = c('label_correction', 'scorewprec', 'plabel', 'mcgaussprec')) %:%
+    foreach::foreach(th = thseq) %dopar% {
 
     if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN2") {
       K <- apply(D, 1, function(v) {
