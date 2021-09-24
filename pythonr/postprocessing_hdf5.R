@@ -31,7 +31,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
     ycol <- as.numeric(get("ycol", run_con))
     sdcol <- as.numeric(get("sdcol", run_con))
 
-    computation <- as.numeric(get("parallel", run_con))
+    computation <- as.numeric(get("parallel=", run_con))
     if (computation == 0) {
       process <- "sequential"
     } else {

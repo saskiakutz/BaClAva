@@ -155,9 +155,15 @@ Kclust_parallel <- function(pts,
     D <- D[1:N, 1:N]
   }
 
-  registerDoParallel(cores = numCores)
-  foreach(r = rseq) %:%
-    foreach(th = thseq) %dopar% {
+  if (.Platform$OS.type == 'windows'){
+    cl <- parallel::makeCluster(numCores, type = 'PSOCK')
+    doParallel::registerDoParallel(cl)
+  }else{
+    doParallel::registerDoParallel(cores = numCores)
+  }
+
+  x <- foreach::foreach(r = rseq, .export = c('label_correction', 'scorewprec', 'plabel', 'mcgaussprec')) %:%
+    foreach::foreach(th = thseq) %dopar% {
 
     if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN2") {
       K <- apply(D, 1, function(v) {
@@ -172,8 +178,8 @@ Kclust_parallel <- function(pts,
 
     if (clustermethod == "Ripley' K based") {
       if (length(C) > 0) {
-        G <- graph.adjacency(D[C, C] < 2 * r)
-        lab <- clusters(G, "weak") #graph theory
+        G <- igraph::graph.adjacency(D[C, C] < 2 * r)
+        lab <- igraph::clusters(G, "weak") #graph theory
         labels <- (N + 1):(2 * N)
         labels[C] <- lab$membership #numeric vector giving the cluster id to which each vertex belongs
       }
@@ -183,8 +189,8 @@ Kclust_parallel <- function(pts,
 
     if (clustermethod == "DBSCAN") {
       if (length(C) > 0) {
-        G <- graph.adjacency(D[C, C] < r)
-        lab <- clusters(G, "weak")
+        G <- igraph::graph.adjacency(D[C, C] < r)
+        lab <- igraph::clusters(G, "weak")
         labels <- (N + 1):(2 * N)
         labels[C] <- lab$membership
         ##hoovering up boundary points by (arbitrarily) assigning to the first clustered
@@ -199,12 +205,12 @@ Kclust_parallel <- function(pts,
     }
 
     if (clustermethod == "ToMATo") {
-      labels <- clusterTomato(pts, r, th)
+      labels <- RSMLM::clusterTomato(pts, r, th)
       labels <- label_correction(labels)
     }
 
     if (clustermethod == "DBSCAN2") {
-      labels <- clusterDBSCAN(pts, r, th)
+      labels <- RSMLM::clusterDBSCAN(pts, r, th)
       labels <- label_correction(labels)
     }
 
@@ -242,6 +248,10 @@ Kclust_parallel <- function(pts,
       labels = retlabels
     )
   }
+  if (.Platform$OS.type == 'windows'){
+    parallel::stopCluster(cl)
+  }
+  return(x)
 }
 
 
