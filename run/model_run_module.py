@@ -2,7 +2,7 @@
 # Objective : Model setup of module 2
 # Written by: Saskia Kutz
 
-from os import path, mkdir
+from os import path, mkdir, listdir
 from PyQt5 import QtCore as qtc
 from pythonr.Python_to_R import PythonToR
 
@@ -32,6 +32,7 @@ class ModelRun(qtc.QObject):
 
         error = ''
         dir_ = self.inputs.get('directory')
+        source_ = self.inputs.get('datasource')
 
         if dir_ == "select data directory":
             error = f'You need to choose a directory'
@@ -42,6 +43,8 @@ class ModelRun(qtc.QObject):
                 mkdir(dir_)
             except Exception as e:
                 error = f'Directory creation failed'
+        elif (source_ == 'simulation') and (not any(f_name.endswith('.h5') for f_name in listdir(dir_))):
+            error = f'There is not any hdf5 in your directory'
         else:
             try:
                 dir_file = dir_ + '/' + 'run_config.txt'
@@ -56,7 +59,8 @@ class ModelRun(qtc.QObject):
 
             try:
                 ptor = PythonToR()
-                ptor.check_dataset_type(dir_)
+                if source_ == 'experiment':
+                    ptor.check_dataset_type(dir_)
                 ptor.r_bayesian_run(self.inputs, self.parallel)
 
             except Exception as e:
