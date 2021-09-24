@@ -178,8 +178,8 @@ Kclust_parallel <- function(pts,
 
     if (clustermethod == "Ripley' K based") {
       if (length(C) > 0) {
-        G <- graph.adjacency(D[C, C] < 2 * r)
-        lab <- clusters(G, "weak") #graph theory
+        G <- igraph::graph.adjacency(D[C, C] < 2 * r)
+        lab <- igraph::clusters(G, "weak") #graph theory
         labels <- (N + 1):(2 * N)
         labels[C] <- lab$membership #numeric vector giving the cluster id to which each vertex belongs
       }
@@ -189,8 +189,8 @@ Kclust_parallel <- function(pts,
 
     if (clustermethod == "DBSCAN") {
       if (length(C) > 0) {
-        G <- graph.adjacency(D[C, C] < r)
-        lab <- clusters(G, "weak")
+        G <- igraph::graph.adjacency(D[C, C] < r)
+        lab <- igraph::clusters(G, "weak")
         labels <- (N + 1):(2 * N)
         labels[C] <- lab$membership
         ##hoovering up boundary points by (arbitrarily) assigning to the first clustered
