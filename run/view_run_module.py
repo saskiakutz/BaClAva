@@ -116,8 +116,8 @@ class ViewRun(qtw.QWidget):
         clustermethods = ("ToMATo", "DBSCAN", "Ripley' K based", "DBSCAN 2")
         self.b_inputs["clustermethod"].addItems(clustermethods)
 
-        if os.name == 'nt':
-            self.b_inputs["parallelization"].setDisabled(True)
+        # if os.name == 'nt':
+        #     self.b_inputs["parallelization"].setDisabled(True)
 
         self.b_inputs["cores"].setDisabled(True)
         self.b_inputs["parallelization"].toggled.connect(self.b_inputs["cores"].setEnabled)
