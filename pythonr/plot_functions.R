@@ -240,8 +240,9 @@ cluster_superplot <- function(results, dirnames, expname, gg_plot_name, stor_end
   num_sets <- length(results)
   n_rows <- ceiling(sqrt(length(dirnames)))
   plotlist <- lapply(results, function(set) {
-    set[[9]]
+    set[[10]]
   })
+  # print(plotlist)
   super_plot <- do.call("ggarrange", c(plotlist, ncol = n_rows))
   plot_save(super_plot, expname, gg_plot_name,storage_opt = stor_ends, plot_height = 45, plot_width = 90)
 }
