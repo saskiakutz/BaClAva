@@ -100,18 +100,19 @@ post_fun <- function(newfolder, meter_unit, makeplot, storage, superplot, separa
       }
       # TODO: propoer error message in software
 
-      # TODO: summary export to hdf5 file
+      # TODO: summary export to hdf5 file and adjustment to nm or um
       filename_base <- stringr::str_split(filename, "\\.")[[1]][1]
       wfile <- file.path(expname, paste0(filename_base, "_summary.txt"))
       if (datasource == "simulation") {
         cat(
           "The best: clusterscale", bestcs, "_thresh", bestthr,
-          "labels.txt\nNumber of clusters: ", nClusters(labelsbest),
+          "labels.txt\nLength unit: ", meter_unit,
+          "\nNumber of clusters: ", nClusters(labelsbest),
           "\nPercentage in clusters: ", percentageInCluster(labelsbest),
           "%\nMean number of molecules per cluster: ", nMolsPerCluster(labelsbest),
           "\nMean area per cluster: ", mean(summarytable$areasCluster),
-          " nm²\nMean density per cluster: ", mean(summarytable$densitiesCluster),
-          "\nMean radius: ", mean(clusterRadii(pts, labelsbest)), " nm (simulation)",
+          " nm² or um²\nMean density per cluster: ", mean(summarytable$densitiesCluster),
+          "\nMean radius: ", mean(clusterRadii(pts, labelsbest)), " nm or µm",
           sep = "",
           file = wfile
 
@@ -122,7 +123,8 @@ post_fun <- function(newfolder, meter_unit, makeplot, storage, superplot, separa
           bestcs,
           " thresh",
           bestthr,
-          "labels.txt\nNumber of clusters:",
+          "labels.txt\nlength unit: ", meter_unit,
+          "\nNumber of clusters:",
           nClusters(labelsbest),
           "\nPercentage in clusters: ",
           percentageInCluster(labelsbest),
@@ -130,12 +132,12 @@ post_fun <- function(newfolder, meter_unit, makeplot, storage, superplot, separa
           nMolsPerCluster(labelsbest),
           "\nMean area per cluster: ",
           mean(summarytable$areasCluster),
-          " µm²",
+          " µm² or nm²",
           "\nMean density per cluster: ",
           mean(summarytable$densitiesCluster),
           "\nMean radius: ",
           mean(clusterRadii(pts, labelsbest)),
-          " µm",
+          " µm or nm",
           sep = "",
           file = wfile
         )
