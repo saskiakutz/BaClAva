@@ -90,7 +90,7 @@ class ViewPost(qtw.QWidget):
             "flip y-axis": qtw.QCheckBox()
         }
 
-        units = ('nanometers', 'micrometers')
+        units = ('nanometre', 'micrometre')
         self.p_inputs["length unit"].addItems(units)
         self.storage_option()
         self.p_inputs["superplot"].setDisabled(True)
