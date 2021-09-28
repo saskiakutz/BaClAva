@@ -2,7 +2,7 @@
 # Objective : Creating and storage post processing summaris as csv in module 3
 # Written by: Saskia Kutz
 
-creating_tibble <- function (results, storage_directory){
+creating_tibble <- function (results, storage_directory, length_unit){
   df_long <- dplyr::tibble(
     id = purrr::map(results, 'id'),
       radius = purrr::map(results, 'radii'),
@@ -20,7 +20,7 @@ creating_tibble <- function (results, storage_directory){
       ) %>%
       tidyr::unnest(cols = c(id, radius, number_mols, area, density, density_area))
 
-  write.csv(df_long, file.path(paste0(storage_directory, '/postprocessing_summary_based_on_clusters.csv')))
+  write.csv(df_long, file.path(paste0(storage_directory, '/postprocessing_summary_based_on_clusters_', length_unit, '.csv')))
 
   df_short <- dplyr::tibble(
     id = purrr::map(results, 'id'),
@@ -32,5 +32,5 @@ creating_tibble <- function (results, storage_directory){
       tidyr::unnest(cols = c(id, number_clusters, percentage_clusters, total_number_molecules,
     relative_density))
 
-  write.csv(df_short, file.path(paste0(storage_directory, '/postprocessing_summary_based_on_rois.csv')))
+  write.csv(df_short, file.path(paste0(storage_directory, '/postprocessing_summary_based_on_rois', length_unit, '.csv')))
 }
