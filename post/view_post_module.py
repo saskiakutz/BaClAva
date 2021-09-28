@@ -222,8 +222,6 @@ class ViewPost(qtw.QWidget):
 
         data = {
             'directory': self.dir_line.text(),
-            # 'datasource': self.p_inputs["datasource"].currentText(),
-            # 'computation': self.p_inputs["Bayesian computation"].currentText(),
             'storeplots': self.p_inputs["store plots"].isChecked(),
             'options': [self.storage_inputs[0].isChecked(), self.storage_inputs[1].isChecked(),
                         self.storage_inputs[2].isChecked(), self.storage_inputs[3].isChecked()],
