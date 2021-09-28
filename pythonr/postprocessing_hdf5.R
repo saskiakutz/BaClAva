@@ -145,7 +145,7 @@ post_fun <- function(newfolder, meter_unit, makeplot, storage, superplot, separa
 
       s <- clusterStatistics(pts, labelsbest)
       trans_s <- t(s)
-      colnames(trans_s) <- c("x", "y", "sd", "nmol")
+      colnames(trans_s) <- c(paste0("x_", meter_unit), paste0("y_", meter_unit), paste0("sd_", meter_unit), "nmol")
       if (!is.null(s) & s[1] != -1) {
         write_df_hdf5(file, trans_s, 'cluster-statistics')
         write_metadata_df(file, colnames(trans_s), 'cluster-statistics', 'colnames')
