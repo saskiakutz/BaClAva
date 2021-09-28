@@ -82,6 +82,7 @@ class ViewPost(qtw.QWidget):
             storage_options.addWidget(widget)
 
         self.p_inputs = {
+            "length unit": qtw.QComboBox(),
             "store plots": qtw.QCheckBox(),
             "options": storage_options,
             "superplot": qtw.QCheckBox(),
@@ -89,6 +90,8 @@ class ViewPost(qtw.QWidget):
             "flip y-axis": qtw.QCheckBox()
         }
 
+        units = ('nanometers', 'micrometers')
+        self.p_inputs["length unit"].addItems(units)
         self.storage_option()
         self.p_inputs["superplot"].setDisabled(True)
         self.p_inputs["separate plots"].setDisabled(True)
