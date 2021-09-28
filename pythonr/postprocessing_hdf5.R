@@ -8,7 +8,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
   source("./pythonr/exporting_hdf5.R")
   source("./pythonr/internal_postporcessing.R")
   source("./pythonr/plot_functions.R")
-  l_ply(newfolder, function(expname) {
+  plyr::l_ply(newfolder, function(expname) {
     nexpname <- expname
 
     run_con <- readLines(con = file.path(paste0(nexpname, "/run_config.txt", sep = "")))
@@ -42,8 +42,8 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
 
     res <- lapply(filenames, function(filename) {
 
-      file <- H5Fopen(file.path(expname, filename))
-      datafile <- h5read(file, 'data')
+      file <- rhdf5::H5Fopen(file.path(expname, filename))
+      datafile <- rhdf5::h5read(file, 'data')
       pts <- datafile[, xcol:ycol]
       pts <- pts / 1000
       sds <- datafile[, sdcol]
@@ -58,8 +58,8 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
       }
 
       # read in r_vs_thresh
-      r <- h5read(file, 'r_vs_thresh')
-      r_attr <- h5readAttributes(file, 'r_vs_thresh')
+      r <- rhdf5::h5read(file, 'r_vs_thresh')
+      r_attr <- rhdf5::h5readAttributes(file, 'r_vs_thresh')
       colnames(r) <- r_attr$scales
       rownames(r) <- r_attr$thresholds
       m <- as.matrix(r)
@@ -76,7 +76,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
       bestcs <- cs[best[2]]
       bestthr <- thr[best[1]]
 
-      labelsbest <- h5read(file, paste0("labels/clusterscale", bestcs, "_thresh", bestthr, sep = ''))
+      labelsbest <- rhdf5::h5read(file, paste0("labels/clusterscale", bestcs, "_thresh", bestthr, sep = ''))
       write_metadata_df(file, paste0("clusterscale", bestcs, "_thresh", bestthr, sep = ''), 'r_vs_thresh', 'best')
 
       # summaries
@@ -94,7 +94,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
       # TODO: propoer error message in software
 
       # TODO: summary export to hdf5 file
-      filename_base <- str_split(filename, "\\.")[[1]][1]
+      filename_base <- stringr::str_split(filename, "\\.")[[1]][1]
       wfile <- file.path(expname, paste0(filename_base, "_summary.txt"))
       if (datasource == "simulation") {
         cat(
@@ -212,7 +212,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
       cluster_superplot(res, filenames, postprocessing_folder, "ROIs_together", stor_ends = storage)
 
     hist_plot(res, postprocessing_folder, makeplot, storage_ends = storage)
-    h5closeAll()
+    rhdf5::closeAll()
   })
 }
 
