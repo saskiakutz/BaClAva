@@ -222,7 +222,7 @@ post_fun <- function(newfolder, meter_unit, makeplot, storage, superplot, separa
     if (makeplot & superplot)
       cluster_superplot(res, filenames, postprocessing_folder, "ROIs_together", stor_ends = storage)
 
-    creating_tibble(res, postprocessing_folder)
+    creating_tibble(res, postprocessing_folder, meter_unit)
 
     hist_plot(res, postprocessing_folder, makeplot, storage_ends = storage)
     rhdf5::h5closeAll()
