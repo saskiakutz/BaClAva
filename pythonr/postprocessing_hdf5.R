@@ -8,6 +8,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
   source("./pythonr/exporting_hdf5.R")
   source("./pythonr/internal_postporcessing.R")
   source("./pythonr/plot_functions.R")
+  source("./pythonr/exporting_csv.R")
   plyr::l_ply(newfolder, function(expname) {
     nexpname <- expname
 
@@ -210,6 +211,8 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
     dir.create(postprocessing_folder, showWarnings = F)
     if (makeplot & superplot)
       cluster_superplot(res, filenames, postprocessing_folder, "ROIs_together", stor_ends = storage)
+
+    creating_tibble(res, expname)
 
     hist_plot(res, postprocessing_folder, makeplot, storage_ends = storage)
     rhdf5::h5closeAll()
