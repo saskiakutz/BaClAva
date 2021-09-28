@@ -212,7 +212,7 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
       cluster_superplot(res, filenames, postprocessing_folder, "ROIs_together", stor_ends = storage)
 
     hist_plot(res, postprocessing_folder, makeplot, storage_ends = storage)
-    rhdf5::closeAll()
+    rhdf5::h5closeAll()
   })
 }
 
