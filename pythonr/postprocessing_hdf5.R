@@ -188,7 +188,8 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
           area = summarytable$areasCluster,
           density = summarytable$densitiesCluster,
           density_area = summarytable$densitiesCluster / summarytable$areasCluster,
-          plots = plot_clustering
+          plots = plot_clustering,
+          id = filename_base
         )
       }else {
         list(
@@ -200,7 +201,8 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
           reldensity = relative_density(pts, labelsbest, summarytable$areasCluster, x_limit, y_limit),
           area = summarytable$areasCluster,
           density = summarytable$densitiesCluster,
-          density_area = summarytable$densitiesCluster / summarytable$areasCluster
+          density_area = summarytable$densitiesCluster / summarytable$areasCluster,
+          id = filename_base
         )
       }
     })
