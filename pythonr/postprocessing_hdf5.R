@@ -48,9 +48,13 @@ post_fun <- function(newfolder, meter_unit, makeplot, storage, superplot, separa
       file <- rhdf5::H5Fopen(file.path(expname, filename))
       datafile <- rhdf5::h5read(file, 'data')
       pts <- datafile[, xcol:ycol]
-      pts <- pts / 1000
       sds <- datafile[, sdcol]
-      sds <- sds / 1000
+
+      if (meter_unit == 'um'){
+        pts <- pts / 1000
+        sds <- sds / 1000
+      }
+
       if (datasource == 'experiment') {
         names(pts)[1] <- "x"
         names(pts)[2] <- "y"
