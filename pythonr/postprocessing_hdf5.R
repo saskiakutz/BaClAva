@@ -3,7 +3,7 @@
 # Adapted from: Griffié et al.
 # Adapted and written by: Saskia Kutz
 
-post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, flipped) {
+post_fun <- function(newfolder, meter_unit, makeplot, storage, superplot, separateplots, flipped) {
   source("./pythonr/package_list.R")
   source("./pythonr/exporting_hdf5.R")
   source("./pythonr/internal_postporcessing.R")
@@ -38,6 +38,8 @@ post_fun <- function(newfolder, makeplot, storage, superplot, separateplots, fli
     } else {
       process <- "parallel"
     }
+
+
 
     filenames <- list.files(expname, pattern = '*.h5')
 
