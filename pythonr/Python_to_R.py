@@ -128,6 +128,7 @@ class PythonToR:
         storage_endings = np.array(input_dic.get('options'))
         self.r.post_fun(
             newfolder=input_dic.get('directory'),
+            meter_unit=input_dic.get('unit'),
             makeplot=BoolVector([input_dic.get('storeplots')]),
             storage=storage_endings,
             superplot=BoolVector([input_dic.get('superplot')]),
