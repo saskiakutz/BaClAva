@@ -32,5 +32,5 @@ creating_tibble <- function (results, storage_directory, length_unit){
       tidyr::unnest(cols = c(id, number_clusters, percentage_clusters, total_number_molecules,
     relative_density))
 
-  write.csv(df_short, file.path(paste0(storage_directory, '/postprocessing_summary_based_on_rois', length_unit, '.csv')))
+  write.csv(df_short, file.path(paste0(storage_directory, '/postprocessing_summary_based_on_rois_', length_unit, '.csv')))
 }
