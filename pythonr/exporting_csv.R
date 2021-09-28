@@ -4,6 +4,7 @@
 
 creating_tibble <- function (results, storage_directory){
   df_long <- dplyr::tibble(
+    id = purrr::map(results, 'id'),
       radius = purrr::map(results, 'radii'),
       number_mols = purrr::map(results, 'nmols'),
       area = purrr::map(results, 'area'),
@@ -17,17 +18,18 @@ creating_tibble <- function (results, storage_directory){
         density = purrr::map(density, ~ tibble(density = .x)),
         density_area = purrr::map(density_area, ~ tibble(density_area = .x))
       ) %>%
-      tidyr::unnest(cols = c(radius, number_mols, area, density, density_area))
+      tidyr::unnest(cols = c(id, radius, number_mols, area, density, density_area))
 
   write.csv(df_long, file.path(paste0(storage_directory, '/postprocessing_summary_based_on_clusters.csv')))
 
   df_short <- dplyr::tibble(
+    id = purrr::map(results, 'id'),
       number_clusters = purrr::map(results, 'nclusters'),
       percentage_clusters = purrr::map(results, 'pclustered'),
       total_number_molecules = purrr::map(results, 'totalmols'),
       relative_density = purrr::map(results, 'reldensity')
     ) %>%
-      tidyr::unnest(cols = c(number_clusters, percentage_clusters, total_number_molecules,
+      tidyr::unnest(cols = c(id, number_clusters, percentage_clusters, total_number_molecules,
     relative_density))
 
   write.csv(df_short, file.path(paste0(storage_directory, '/postprocessing_summary_based_on_rois.csv')))
