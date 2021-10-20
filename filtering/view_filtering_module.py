@@ -52,6 +52,17 @@ class ViewFiltering(qtw.QWidget):
 
         option_layout.addLayout(slider_layout)
 
+        storage_layout = qtw.QHBoxLayout()
+
+        self.image_btn = qtw.QPushButton("Store image")
+        self.image_btn.clicked.connect(self.choose_storage)
+        storage_layout.addWidget(self.image_btn)
+        self.data_btn = qtw.QPushButton("Store data")
+        self.data_btn.clicked.connect(self.choose_storage)
+        storage_layout.addWidget(self.data_btn)
+
+        option_layout.addLayout(storage_layout)
+
         plot_layout = qtw.QVBoxLayout()
 
         self.plot_window = pg.GraphicsWindow(title='Plotting test')
@@ -71,4 +82,7 @@ class ViewFiltering(qtw.QWidget):
         pass
 
     def update_plot(self):
+        pass
+
+    def choose_storage(self):
         pass
