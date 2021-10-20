@@ -7,9 +7,7 @@
 hist_plot <- function(res, nexpname, plotcreation, storage_ends) {
   # histogram preparation and storage
 
-  length_res <- length(names(res[[1]]))
-  if (length_res == 10)
-    length_res <- 9
+  length_res <- 9
   for (j in 1:length_res) {
     datavec <- c()
     for (i in 1:length(res)) {

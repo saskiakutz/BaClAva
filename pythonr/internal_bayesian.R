@@ -193,7 +193,7 @@ Kclust_parallel <- function(pts,
         lab <- igraph::clusters(G, "weak")
         labels <- (N + 1):(2 * N)
         labels[C] <- lab$membership
-        ##hoovering up boundary points by (arbitrarily) assigning to the first clustered
+        # hoovering up boundary points by (arbitrarily) assigning to the first clustered
         for (i in (1:N)[-C]) {
           closeto <- which(D[C, i] < r)
           if (length(closeto) > 0)
@@ -272,7 +272,7 @@ Kclust_sequential <- function(pts,
                               report = FALSE,
                               clustermethod = "Ripley' K based") {
   # adapted from Griffié et al.
-  # clsutering in sequential fashion
+  # clustering in sequential fashion
 
   N <- dim(pts)[1]
   if (N == 1) {
@@ -533,3 +533,4 @@ label_correction <- function(labels) {
   }
   labels
 }
+

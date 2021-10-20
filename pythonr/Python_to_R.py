@@ -126,8 +126,13 @@ class PythonToR:
         self.r.source("./pythonr/postprocessing_hdf5.R")
         numpy2ri.activate()
         storage_endings = np.array(input_dic.get('options'))
+        if input_dic.get('unit') == 'nanometre':
+            length = 'nm'
+        else:
+            length = 'um'
         self.r.post_fun(
             newfolder=input_dic.get('directory'),
+            meter_unit=length,
             makeplot=BoolVector([input_dic.get('storeplots')]),
             storage=storage_endings,
             superplot=BoolVector([input_dic.get('superplot')]),
