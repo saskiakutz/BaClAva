@@ -33,14 +33,14 @@ class ViewFiltering(qtw.QWidget):
         main_layout = qtw.QHBoxLayout()
         option_layout = qtw.QVBoxLayout()
 
-        parameter_layout = qtw.QFormLayout()
+        parameter_layout = qtw.QHBoxLayout()
 
         self.file_btn = qtw.QPushButton("Select file")
         self.file_btn.clicked.connect(self.choose_file)
+        parameter_layout.addWidget(self.file_btn)
         self.file_line = qtw.QLineEdit("Select file")
         self.file_line.setReadOnly(True)
-
-        parameter_layout.addRow(self.file_btn, self.file_line)
+        parameter_layout.addWidget(self.file_line)
 
         option_layout.addLayout(parameter_layout)
 
