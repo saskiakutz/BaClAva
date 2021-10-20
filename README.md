@@ -184,13 +184,14 @@ For feature requests or bug reports, please post them on the GitHub issue tracke
 
 # Citing BaClAva
 
-If you use BaClAva in your research, please cite the pre-print:
+If you use BaClAva in your research, please cite the article:
 
 An efficient GUI-based clustering software for simulation and Bayesian cluster analysis of single-molecule localization
 microscopy data<br/>
-Saskia Kutz, Ando C. Zehrer, Roman Svetlitckii, Gülce S. Gülcüler Balta, Lucrezia Galli, Susanne Kleber, Ana
-Martin-Villalba, Helge Ewers<br/>
-bioRxiv 2021.06.11.447933; doi: https://doi.org/10.1101/2021.06.11.447933
+Saskia Kutz, Ando C. Zehrer, Roman Svetlitckii, Gülce S. Gülcüler Balta, Lucrezia Galli, Susanne Kleber, Jakob Rentsch,
+Ana Martin-Villalba, Helge Ewers<br/>
+Frontiers in Bioinformatics;
+DOI: [10.3389/fbinf.2021.723915](https://www.frontiersin.org/article/10.3389/fbinf.2021.723915 )
 
 # Literature:
 
