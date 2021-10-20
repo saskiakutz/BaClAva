@@ -79,7 +79,14 @@ class ViewFiltering(qtw.QWidget):
         self.setLayout(main_layout)
 
     def choose_file(self):
-        pass
+
+        filename, _ = qtw.QFileDialog.getOpenFileName(
+            self,
+            "Select data file",
+            qtc.QDir.homePath(),
+            'hdf5 files (*.h5)'
+        )
+        self.dir_line.setText(os.path.dirname(filename))
 
     def update_plot(self):
         pass
