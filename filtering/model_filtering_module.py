@@ -8,4 +8,13 @@ from PyQt5 import QtWidgets as qtw
 
 
 class ModuleFiltering(qtw.QWidget):
-    pass
+
+    def __init__(self):
+        super().__init__()
+        self.inputs = None
+
+    def import_data(self):
+        pass
+
+    def update_plot(self):
+        pass

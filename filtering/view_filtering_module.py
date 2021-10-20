@@ -88,6 +88,9 @@ class ViewFiltering(qtw.QWidget):
         )
         self.file_line.setText(filename)
 
+    def import_data(self):
+        pass
+
     def update_plot(self):
         pass
 
