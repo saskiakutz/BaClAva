@@ -86,7 +86,7 @@ class ViewFiltering(qtw.QWidget):
             qtc.QDir.homePath(),
             'hdf5 files (*.h5)'
         )
-        self.dir_line.setText(os.path.dirname(filename))
+        self.file_line.setText(filename)
 
     def update_plot(self):
         pass
