@@ -98,7 +98,7 @@ post_fun <- function(newfolder, meter_unit, makeplot, storage, superplot, separa
       }else {
         print("Corrected labels do not have the same length as the Bayesian labels!")
       }
-      # TODO: propoer error message in software
+      # TODO: proper error message in software
 
       # TODO: summary export to hdf5 file and adjustment to nm or um
       filename_base <- stringr::str_split(filename, "\\.")[[1]][1]
@@ -177,13 +177,15 @@ post_fun <- function(newfolder, meter_unit, makeplot, storage, superplot, separa
         }else {
 
           plot_clustering <- cluster_plot(pts, labelsbest, paste0("Clustering: ", filename_base), sds, flip = flipped)
-          plot_save(plot_clustering, expname, paste0(filename_base, "_Clustering"), storage_opt = storage)
+          plot_save(plot_clustering, expname = expname, gg_plot_name = paste0(filename_base, "_Clustering"), storage_opt = storage)
+
         }
 #
 #         # summary_plot(summarytable, paste0(filename_base, "_summarytable_plots"), exp_name = expname)
       }
 
       # H5Fclose(file)
+
 
       if (makeplot & superplot) {
         list(
