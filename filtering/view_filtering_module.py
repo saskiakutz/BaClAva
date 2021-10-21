@@ -100,3 +100,8 @@ class ViewFiltering(qtw.QWidget):
 
     def choose_storage(self):
         pass
+
+    def show_error(self, error):
+        """error message in separate window"""
+
+        qtw.QMessageBox.critical(None, 'Error', error)
