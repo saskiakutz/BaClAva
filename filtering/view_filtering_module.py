@@ -33,14 +33,14 @@ class ViewFiltering(qtw.QWidget):
         main_layout = qtw.QHBoxLayout()
         option_layout = qtw.QVBoxLayout()
 
-        parameter_layout = qtw.QFormLayout()
+        parameter_layout = qtw.QHBoxLayout()
 
         self.file_btn = qtw.QPushButton("Select file")
         self.file_btn.clicked.connect(self.choose_file)
+        parameter_layout.addWidget(self.file_btn)
         self.file_line = qtw.QLineEdit("Select file")
         self.file_line.setReadOnly(True)
-
-        parameter_layout.addRow(self.file_btn, self.file_line)
+        parameter_layout.addWidget(self.file_line)
 
         option_layout.addLayout(parameter_layout)
 
@@ -51,6 +51,17 @@ class ViewFiltering(qtw.QWidget):
         slider_layout.addWidget(self.area_slider)
 
         option_layout.addLayout(slider_layout)
+
+        storage_layout = qtw.QHBoxLayout()
+
+        self.image_btn = qtw.QPushButton("Store image")
+        self.image_btn.clicked.connect(self.choose_storage)
+        storage_layout.addWidget(self.image_btn)
+        self.data_btn = qtw.QPushButton("Store data")
+        self.data_btn.clicked.connect(self.choose_storage)
+        storage_layout.addWidget(self.data_btn)
+
+        option_layout.addLayout(storage_layout)
 
         plot_layout = qtw.QVBoxLayout()
 
@@ -68,7 +79,20 @@ class ViewFiltering(qtw.QWidget):
         self.setLayout(main_layout)
 
     def choose_file(self):
+
+        filename, _ = qtw.QFileDialog.getOpenFileName(
+            self,
+            "Select data file",
+            qtc.QDir.homePath(),
+            'hdf5 files (*.h5)'
+        )
+        self.file_line.setText(filename)
+
+    def import_data(self):
         pass
 
     def update_plot(self):
+        pass
+
+    def choose_storage(self):
         pass
