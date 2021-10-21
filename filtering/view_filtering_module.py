@@ -25,7 +25,7 @@ from matplotlib.figure import Figure
 class ViewFiltering(qtw.QWidget):
     """View part of module 4"""
 
-    sub_data = qtc.pyqtSignal(object)
+    sub_data = qtc.pyqtSignal(str)
 
     def __init__(self):
         """Setup of all GUI sections and options"""
@@ -90,6 +90,7 @@ class ViewFiltering(qtw.QWidget):
         )
         self.file_line.setText(filename)
 
+        print(filename)
         self.sub_data.emit(filename)
 
     def import_data(self):
