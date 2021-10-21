@@ -25,6 +25,8 @@ from matplotlib.figure import Figure
 class ViewFiltering(qtw.QWidget):
     """View part of module 4"""
 
+    sub_data = qtc.pyqtSignal(object)
+
     def __init__(self):
         """Setup of all GUI sections and options"""
 
@@ -87,6 +89,8 @@ class ViewFiltering(qtw.QWidget):
             'hdf5 files (*.h5)'
         )
         self.file_line.setText(filename)
+
+        self.sub_data.emit(filename)
 
     def import_data(self):
         pass
