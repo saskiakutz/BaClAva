@@ -12,6 +12,7 @@ import pandas as pd
 import seaborn as sns
 import h5py
 from filtering.model_slider import Slider
+from post.view_post_module import MplCanvas
 
 import pyqtgraph as pg
 
@@ -67,11 +68,9 @@ class ViewFiltering(qtw.QWidget):
 
         plot_layout = qtw.QVBoxLayout()
 
-        self.plot_window = pg.GraphicsWindow(title='Plotting test')
+        self.plot_window = MplCanvas(self, width=5, height=5, dpi=200)
         plot_layout.addWidget(self.plot_window)
-        self.plotting = self.plot_window.addPlot(title='plot')
-        self.plot = self.plotting.plot(pen='r')
-        self.update_plot()
+
 
         main_layout.addLayout(option_layout)
         main_layout.addLayout(plot_layout)
@@ -95,8 +94,37 @@ class ViewFiltering(qtw.QWidget):
     def import_data(self):
         pass
 
-    def update_plot(self):
-        pass
+    def update_plot(self, data_signal):
+
+        data_df, summary_df = data_signal
+
+        self.plot_window.axes.cla()
+        self.draw_scatterplot(data_df, self.plot_window, 'x [nm]', 'y [nm]')
+
+    def draw_scatterplot(self, data_scatter, canvas, x_label, y_label):
+        """Scatterplot of a clustering result"""
+
+        canvas.axes.cla()
+        canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], s=0, clip_on=False)
+        canvas.axes.set_ylabel(y_label, fontsize='10')
+        canvas.axes.set_xlabel(x_label, fontsize='10')
+        canvas.draw()
+
+        colour = self.scatterplot_colour(data_scatter.iloc[:, -1])
+        canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], color=colour, alpha=0.9,
+                            edgecolors="none")
+
+        canvas.draw()
+
+    def scatterplot_colour(self, labels):
+        """colour selection for the scatter plot:
+        - clusters in colour
+        - background localizations: silver
+        """
+
+        colors = sns.color_palette("CMRmap_r", n_colors=len(np.unique(labels)) - 1)
+        scale = ['silver' if label == 0 else colors[label - 1] for label in labels]
+        return scale
 
     def choose_storage(self):
         pass
