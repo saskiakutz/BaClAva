@@ -37,7 +37,9 @@ class ModuleFiltering(qtw.QWidget):
         elif not path.isdir(dir_.rsplit('/', 1)[0]):
             error = f'You need to choose a valid directory'
         else:
-            self.import_data()
+            data, summary = self.import_data()
+            print(data.head())
+            print(summary.head())
 
         if error:
             self.error.emit(error)
@@ -56,6 +58,10 @@ class ModuleFiltering(qtw.QWidget):
 
         labels = self.single_values(labels)
         dataset['labels'] = labels
+        dataset['labels_plot'] = labels
+        summary_table['labels'] = np.arange(summary_table.shape[0]) + 1
+
+        return [dataset, summary_table]
 
     def update_plot(self):
         pass
