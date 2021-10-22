@@ -19,10 +19,20 @@ class ModuleFiltering(qtw.QWidget):
     def __init__(self):
         super().__init__()
         self.inputs = None
+        self.area_update = None
+        self.density_update = None
+        self.dataset = None
+        self.summary_table = None
 
     @qtc.pyqtSlot(str)
     def set_data(self, inputs):
         self.inputs = inputs
+
+    @qtc.pyqtSlot(object)
+    def set_area_density(self, updated_values):
+        self.area_update, self.density_update = updated_values
+        print(self.area_update)
+        print(self.density_update)
 
     @qtc.pyqtSlot()
     def print_income(self):
@@ -51,15 +61,15 @@ class ModuleFiltering(qtw.QWidget):
             labels = np.asarray(f['labels/' + label_set][()])
             columns_data = f['data'].attrs['datacolumns'] - 1
             columns_data = columns_data.tolist()
-            dataset = pd.DataFrame(f['data'][()]).iloc[:, columns_data]
-            summary_table = pd.DataFrame(f['summarytable'][()])
+            self.dataset = pd.DataFrame(f['data'][()]).iloc[:, columns_data]
+            self.summary_table = pd.DataFrame(f['summarytable'][()])
 
         labels = self.single_values(labels)
-        dataset['labels'] = labels
-        dataset['labels_plot'] = labels
-        summary_table['labels'] = np.arange(summary_table.shape[0]) + 1
+        self.dataset['labels'] = labels
+        self.dataset['labels_plot'] = labels
+        self.summary_table['labels'] = np.arange(self.summary_table.shape[0]) + 1
 
-        return [dataset, summary_table]
+        return [self.dataset, self.summary_table]
 
     @staticmethod
     def single_values(cluster_labels):
@@ -74,3 +84,6 @@ class ModuleFiltering(qtw.QWidget):
                 cluster_labels = np.where(cluster_labels == key, 0, cluster_labels)
 
         return cluster_labels.astype(int)
+
+    def data_update(self):
+        pass
