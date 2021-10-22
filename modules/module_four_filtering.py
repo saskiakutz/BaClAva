@@ -24,7 +24,8 @@ class MainWindowFiltering(qtw.QWidget):
         self.layout().addWidget(self.filtering_view)
 
         self.filtering_view.sub_data.connect(self.filtering_model.set_data)
-
+        self.filtering_view.sub_data.connect(self.filtering_model.print_income)
+        self.filtering_model.error.connect(self.filtering_view.show_error)
 
         # End main UI code
         self.show()
