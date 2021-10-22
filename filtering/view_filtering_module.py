@@ -27,6 +27,7 @@ class ViewFiltering(qtw.QWidget):
     """View part of module 4"""
 
     sub_data = qtc.pyqtSignal(str)
+    updated_labels = qtc.pyqtSignal(object)
 
     def __init__(self):
         """Setup of all GUI sections and options"""
@@ -71,10 +72,11 @@ class ViewFiltering(qtw.QWidget):
         self.plot_window = MplCanvas(self, width=5, height=5, dpi=200)
         plot_layout.addWidget(self.plot_window)
 
+        self.area_slider.slider.valueChanged.connect(self.update_labels)
+        self.density_slider.slider.valueChanged.connect(self.update_labels)
 
         main_layout.addLayout(option_layout)
         main_layout.addLayout(plot_layout)
-
 
         # show final layout
         self.setLayout(main_layout)
@@ -122,6 +124,11 @@ class ViewFiltering(qtw.QWidget):
         colors = sns.color_palette("CMRmap_r", n_colors=len(np.unique(labels)) - 1)
         scale = ['silver' if label == 0 else colors[label - 1] for label in labels]
         return scale
+
+    def update_labels(self):
+
+        updated_area_density = [self.area_slider.x, self.density_slider.x]
+        self.updated_labels.emit(updated_area_density)
 
     def choose_storage(self):
         pass
