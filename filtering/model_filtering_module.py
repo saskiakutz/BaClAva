@@ -46,13 +46,14 @@ class ModuleFiltering(qtw.QWidget):
     def import_data(self):
 
         with h5py.File(self.inputs, 'r') as f:
-            labelset = f['r_vs_thresh'].attrs['best'][0].decode()
-            labels = pd.array(f['labels/' + labelset][()]).astype(int)
-            columns = f['data'].attrs['datacolumns'] - 1
-            columns = columns.tolist()
-            dataset = pd.DataFrame(f['data'][()]).iloc[:, columns]
+            label_set = f['r_vs_thresh'].attrs['best'][0].decode()
+            labels = pd.array(f['labels/' + label_set][()]).astype(int)
+            columns_data = f['data'].attrs['datacolumns'] - 1
+            columns_data = columns_data.tolist()
+            dataset = pd.DataFrame(f['data'][()]).iloc[:, columns_data]
+            summary_table = pd.DataFrame(f['summarytable'][()])
         dataset['labels'] = labels
-        print(dataset.head())
+        print(summary_table)
 
 
     def update_plot(self):
