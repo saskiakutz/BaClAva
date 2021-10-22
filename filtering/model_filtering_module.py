@@ -3,6 +3,9 @@
 # Written by: Saskia Kutz
 
 from os import path
+
+import h5py
+import pandas as pd
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtWidgets as qtw
 
@@ -32,12 +35,25 @@ class ModuleFiltering(qtw.QWidget):
             error = f'You need to choose a file'
         elif not path.isdir(dir_.rsplit('/', 1)[0]):
             error = f'You need to choose a valid directory'
+        else:
+            self.import_data()
 
         if error:
             self.error.emit(error)
 
+        print("all seems fine.")
+
     def import_data(self):
-        pass
+
+        with h5py.File(self.inputs, 'r') as f:
+            labelset = f['r_vs_thresh'].attrs['best'][0].decode()
+            labels = pd.array(f['labels/' + labelset][()]).astype(int)
+            columns = f['data'].attrs['datacolumns'] - 1
+            columns = columns.tolist()
+            dataset = pd.DataFrame(f['data'][()]).iloc[:, columns]
+        dataset['labels'] = labels
+        print(dataset.head())
+
 
     def update_plot(self):
         pass
