@@ -31,8 +31,6 @@ class ModuleFiltering(qtw.QWidget):
     @qtc.pyqtSlot(object)
     def set_area_density(self, updated_values):
         self.area_update, self.density_update = updated_values
-        print(self.area_update)
-        print(self.density_update)
 
     @qtc.pyqtSlot()
     def print_income(self):
