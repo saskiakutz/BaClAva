@@ -15,7 +15,6 @@ class ModuleFiltering(qtw.QWidget):
 
     error = qtc.pyqtSignal(str)
     data_signal = qtc.pyqtSignal(object)
-    summary_signal = qtc.pyqtSignal(object)
 
     def __init__(self):
         super().__init__()
@@ -40,8 +39,7 @@ class ModuleFiltering(qtw.QWidget):
             error = f'You need to choose a valid directory'
         else:
             data, summary = self.import_data()
-            self.data_signal.emit(data)
-            self.summary_signal.emit(summary)
+            self.data_signal.emit([data, summary])
 
         if error:
             self.error.emit(error)
