@@ -64,6 +64,10 @@ class ModuleFiltering(qtw.QWidget):
 
     @staticmethod
     def single_values(cluster_labels):
+        """
+        function to change labels for background localisations to zero
+        """
+
         values, counts = np.unique(cluster_labels, return_counts=True)
         count_dic = dict(zip(values, counts))
         for key, value in count_dic.items():
