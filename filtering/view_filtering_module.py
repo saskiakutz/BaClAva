@@ -90,7 +90,6 @@ class ViewFiltering(qtw.QWidget):
         )
         self.file_line.setText(filename)
 
-        print(filename)
         self.sub_data.emit(filename)
 
     def import_data(self):
