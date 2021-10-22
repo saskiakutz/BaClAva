@@ -53,11 +53,9 @@ class ModuleFiltering(qtw.QWidget):
             columns_data = columns_data.tolist()
             dataset = pd.DataFrame(f['data'][()]).iloc[:, columns_data]
             summary_table = pd.DataFrame(f['summarytable'][()])
-        dataset['labels'] = labels
 
-        print(summary_table)
         labels = self.single_values(labels)
-        print(labels)
+        dataset['labels'] = labels
 
     def update_plot(self):
         pass
