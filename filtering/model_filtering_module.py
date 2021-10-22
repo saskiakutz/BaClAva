@@ -5,6 +5,7 @@
 from os import path
 
 import h5py
+import numpy as np
 import pandas as pd
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtWidgets as qtw
@@ -47,14 +48,26 @@ class ModuleFiltering(qtw.QWidget):
 
         with h5py.File(self.inputs, 'r') as f:
             label_set = f['r_vs_thresh'].attrs['best'][0].decode()
-            labels = pd.array(f['labels/' + label_set][()]).astype(int)
+            labels = np.asarray(f['labels/' + label_set][()])
             columns_data = f['data'].attrs['datacolumns'] - 1
             columns_data = columns_data.tolist()
             dataset = pd.DataFrame(f['data'][()]).iloc[:, columns_data]
             summary_table = pd.DataFrame(f['summarytable'][()])
         dataset['labels'] = labels
-        print(summary_table)
 
+        print(summary_table)
+        labels = self.single_values(labels)
+        print(labels)
 
     def update_plot(self):
         pass
+
+    @staticmethod
+    def single_values(cluster_labels):
+        values, counts = np.unique(cluster_labels, return_counts=True)
+        count_dic = dict(zip(values, counts))
+        for key, value in count_dic.items():
+            if value == 1:
+                cluster_labels = np.where(cluster_labels == key, 0, cluster_labels)
+
+        return cluster_labels
