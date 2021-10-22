@@ -134,8 +134,9 @@ class ViewFiltering(qtw.QWidget):
 
     def update_sliders(self, summary_df):
 
-        area_max = summary_df.iloc[:, 1].max()
-        area_min = summary_df.iloc[:, 1].min() - 1
+        print(summary_df)
+        area_max = summary_df.iloc[:, 1].max() * 1000
+        area_min = summary_df.iloc[:, 1].min() * 1000 -1
         density_max = summary_df.iloc[:, 2].max()
         density_min = summary_df.iloc[:, 2]. min() -1
 
