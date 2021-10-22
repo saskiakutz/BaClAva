@@ -14,6 +14,8 @@ from PyQt5 import QtWidgets as qtw
 class ModuleFiltering(qtw.QWidget):
 
     error = qtc.pyqtSignal(str)
+    data_signal = qtc.pyqtSignal(object)
+    summary_signal = qtc.pyqtSignal(object)
 
     def __init__(self):
         super().__init__()
@@ -38,8 +40,8 @@ class ModuleFiltering(qtw.QWidget):
             error = f'You need to choose a valid directory'
         else:
             data, summary = self.import_data()
-            print(data.head())
-            print(summary.head())
+            self.data_signal.emit(data)
+            self.summary_signal.emit(summary)
 
         if error:
             self.error.emit(error)
@@ -62,9 +64,6 @@ class ModuleFiltering(qtw.QWidget):
         summary_table['labels'] = np.arange(summary_table.shape[0]) + 1
 
         return [dataset, summary_table]
-
-    def update_plot(self):
-        pass
 
     @staticmethod
     def single_values(cluster_labels):
