@@ -49,9 +49,9 @@ class ViewFiltering(qtw.QWidget):
         option_layout.addLayout(parameter_layout)
 
         slider_layout = qtw.QVBoxLayout()
-        self.density_slider = Slider('Density', -10, 10)
+        self.density_slider = Slider('Density', 0, 10)
         slider_layout.addWidget(self.density_slider)
-        self.area_slider = Slider('Area', -10, 10)
+        self.area_slider = Slider('Area', 0, 10)
         slider_layout.addWidget(self.area_slider)
 
         option_layout.addLayout(slider_layout)
@@ -97,6 +97,8 @@ class ViewFiltering(qtw.QWidget):
 
         data_df, summary_df = data_signal
 
+        self.update_sliders(summary_df)
+
         self.plot_window.axes.cla()
         self.draw_scatterplot(data_df, self.plot_window, 'x [nm]', 'y [nm]')
 
@@ -129,6 +131,16 @@ class ViewFiltering(qtw.QWidget):
 
         updated_area_density = [self.area_slider.x, self.density_slider.x]
         self.updated_labels.emit(updated_area_density)
+
+    def update_sliders(self, summary_df):
+
+        area_max = summary_df.iloc[:, 1].max()
+        area_min = summary_df.iloc[:, 1].min() - 1
+        density_max = summary_df.iloc[:, 2].max()
+        density_min = summary_df.iloc[:, 2]. min() -1
+
+
+
 
     def choose_storage(self):
         pass
