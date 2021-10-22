@@ -91,9 +91,6 @@ class ViewFiltering(qtw.QWidget):
 
         self.sub_data.emit(filename)
 
-    def import_data(self):
-        pass
-
     def update_plot(self, data_signal):
 
         data_df, summary_df = data_signal
