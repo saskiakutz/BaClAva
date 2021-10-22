@@ -40,3 +40,7 @@ class Slider(qtw.QWidget):
         self.x = self.maximum + (float(value) / (self.slider.maximum() - self.slider.minimum())) * \
                  (self.maximum - self.minimum)
         self.label.setText("{0:.4g}".format(self.x))
+
+    def update_min_max(self, min_new, max_new):
+        self.minimum = min_new
+        self.maximum = max_new
