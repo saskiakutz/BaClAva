@@ -139,7 +139,8 @@ class ViewFiltering(qtw.QWidget):
         density_max = summary_df.iloc[:, 2].max()
         density_min = summary_df.iloc[:, 2]. min() -1
 
-
+        self.area_slider.update_min_max(area_min, area_max)
+        self.density_slider.update_min_max(density_min, density_max)
 
 
     def choose_storage(self):
