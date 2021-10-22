@@ -44,8 +44,6 @@ class ModuleFiltering(qtw.QWidget):
         if error:
             self.error.emit(error)
 
-        print("all seems fine.")
-
     def import_data(self):
 
         with h5py.File(self.inputs, 'r') as f:
@@ -75,4 +73,4 @@ class ModuleFiltering(qtw.QWidget):
             if value == 1:
                 cluster_labels = np.where(cluster_labels == key, 0, cluster_labels)
 
-        return cluster_labels
+        return cluster_labels.astype(int)
