@@ -27,6 +27,7 @@ class MainWindowFiltering(qtw.QWidget):
         self.filtering_view.sub_data.connect(self.filtering_model.print_income)
         self.filtering_model.error.connect(self.filtering_view.show_error)
         self.filtering_model.data_signal.connect(self.filtering_view.update_plot)
+        self.filtering_view.updated_labels.connect(self.filtering_model.set_area_density)
 
         # End main UI code
         self.show()
