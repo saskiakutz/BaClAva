@@ -59,10 +59,10 @@ class ViewFiltering(qtw.QWidget):
         storage_layout = qtw.QHBoxLayout()
 
         self.image_btn = qtw.QPushButton("Store image")
-        self.image_btn.clicked.connect(self.choose_storage)
+        self.image_btn.clicked.connect(self.choose_storage_image)
         storage_layout.addWidget(self.image_btn)
         self.data_btn = qtw.QPushButton("Store data")
-        self.data_btn.clicked.connect(self.choose_storage)
+        self.data_btn.clicked.connect(self.choose_storage_data)
         storage_layout.addWidget(self.data_btn)
 
         option_layout.addLayout(storage_layout)
@@ -103,7 +103,7 @@ class ViewFiltering(qtw.QWidget):
         self.draw_scatterplot(data_df, self.plot_window, 'x [nm]', 'y [nm]')
 
     def draw_scatterplot(self, data_scatter, canvas, x_label, y_label):
-        """Scatterplot of a clustering result"""
+        """Scatter plot of a clustering result"""
 
         canvas.axes.cla()
         canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], s=0, clip_on=False)
@@ -147,8 +147,15 @@ class ViewFiltering(qtw.QWidget):
         self.area_slider.update_min_max(area_min, area_max)
         self.density_slider.update_min_max(density_min, density_max)
 
+    def choose_storage_image(self):
 
-    def choose_storage(self):
+        filename = qtw.QFileDialog.getExistingDirectory(
+            self,
+            "Save File",
+            self.file_line.text()
+        )
+
+    def choose_storage_data(self):
         pass
 
     def show_error(self, error):
