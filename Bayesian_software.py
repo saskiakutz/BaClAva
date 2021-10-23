@@ -1,9 +1,11 @@
 import sys
+import webbrowser
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtGui as qtg
 from PyQt5.QtGui import QPalette, QColor
 from Bayesian_software_view import ViewSoftware
+
 
 
 class ModuleWindow(qtw.QMainWindow):
@@ -39,7 +41,8 @@ class ModuleWindow(qtw.QMainWindow):
         self.setStatusBar(self.status_bar)
         self.status_bar.showMessage('Select a module.')
 
-        help_action = qtw.QAction('Help', self, triggered=lambda: self.statusBar().showMessage('Sorry, no help'))
+        help_action = qtw.QAction('Help', self, triggered=lambda: self.statusBar().showMessage('open BaClAva on GitHub...'))
+        help_action.triggered.connect(self.open_help)
         help_menu.addAction(help_action)
 
         # End main UI code
@@ -48,6 +51,10 @@ class ModuleWindow(qtw.QMainWindow):
     @qtc.pyqtSlot(str)
     def set_statusbar(self, message):
         self.status_bar.showMessage(message)
+
+    @staticmethod
+    def open_help():
+        webbrowser.open(url='https://github.com/saskiakutz/BaClAva')
 
 
 class MainWindow(qtw.QMainWindow):
