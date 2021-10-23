@@ -136,6 +136,8 @@ user also can save the plots individually.
 
 ## Module 4: Filtering clusters
 
+![alt text](readme_images/module_4.png "Screenshot of the cluster filtering module")
+
 The fourth module of BaClAva is a filtering tool. This tool allows filtering of single datasets by area and density
 while automatically visualising the data changes. The results can be stored as a cluster image and a data frame with the
 localisation coordinates and the new labels.
