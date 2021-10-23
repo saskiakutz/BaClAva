@@ -7,9 +7,7 @@
 hist_plot <- function(res, nexpname, plotcreation, storage_ends) {
   # histogram preparation and storage
 
-  length_res <- length(names(res[[1]]))
-  if (length_res == 10)
-    length_res <- 9
+  length_res <- 9
   for (j in 1:length_res) {
     datavec <- c()
     for (i in 1:length(res)) {
@@ -247,19 +245,25 @@ cluster_superplot <- function(results, dirnames, expname, gg_plot_name, stor_end
   plot_save(super_plot, expname, gg_plot_name,storage_opt = stor_ends, plot_height = 45, plot_width = 90)
 }
 
-plot_save <- function(gg_plot, expname, gg_plot_name, storage_opt = list(), plot_height = 45, plot_width = 45, unit = "mm") {
+plot_save <- function(ggplot, expname, gg_plot_name='clustering', storage_opt = list(), plot_height = 45, plot_width = 45, unit = "mm") {
   # saving a plot in pdf, eps, svg, and png format
+
   for (ind in seq_along(storage_opt)) {
+
     if (storage_opt[[ind]] == TRUE) {
+
       ending <- case_when(
         ind == 1 ~ '.png',
         ind == 2 ~ '.pdf',
         ind == 3 ~ '.eps',
         ind == 4 ~ '.tiff'
       )
+
+      ggplot
       ggsave(file.path(paste0(
         expname, "/", gg_plot_name, ending, sep = ""
       )), width = plot_width, height = plot_height, units = unit)
+
     }
   }
 }
@@ -363,7 +367,6 @@ summary_plot <- function(data_table,
 plot_save_test <- function(expname, ggplot_name='test', storage_opt = list(), plot_height = 45, plot_width = 45, unit = "mm") {
   # saving a plot in pdf, eps, svg, and png format
   ggplot(mpg, aes(displ, hwy, colour = class)) + geom_point()
-
   for (ind in seq_along(storage_opt)) {
     if (storage_opt[[ind]] == TRUE) {
       ending <- case_when(
@@ -372,6 +375,7 @@ plot_save_test <- function(expname, ggplot_name='test', storage_opt = list(), pl
         ind == 3 ~ '.eps',
         ind == 4 ~ '.tiff'
       )
+
       ggsave(file.path(paste0(expname, '/', ggplot_name, ending, sep = ""
       )), width = plot_width, height = plot_height, units = unit)
     }

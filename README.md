@@ -21,6 +21,7 @@ software delivers clustering analysis with actively minimized user bias and sign
     - [Module 1: Simulation tool](#Module-1-Simulation-tools)
     - [Module 2: Bayesian calculations](#Module-2-Bayesian-calculations)
     - [Module 3: Bayesian postprocessing](#Module-3-Bayesian-postprocessing)
+    - [Module 4: Filtering clusters](#Module-4-Flitering-clusters)
     - [Data format](#Data-format)
 - [Usage](#Usage)
 - [Contributing](#Contributing)
@@ -133,6 +134,12 @@ file. However, the user must tell the software whether to automatically create a
 and histograms as png, eps, and pdf files. Since the GUI displays the plotted data and allows for their formatting, the
 user also can save the plots individually.
 
+## Module 4: Filtering clusters
+
+The fourth module of BaClAva is a filtering tool. This tool allows filtering of single datasets by area and density
+while automatically visualising the data changes. The results can be stored as a cluster image and a data frame with the
+localisation coordinates and the new labels.
+
 ## Data format
 
 The Bayesian software uses the hdf5 file format to manage and store the datasets and the data gathered during the
@@ -184,13 +191,14 @@ For feature requests or bug reports, please post them on the GitHub issue tracke
 
 # Citing BaClAva
 
-If you use BaClAva in your research, please cite the pre-print:
+If you use BaClAva in your research, please cite the article:
 
 An efficient GUI-based clustering software for simulation and Bayesian cluster analysis of single-molecule localization
 microscopy data<br/>
-Saskia Kutz, Ando C. Zehrer, Roman Svetlitckii, Gülce S. Gülcüler Balta, Lucrezia Galli, Susanne Kleber, Ana
-Martin-Villalba, Helge Ewers<br/>
-bioRxiv 2021.06.11.447933; doi: https://doi.org/10.1101/2021.06.11.447933
+Saskia Kutz, Ando C. Zehrer, Roman Svetlitckii, Gülce S. Gülcüler Balta, Lucrezia Galli, Susanne Kleber, Jakob Rentsch,
+Ana Martin-Villalba, Helge Ewers<br/>
+Frontiers in Bioinformatics;
+DOI: [10.3389/fbinf.2021.723915](https://www.frontiersin.org/article/10.3389/fbinf.2021.723915 )
 
 # Literature:
 

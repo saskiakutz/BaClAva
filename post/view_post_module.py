@@ -82,6 +82,7 @@ class ViewPost(qtw.QWidget):
             storage_options.addWidget(widget)
 
         self.p_inputs = {
+            "length unit": qtw.QComboBox(),
             "store plots": qtw.QCheckBox(),
             "options": storage_options,
             "superplot": qtw.QCheckBox(),
@@ -89,6 +90,8 @@ class ViewPost(qtw.QWidget):
             "flip y-axis": qtw.QCheckBox()
         }
 
+        units = ('nanometre', 'micrometre')
+        self.p_inputs["length unit"].addItems(units)
         self.storage_option()
         self.p_inputs["superplot"].setDisabled(True)
         self.p_inputs["separate plots"].setDisabled(True)
@@ -219,8 +222,7 @@ class ViewPost(qtw.QWidget):
 
         data = {
             'directory': self.dir_line.text(),
-            # 'datasource': self.p_inputs["datasource"].currentText(),
-            # 'computation': self.p_inputs["Bayesian computation"].currentText(),
+            'unit': self.p_inputs["length unit"].currentText(),
             'storeplots': self.p_inputs["store plots"].isChecked(),
             'options': [self.storage_inputs[0].isChecked(), self.storage_inputs[1].isChecked(),
                         self.storage_inputs[2].isChecked(), self.storage_inputs[3].isChecked()],
