@@ -110,7 +110,6 @@ class ViewFiltering(qtw.QWidget):
         canvas.axes.set_ylabel(y_label, fontsize='10')
         canvas.axes.set_xlabel(x_label, fontsize='10')
         canvas.draw()
-
         colour = self.scatterplot_colour(data_scatter.iloc[:, -1])
         canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], color=colour, alpha=0.9,
                             edgecolors="none")
@@ -123,8 +122,14 @@ class ViewFiltering(qtw.QWidget):
         - background localizations: silver
         """
 
-        colors = sns.color_palette("CMRmap_r", n_colors=len(np.unique(labels)) - 1)
-        scale = ['silver' if label == 0 else colors[label - 1] for label in labels]
+        unique_labels = np.unique(labels)
+        number_unique_labels = len(unique_labels)
+        temp_labels = labels.copy()
+        for i in range(1, len(unique_labels)):
+            temp_labels[temp_labels == unique_labels[i]] = i
+
+        colors = sns.color_palette("CMRmap_r", n_colors=number_unique_labels - 1)
+        scale = ['silver' if label == 0 else colors[label-1] for label in temp_labels]
         return scale
 
     def update_labels(self):
