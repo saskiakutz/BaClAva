@@ -95,12 +95,12 @@ class ViewFiltering(qtw.QWidget):
 
     def update_plot(self, data_signal):
 
-        data_df, summary_df = data_signal
+        self.data_df, self.summary_df = data_signal
 
-        self.update_sliders(summary_df)
+        self.update_sliders()
 
         self.plot_window.axes.cla()
-        self.draw_scatterplot(data_df, self.plot_window, 'x [nm]', 'y [nm]')
+        self.draw_scatterplot(self.data_df, self.plot_window, 'x [nm]', 'y [nm]')
 
     def draw_scatterplot(self, data_scatter, canvas, x_label, y_label):
         """Scatter plot of a clustering result"""
@@ -137,12 +137,12 @@ class ViewFiltering(qtw.QWidget):
         updated_area_density = [self.area_slider.x, self.density_slider.x]
         self.updated_labels.emit(updated_area_density)
 
-    def update_sliders(self, summary_df):
+    def update_sliders(self):
 
-        area_max = summary_df.iloc[:, 1].max() * 1000
-        area_min = summary_df.iloc[:, 1].min() * 1000 -1
-        density_max = summary_df.iloc[:, 2].max()
-        density_min = summary_df.iloc[:, 2]. min() -1
+        area_max = self.summary_df.iloc[:, 1].max() * 1000
+        area_min = self.summary_df.iloc[:, 1].min() * 1000 -1
+        density_max = self.summary_df.iloc[:, 2].max()
+        density_min = self.summary_df.iloc[:, 2]. min() -1
 
         self.area_slider.update_min_max(area_min, area_max)
         self.density_slider.update_min_max(density_min, density_max)
@@ -162,7 +162,14 @@ class ViewFiltering(qtw.QWidget):
             self.plot_window.print_tiff(filename)
 
     def choose_storage_data(self):
-        pass
+        filename, _ = qtw.QFileDialog.getSaveFileName(
+            self,
+            "Save Image",
+            os.path.dirname(self.file_line.text()),
+            'csv file (*.csv);; txt file (*.txt)'
+        )
+
+        self.data_df.loc[:, self.data_df.columns != 'labels'].to_csv(filename)
 
     def show_error(self, error):
         """error message in separate window"""
