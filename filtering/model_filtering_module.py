@@ -83,5 +83,21 @@ class ModuleFiltering(qtw.QWidget):
 
         return cluster_labels.astype(int)
 
+    @qtc.pyqtSlot()
     def data_update(self):
-        pass
+
+        updated_df = self.summary_table.loc[self.summary_table.iloc[:, 1] > self.area_update / 1000]
+        updated_df = updated_df.loc[updated_df.iloc[:, 2] > self.density_update]
+
+        temp_array = np.zeros((1, self.summary_table.shape[0]))
+        for label in updated_df.iloc[:, -1]:
+            temp_array[0, label-1] = label
+
+        for i in range(temp_array.shape[1]):
+            self.dataset.loc[self.dataset.iloc[:, -2] == (i + 1), 'labels_plot'] = temp_array[0, i].astype(int)
+
+        # print(self.dataset.head(50))
+
+        self.data_signal.emit([self.dataset, self.summary_table])
+
+
