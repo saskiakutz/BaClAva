@@ -149,11 +149,17 @@ class ViewFiltering(qtw.QWidget):
 
     def choose_storage_image(self):
 
-        filename = qtw.QFileDialog.getExistingDirectory(
+        filename, ending = qtw.QFileDialog.getSaveFileName(
             self,
-            "Save File",
-            self.file_line.text()
+            "Save Image",
+            os.path.dirname(self.file_line.text()),
+            'png image (*.png);; tiff image (*.tiff)'
         )
+        if ending == 'png image (*.png)':
+            self.plot_window.print_png(filename)
+
+        else:
+            self.plot_window.print_tiff(filename)
 
     def choose_storage_data(self):
         pass
