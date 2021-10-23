@@ -21,6 +21,7 @@ software delivers clustering analysis with actively minimized user bias and sign
     - [Module 1: Simulation tool](#Module-1-Simulation-tools)
     - [Module 2: Bayesian calculations](#Module-2-Bayesian-calculations)
     - [Module 3: Bayesian postprocessing](#Module-3-Bayesian-postprocessing)
+    - [Module 4: Filtering clusters](#Module-4-Flitering-clusters)
     - [Data format](#Data-format)
 - [Usage](#Usage)
 - [Contributing](#Contributing)
@@ -132,6 +133,12 @@ histograms for the different cluster parameters. The software automatically stor
 file. However, the user must tell the software whether to automatically create and store the corresponding scatterplots
 and histograms as png, eps, and pdf files. Since the GUI displays the plotted data and allows for their formatting, the
 user also can save the plots individually.
+
+## Module 4: Filtering clusters
+
+The fourth module of BaClAva is a filtering tool. This tool allows filtering of single datasets by area and density
+while automatically visualising the data changes. The results can be stored as a cluster image and a data frame with the
+localisation coordinates and the new labels.
 
 ## Data format
 
