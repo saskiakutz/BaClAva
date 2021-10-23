@@ -96,8 +96,6 @@ class ModuleFiltering(qtw.QWidget):
         for i in range(temp_array.shape[1]):
             self.dataset.loc[self.dataset.iloc[:, -2] == (i + 1), 'labels_plot'] = temp_array[0, i].astype(int)
 
-        # print(self.dataset.head(50))
-
         self.data_signal.emit([self.dataset, self.summary_table])
 
 
