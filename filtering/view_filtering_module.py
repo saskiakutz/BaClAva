@@ -14,7 +14,6 @@ import h5py
 from filtering.model_slider import Slider
 from post.view_post_module import MplCanvas
 
-import pyqtgraph as pg
 
 matplotlib.use('Qt5Agg')
 import numpy as np
