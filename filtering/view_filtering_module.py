@@ -47,6 +47,16 @@ class ViewFiltering(qtw.QWidget):
 
         option_layout.addLayout(parameter_layout)
 
+        self.spot_size = qtw.QDoubleSpinBox(
+            self,
+            minimum=1,
+            maximum=100,
+            singleStep=0.1,
+            value=1
+        )
+        self.spot_size.valueChanged.connect(self.update_plot_point_size)
+        option_layout.addWidget(self.spot_size)
+
         slider_layout = qtw.QVBoxLayout()
         self.density_slider = Slider('Density', 0, 10)
         slider_layout.addWidget(self.density_slider)
@@ -104,16 +114,21 @@ class ViewFiltering(qtw.QWidget):
         self.plot_window.axes.cla()
         self.draw_scatterplot(self.data_df, self.plot_window, 'x [nm]', 'y [nm]')
 
+    def update_plot_point_size(self):
+        self.plot_window.axes.cla()
+        self.draw_scatterplot(self.data_df, self.plot_window, 'x [nm]', 'y [nm]')
+
     def draw_scatterplot(self, data_scatter, canvas, x_label, y_label):
         """Scatter plot of a clustering result"""
 
         canvas.axes.cla()
+        size_pt = (2 * self.spot_size.value() / canvas.fig.dpi * 72) ** 2
         canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], s=0, clip_on=False)
         canvas.axes.set_ylabel(y_label, fontsize='10')
         canvas.axes.set_xlabel(x_label, fontsize='10')
         canvas.draw()
         colour = self.scatterplot_colour(data_scatter.iloc[:, -1])
-        canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], color=colour, alpha=0.9,
+        canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], s=size_pt, color=colour, alpha=0.9,
                             edgecolors="none")
 
         canvas.draw()
