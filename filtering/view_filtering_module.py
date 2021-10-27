@@ -127,7 +127,10 @@ class ViewFiltering(qtw.QWidget):
         for i in range(1, len(unique_labels)):
             temp_labels[temp_labels == unique_labels[i]] = i
 
-        colors = sns.color_palette("CMRmap_r", n_colors=number_unique_labels - 1)
+        if number_unique_labels > 1:
+            colors = sns.color_palette("CMRmap_r", n_colors=number_unique_labels - 1)
+        else:
+            colors = sns.color_palette("CMRmap_r", n_colors=number_unique_labels)
         scale = ['silver' if label == 0 else colors[label-1] for label in temp_labels]
         return scale
 
