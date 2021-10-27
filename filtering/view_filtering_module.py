@@ -47,6 +47,15 @@ class ViewFiltering(qtw.QWidget):
 
         option_layout.addLayout(parameter_layout)
 
+        self.spot_size = qtw.QDoubleSpinBox(
+            self,
+            minimum=1,
+            maximum=100,
+            singleStep=0.1,
+            value=1
+        )
+        option_layout.addWidget(self.spot_size)
+
         slider_layout = qtw.QVBoxLayout()
         self.density_slider = Slider('Density', 0, 10)
         slider_layout.addWidget(self.density_slider)
