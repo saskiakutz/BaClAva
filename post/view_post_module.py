@@ -261,7 +261,6 @@ class ViewPost(qtw.QWidget):
         data_in = self.import_postdata(data_type)
         data_temp = [np.nan if i == np.inf else i for i in data_in]
         data_temp = [i for i in data_temp if (math.isnan(i) == False)]
-        print(data_temp)
         if len(data_temp) > 1:
             bw = 2 * np.subtract.reduce(np.percentile(data_temp, [75, 25])) / len(data_temp) ** (1 / 3)
             if bw == 0:
