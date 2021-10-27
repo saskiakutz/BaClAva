@@ -54,6 +54,7 @@ class ViewFiltering(qtw.QWidget):
             singleStep=0.1,
             value=1
         )
+        self.spot_size.valueChanged.connect(self.update_plot_point_size)
         option_layout.addWidget(self.spot_size)
 
         slider_layout = qtw.QVBoxLayout()
@@ -110,6 +111,10 @@ class ViewFiltering(qtw.QWidget):
 
         self.update_sliders()
 
+        self.plot_window.axes.cla()
+        self.draw_scatterplot(self.data_df, self.plot_window, 'x [nm]', 'y [nm]')
+
+    def update_plot_point_size(self):
         self.plot_window.axes.cla()
         self.draw_scatterplot(self.data_df, self.plot_window, 'x [nm]', 'y [nm]')
 
