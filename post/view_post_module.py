@@ -1,6 +1,7 @@
 # Title     : View of module 3
 # Objective : View part of module 3
 # Written by: Saskia Kutz
+import math
 
 from PyQt5 import QtWidgets as qtw
 from PyQt5 import QtGui as qtg
@@ -258,14 +259,16 @@ class ViewPost(qtw.QWidget):
 
         canvas.axes.cla()
         data_in = self.import_postdata(data_type)
-
-        if len(data_in) > 1:
-            bw = 2 * np.subtract.reduce(np.percentile(data_in, [75, 25])) / len(data_in) ** (1 / 3)
+        data_temp = [np.nan if i == np.inf else i for i in data_in]
+        data_temp = [i for i in data_temp if (math.isnan(i) == False)]
+        print(data_temp)
+        if len(data_temp) > 1:
+            bw = 2 * np.subtract.reduce(np.percentile(data_temp, [75, 25])) / len(data_temp) ** (1 / 3)
             if bw == 0:
                 bw = 1
-            canvas.axes.hist(data_in, bins=np.arange(min(data_in), max(data_in) + bw, bw))
+            canvas.axes.hist(data_temp, bins=np.arange(min(data_temp), max(data_temp) + bw, bw))
         else:
-            canvas.axes.hist(data_in, bins=1)
+            canvas.axes.hist(data_temp, bins=1)
         canvas.axes.set_ylabel(y_label, fontsize='10')
         canvas.axes.set_xlabel(x_label, fontsize='10')
         canvas.draw()
