@@ -71,6 +71,9 @@ class ViewFiltering(qtw.QWidget):
         self.plot_window = MplCanvas(self, width=5, height=5, dpi=200)
         plot_layout.addWidget(self.plot_window)
 
+        self.plot_toolbar = NavigationToolbar(self.plot_window, self)
+        plot_layout.addWidget(self.plot_toolbar)
+
         self.area_slider.slider.valueChanged.connect(self.update_labels)
         self.density_slider.slider.valueChanged.connect(self.update_labels)
 
