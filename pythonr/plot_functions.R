@@ -29,9 +29,11 @@ hist_plot <- function(res, nexpname, plotcreation, storage_ends) {
       #plot
       if (plotcreation) {
         tryCatch({
-          bw <- 2 * IQR(datavec) / length(datavec)^(1 / 3)
+          vec_temp <- replace(datavec, datavec == Inf, NaN)
+          vec_temp <- na.omit(vec_temp)
+          bw <- 2 * IQR(vec_temp) / length(vec_temp)^(1 / 3)
           hist_data <- ggplot() +
-            aes(datavec) +
+            aes(vec_temp) +
             geom_histogram(binwidth = bw) +
             labs(x = k[1], y = k[2]) +
             theme_bw() +
@@ -67,9 +69,9 @@ hist_plot <- function(res, nexpname, plotcreation, storage_ends) {
             plot_save(hist_data_w, nexpname, hist_name_w, storage_opt = storage_ends)
           })
 
-        if (length(datavec) > 1) {
+        if (length(vec_temp) > 1) {
           den_plot <- ggplot() +
-            aes(datavec) +
+            aes(vec_temp) +
             geom_density() +
             labs(x = k[1]) +
             theme_bw() +
