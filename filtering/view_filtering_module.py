@@ -117,12 +117,13 @@ class ViewFiltering(qtw.QWidget):
         """Scatter plot of a clustering result"""
 
         canvas.axes.cla()
+        size_pt = (2 * self.spot_size.value() / canvas.fig.dpi * 72) ** 2
         canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], s=0, clip_on=False)
         canvas.axes.set_ylabel(y_label, fontsize='10')
         canvas.axes.set_xlabel(x_label, fontsize='10')
         canvas.draw()
         colour = self.scatterplot_colour(data_scatter.iloc[:, -1])
-        canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], color=colour, alpha=0.9,
+        canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], s=size_pt, color=colour, alpha=0.9,
                             edgecolors="none")
 
         canvas.draw()
