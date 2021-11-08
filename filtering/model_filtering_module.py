@@ -36,8 +36,9 @@ class ModuleFiltering(qtw.QWidget):
         self.area_update, self.density_update = updated_values
 
     @qtc.pyqtSlot(object)
-    def set_batch(self, batch_values):
-        self.batch_dir, self.batch_density, self.batch_area = batch_values
+    def set_batch(self, batch_data):
+        self.batch_dir, self.batch_density, self.batch_area = batch_data
+        print('set parameters')
 
     @qtc.pyqtSlot()
     def print_income(self):
@@ -105,7 +106,10 @@ class ModuleFiltering(qtw.QWidget):
 
         self.data_signal.emit([self.dataset, self.summary_table])
 
-    def batch_proessing(self):
-        print()
+    def batch_processing(self):
+        print(self.batch_dir)
+        # for file in self.batch_dir:
+        #     if file.endswith('.h5'):
+        #         print(file)
 
 
