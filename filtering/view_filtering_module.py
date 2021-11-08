@@ -138,8 +138,8 @@ class ViewFiltering(qtw.QWidget):
             'hdf5 files (*.h5)'
         )
         self.file_line.setText(filename)
-        self.data_image_btn.setEnabled(True)
-        self.only_image_btn.setEnabled(True)
+        # self.data_image_btn.setEnabled(True)
+        # self.only_image_btn.setEnabled(True)
         self.file_btn.setEnabled(True)
         self.image_btn.setEnabled(True)
 
@@ -195,8 +195,8 @@ class ViewFiltering(qtw.QWidget):
     def update_labels(self):
 
         updated_area_density = [self.area_slider.x, self.density_slider.x]
-        self.density_value.setValue(self.density_slider.x)
-        self.area_value.setValue(self.area_slider.x)
+        # self.density_value.setValue(self.density_slider.x)
+        # self.area_value.setValue(self.area_slider.x)
         self.updated_labels.emit(updated_area_density)
 
     def update_sliders(self):
