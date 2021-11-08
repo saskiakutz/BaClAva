@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 from PyQt5 import QtCore as qtc
 from PyQt5 import QtWidgets as qtw
+import matplotlib.pyplot as plt
 
 
 class ModuleFiltering(qtw.QWidget):
