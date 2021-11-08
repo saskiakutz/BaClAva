@@ -36,20 +36,15 @@ class ViewFiltering(qtw.QWidget):
         main_layout = qtw.QHBoxLayout()
         option_layout = qtw.QVBoxLayout()
 
-        parameter_layout = qtw.QHBoxLayout()
-
+        parameter_layout = qtw.QFormLayout()
         self.file_btn = qtw.QPushButton("Select file")
         self.file_btn.clicked.connect(self.choose_file)
-        parameter_layout.addWidget(self.file_btn)
+
         self.file_line = qtw.QLineEdit("Select file")
         self.file_line.setReadOnly(True)
-        parameter_layout.addWidget(self.file_line)
+        parameter_layout.addRow(self.file_btn, self.file_line)
 
-        option_layout.addLayout(parameter_layout)
-
-        spot_layout = qtw.QHBoxLayout()
         self.spot_label = qtw.QLabel('Spot size')
-        spot_layout.addWidget(self.spot_label)
         self.spot_size = qtw.QDoubleSpinBox(
             self,
             minimum=1,
@@ -58,9 +53,8 @@ class ViewFiltering(qtw.QWidget):
             value=1
         )
         self.spot_size.valueChanged.connect(self.update_plot_point_size)
-        spot_layout.addWidget(self.spot_size)
-
-        option_layout.addLayout(spot_layout)
+        parameter_layout.addRow(self.spot_label, self.spot_size)
+        option_layout.addLayout(parameter_layout)
 
         slider_layout = qtw.QVBoxLayout()
         self.density_slider = Slider('Density', 0, 10)
