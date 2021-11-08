@@ -92,7 +92,10 @@ class ModuleFiltering(qtw.QWidget):
 
     @qtc.pyqtSlot()
     def data_update(self):
+        self.filter_data()
+        self.data_signal.emit([self.dataset, self.summary_table])
 
+    def filter_data(self):
         updated_df = self.summary_table.loc[self.summary_table.iloc[:, 1] > self.area_update / 1000]
         updated_df = updated_df.loc[updated_df.iloc[:, 2] > self.density_update]
 
@@ -102,11 +105,6 @@ class ModuleFiltering(qtw.QWidget):
 
         for i in range(temp_array.shape[1]):
             self.dataset.loc[self.dataset.iloc[:, -2] == (i + 1), 'labels_plot'] = temp_array[0, i].astype(int)
-
-        self.data_signal.emit([self.dataset, self.summary_table])
-
-    def filter_data(self):
-        pass
 
     def batch_processing(self):
         self.import_data()
