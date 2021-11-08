@@ -79,38 +79,38 @@ class ViewFiltering(qtw.QWidget):
 
         option_layout.addLayout(storage_layout)
 
-        batch_layout = qtw.QVBoxLayout()
-        self.batch_label = qtw.QLabel('Batch processing:')
-        batch_layout.addWidget(self.batch_label)
-        batch_parameters_layout = qtw.QFormLayout()
-        self.density_label = qtw.QLabel('Batch density')
-        self.density_value = qtw.QDoubleSpinBox(
-            self,
-            minimum=1,
-            maximum=100000,
-            singleStep=0.1,
-            value=1
-        )
-        self.area_label = qtw.QLabel('Batch area')
-        self.area_value = qtw.QDoubleSpinBox(
-            self,
-            minimum=1,
-            maximum=100000,
-            singleStep=0.1,
-            value=1
-        )
-        self.data_image_btn = qtw.QPushButton('Store data and images')
-        self.data_image_btn.setDisabled(True)
-        self.data_image_btn.clicked.connect(self.choose_storage_data_image)
-        self.only_image_btn = qtw.QPushButton('Store images only')
-        self.only_image_btn.setDisabled(True)
-        self.only_image_btn.clicked.connect(self.choose_storage_image_only)
-        batch_parameters_layout.addRow(self.density_label, self.density_value)
-        batch_parameters_layout.addRow(self.area_label, self.area_value)
-        batch_parameters_layout.addRow(self.data_image_btn, self.only_image_btn)
-        batch_layout.addLayout(batch_parameters_layout)
-
-        option_layout.addLayout(batch_layout)
+        # batch_layout = qtw.QVBoxLayout()
+        # self.batch_label = qtw.QLabel('Batch processing:')
+        # batch_layout.addWidget(self.batch_label)
+        # batch_parameters_layout = qtw.QFormLayout()
+        # self.density_label = qtw.QLabel('Batch density')
+        # self.density_value = qtw.QDoubleSpinBox(
+        #     self,
+        #     minimum=1,
+        #     maximum=100000,
+        #     singleStep=0.1,
+        #     value=1
+        # )
+        # self.area_label = qtw.QLabel('Batch area')
+        # self.area_value = qtw.QDoubleSpinBox(
+        #     self,
+        #     minimum=1,
+        #     maximum=100000,
+        #     singleStep=0.1,
+        #     value=1
+        # )
+        # self.data_image_btn = qtw.QPushButton('Store data and images')
+        # self.data_image_btn.setDisabled(True)
+        # self.data_image_btn.clicked.connect(self.choose_storage_data_image)
+        # self.only_image_btn = qtw.QPushButton('Store images only')
+        # self.only_image_btn.setDisabled(True)
+        # self.only_image_btn.clicked.connect(self.choose_storage_image_only)
+        # batch_parameters_layout.addRow(self.density_label, self.density_value)
+        # batch_parameters_layout.addRow(self.area_label, self.area_value)
+        # batch_parameters_layout.addRow(self.data_image_btn, self.only_image_btn)
+        # batch_layout.addLayout(batch_parameters_layout)
+        #
+        # option_layout.addLayout(batch_layout)
 
         plot_layout = qtw.QVBoxLayout()
 
