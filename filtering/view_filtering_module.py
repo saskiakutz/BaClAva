@@ -96,7 +96,9 @@ class ViewFiltering(qtw.QWidget):
             value=1
         )
         self.data_image_btn = qtw.QPushButton('Store data and images')
+        self.data_image_btn.clicked.connect(self.choose_storage_data_image)
         self.only_image_btn = qtw.QPushButton('Store images only')
+        self.only_image_btn.clicked.connect(self.choose_storage_image_only)
         batch_parameters_layout.addRow(self.density_label, self.density_value)
         batch_parameters_layout.addRow(self.area_label, self.area_value)
         batch_parameters_layout.addRow(self.data_image_btn, self.only_image_btn)
@@ -225,7 +227,8 @@ class ViewFiltering(qtw.QWidget):
         pass
 
     def choose_storage_data_image(self):
-        pass
+
+        print(self.file_line.text())
 
     def show_error(self, error):
         """error message in separate window"""
