@@ -221,6 +221,12 @@ class ViewFiltering(qtw.QWidget):
 
         self.data_df.loc[:, self.data_df.columns != 'labels'].to_csv(filename)
 
+    def choose_storage_image_only(self):
+        pass
+
+    def choose_storage_data_image(self):
+        pass
+
     def show_error(self, error):
         """error message in separate window"""
 
