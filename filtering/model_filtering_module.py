@@ -1,7 +1,7 @@
 # Title     : Module 4 model
 # Objective : Model setup of module 4
 # Written by: Saskia Kutz
-
+import os
 from os import path
 
 import h5py
@@ -53,15 +53,15 @@ class ModuleFiltering(qtw.QWidget):
         elif not path.isdir(dir_.rsplit('/', 1)[0]):
             error = f'You need to choose a valid directory'
         else:
-            data, summary = self.import_data()
+            data, summary = self.import_data(self.inputs)
             self.data_signal.emit([data, summary])
 
         if error:
             self.error.emit(error)
 
-    def import_data(self):
+    def import_data(self, dir_path):
 
-        with h5py.File(self.inputs, 'r') as f:
+        with h5py.File(dir_path, 'r') as f:
             label_set = f['r_vs_thresh'].attrs['best'][0].decode()
             labels = np.asarray(f['labels/' + label_set][()])
             columns_data = f['data'].attrs['datacolumns'] - 1
@@ -106,9 +106,9 @@ class ModuleFiltering(qtw.QWidget):
         self.data_signal.emit([self.dataset, self.summary_table])
 
     def batch_processing(self):
-        print(self.batch_dir)
-        # for file in self.batch_dir:
-        #     if file.endswith('.h5'):
-        #         print(file)
+        for file in os.listdir(self.batch_dir):
+            if file.endswith('.h5'):
+                print(file)
+
 
 
