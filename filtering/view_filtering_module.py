@@ -238,7 +238,9 @@ class ViewFiltering(qtw.QWidget):
     def choose_storage_data_image(self):
 
         directory_path = os.path.dirname(self.file_line.text())
-        self.batch_data.emit([directory_path, self.density_value.value(), self.area_value.value()])
+        for file in os.listdir(directory_path):
+            if file.endswith('.h5'):
+                self.batch_data.emit([os.path.join(directory_path, file), self.density_value.value(), self.area_value.value()])
 
     def show_error(self, error):
         """error message in separate window"""
