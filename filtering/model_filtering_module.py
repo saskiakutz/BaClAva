@@ -24,8 +24,8 @@ class ModuleFiltering(qtw.QWidget):
         self.dataset = None
         self.summary_table = None
         self.batch_dir = None
-        self.batch_density = None
-        self.batch_area = None
+        # self.batch_density = None
+        # self.batch_area = None
 
     @qtc.pyqtSlot(str)
     def set_data(self, inputs):
@@ -37,7 +37,7 @@ class ModuleFiltering(qtw.QWidget):
 
     @qtc.pyqtSlot(object)
     def set_batch(self, batch_data):
-        self.batch_dir, self.batch_density, self.batch_area = batch_data
+        self.inputs, self.density_update, self.area_update = batch_data
 
     @qtc.pyqtSlot()
     def print_income(self):
@@ -53,15 +53,15 @@ class ModuleFiltering(qtw.QWidget):
         elif not path.isdir(dir_.rsplit('/', 1)[0]):
             error = f'You need to choose a valid directory'
         else:
-            data, summary = self.import_data(self.inputs)
+            data, summary = self.import_data()
             self.data_signal.emit([data, summary])
 
         if error:
             self.error.emit(error)
 
-    def import_data(self, dir_path):
+    def import_data(self):
 
-        with h5py.File(dir_path, 'r') as f:
+        with h5py.File(self.inputs, 'r') as f:
             label_set = f['r_vs_thresh'].attrs['best'][0].decode()
             labels = np.asarray(f['labels/' + label_set][()])
             columns_data = f['data'].attrs['datacolumns'] - 1
@@ -106,9 +106,11 @@ class ModuleFiltering(qtw.QWidget):
         self.data_signal.emit([self.dataset, self.summary_table])
 
     def batch_processing(self):
-        for file in os.listdir(self.batch_dir):
-            if file.endswith('.h5'):
-                print(file)
+        self.import_data()
+        self.data_update
+
+
+
 
 
 
