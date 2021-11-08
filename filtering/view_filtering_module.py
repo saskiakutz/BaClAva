@@ -183,6 +183,8 @@ class ViewFiltering(qtw.QWidget):
     def update_labels(self):
 
         updated_area_density = [self.area_slider.x, self.density_slider.x]
+        self.density_value.setValue(self.density_slider.x)
+        self.area_value.setValue(self.area_slider.x)
         self.updated_labels.emit(updated_area_density)
 
     def update_sliders(self):
