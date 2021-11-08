@@ -23,6 +23,9 @@ class ModuleFiltering(qtw.QWidget):
         self.density_update = None
         self.dataset = None
         self.summary_table = None
+        self.batch_dir = None
+        self.batch_density = None
+        self.batch_area = None
 
     @qtc.pyqtSlot(str)
     def set_data(self, inputs):
@@ -31,6 +34,10 @@ class ModuleFiltering(qtw.QWidget):
     @qtc.pyqtSlot(object)
     def set_area_density(self, updated_values):
         self.area_update, self.density_update = updated_values
+
+    @qtc.pyqtSlot(object)
+    def set_batch(self, batch_values):
+        self.batch_dir, self.batch_density, self.batch_area = batch_values
 
     @qtc.pyqtSlot()
     def print_income(self):
@@ -99,6 +106,6 @@ class ModuleFiltering(qtw.QWidget):
         self.data_signal.emit([self.dataset, self.summary_table])
 
     def batch_proessing(self):
-        pass
+        print()
 
 
