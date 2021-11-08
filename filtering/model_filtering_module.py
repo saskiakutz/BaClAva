@@ -23,7 +23,7 @@ class ModuleFiltering(qtw.QWidget):
         self.density_update = None
         self.dataset = None
         self.summary_table = None
-        self.batch_dir = None
+        # self.batch_dir = None
         # self.batch_density = None
         # self.batch_area = None
 
@@ -105,9 +105,13 @@ class ModuleFiltering(qtw.QWidget):
 
         self.data_signal.emit([self.dataset, self.summary_table])
 
+    def filter_data(self):
+        pass
+
     def batch_processing(self):
         self.import_data()
-        self.data_update
+        self.data_update()
+
 
 
 
