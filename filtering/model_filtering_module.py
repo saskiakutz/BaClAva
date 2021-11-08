@@ -108,5 +108,5 @@ class ModuleFiltering(qtw.QWidget):
 
     def batch_processing(self):
         self.import_data()
-        self.filter_update()
+        self.filter_data()
         self.batch_signal.emit([self.dataset, self.summary_table])

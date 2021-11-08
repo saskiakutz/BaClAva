@@ -241,12 +241,24 @@ class ViewFiltering(qtw.QWidget):
         directory_path = os.path.dirname(self.file_line.text())
         for file in os.listdir(directory_path):
             if file.endswith('.h5'):
-                self.batch_data.emit([os.path.join(directory_path, file),
+                self.file_path = os.path.join(directory_path, file)
+                self.batch_data.emit([self.file_path,
                                       self.density_value.value(),
                                       self.area_value.value()])
 
-    def scatter_plot(self):
-        pass
+
+    def scatter_plot(self, batch_signal):
+        self.data_df, self.summary_df = batch_signal
+        plot = plt.scatter()
+        colour = self.scatterplot_colour(self.data_df.iloc[:, -1])
+        size_pt = (2 * self.spot_size.value() / plot.dpi * 72) ** 2
+        plot.scatter(x=self.data_df.iloc[:, 0], y=self.data_df.iloc[:, 1], s=size_pt, c=colour, alpha=0.9,
+                    edgecolors='none')
+        plot.xlabel('x [nm]')
+        plot.ylabel('y [nm]')
+        plot.show()
+        plot.show()
+
 
     def show_error(self, error):
         """error message in separate window"""
