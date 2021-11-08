@@ -76,6 +76,10 @@ class ViewFiltering(qtw.QWidget):
 
         option_layout.addLayout(storage_layout)
 
+        batch_layout = qtw.QVBoxLayout()
+
+        option_layout.addLayout(batch_layout)
+
         plot_layout = qtw.QVBoxLayout()
 
         self.plot_window = MplCanvas(self, width=5, height=5, dpi=200)
