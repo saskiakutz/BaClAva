@@ -47,6 +47,9 @@ class ViewFiltering(qtw.QWidget):
 
         option_layout.addLayout(parameter_layout)
 
+        spot_layout = qtw.QHBoxLayout()
+        self.spot_label = qtw.QLabel('Spot size')
+        spot_layout.addWidget(self.spot_label)
         self.spot_size = qtw.QDoubleSpinBox(
             self,
             minimum=1,
@@ -55,7 +58,9 @@ class ViewFiltering(qtw.QWidget):
             value=1
         )
         self.spot_size.valueChanged.connect(self.update_plot_point_size)
-        option_layout.addWidget(self.spot_size)
+        spot_layout.addWidget(self.spot_size)
+
+        option_layout.addLayout(spot_layout)
 
         slider_layout = qtw.QVBoxLayout()
         self.density_slider = Slider('Density', 0, 10)
