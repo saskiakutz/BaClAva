@@ -38,7 +38,6 @@ class ModuleFiltering(qtw.QWidget):
     @qtc.pyqtSlot(object)
     def set_batch(self, batch_data):
         self.batch_dir, self.batch_density, self.batch_area = batch_data
-        print('set parameters')
 
     @qtc.pyqtSlot()
     def print_income(self):
