@@ -244,6 +244,8 @@ class ViewFiltering(qtw.QWidget):
                                       self.density_value.value(),
                                       self.area_value.value()])
 
+    def scatter_plot(self):
+        pass
 
     def show_error(self, error):
         """error message in separate window"""
