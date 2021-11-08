@@ -12,7 +12,6 @@ from PyQt5 import QtWidgets as qtw
 
 
 class ModuleFiltering(qtw.QWidget):
-
     error = qtc.pyqtSignal(str)
     data_signal = qtc.pyqtSignal(object)
     batch_signal = qtc.pyqtSignal(object)
@@ -102,7 +101,7 @@ class ModuleFiltering(qtw.QWidget):
 
         temp_array = np.zeros((1, self.summary_table.shape[0]))
         for label in updated_df.iloc[:, -1]:
-            temp_array[0, label-1] = label
+            temp_array[0, label - 1] = label
 
         for i in range(temp_array.shape[1]):
             self.dataset.loc[self.dataset.iloc[:, -2] == (i + 1), 'labels_plot'] = temp_array[0, i].astype(int)
@@ -110,11 +109,4 @@ class ModuleFiltering(qtw.QWidget):
     def batch_processing(self):
         self.import_data()
         self.filter_update()
-        self.
-
-
-
-
-
-
-
+        self.batch_signal.emit([self.dataset, self.summary_table])
