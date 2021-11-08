@@ -27,6 +27,7 @@ class ViewFiltering(qtw.QWidget):
 
     sub_data = qtc.pyqtSignal(str)
     updated_labels = qtc.pyqtSignal(object)
+    batch_data = qtc.pyqtSignal(object)
 
     def __init__(self):
         """Setup of all GUI sections and options"""
@@ -228,7 +229,8 @@ class ViewFiltering(qtw.QWidget):
 
     def choose_storage_data_image(self):
 
-        print(self.file_line.text())
+        directory_path = os.path.dirname(self.file_line.text())
+        self.batch_data.emit([directory_path, self.density_value.value(), self.area_value.value()])
 
     def show_error(self, error):
         """error message in separate window"""
