@@ -20,6 +20,7 @@ import numpy as np
 from matplotlib.backends.backend_qt5agg import (FigureCanvasQTAgg as FigureCanvas,
                                                 NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 
 
 class ViewFiltering(qtw.QWidget):
@@ -68,44 +69,48 @@ class ViewFiltering(qtw.QWidget):
         storage_layout = qtw.QHBoxLayout()
 
         self.image_btn = qtw.QPushButton("Store image")
+        self.image_btn.setDisabled(True)
         self.image_btn.clicked.connect(self.choose_storage_image)
         storage_layout.addWidget(self.image_btn)
         self.data_btn = qtw.QPushButton("Store data")
+        self.data_btn.setDisabled(True)
         self.data_btn.clicked.connect(self.choose_storage_data)
         storage_layout.addWidget(self.data_btn)
 
         option_layout.addLayout(storage_layout)
 
-        batch_layout = qtw.QVBoxLayout()
-        self.batch_label = qtw.QLabel('Batch processing:')
-        batch_layout.addWidget(self.batch_label)
-        batch_parameters_layout = qtw.QFormLayout()
-        self.density_label = qtw.QLabel('Batch density')
-        self.density_value = qtw.QDoubleSpinBox(
-            self,
-            minimum=1,
-            maximum=100000,
-            singleStep=0.1,
-            value=1
-        )
-        self.area_label = qtw.QLabel('Batch area')
-        self.area_value = qtw.QDoubleSpinBox(
-            self,
-            minimum=1,
-            maximum=100000,
-            singleStep=0.1,
-            value=1
-        )
-        self.data_image_btn = qtw.QPushButton('Store data and images')
-        self.data_image_btn.clicked.connect(self.choose_storage_data_image)
-        self.only_image_btn = qtw.QPushButton('Store images only')
-        self.only_image_btn.clicked.connect(self.choose_storage_image_only)
-        batch_parameters_layout.addRow(self.density_label, self.density_value)
-        batch_parameters_layout.addRow(self.area_label, self.area_value)
-        batch_parameters_layout.addRow(self.data_image_btn, self.only_image_btn)
-        batch_layout.addLayout(batch_parameters_layout)
-
-        option_layout.addLayout(batch_layout)
+        # batch_layout = qtw.QVBoxLayout()
+        # self.batch_label = qtw.QLabel('Batch processing:')
+        # batch_layout.addWidget(self.batch_label)
+        # batch_parameters_layout = qtw.QFormLayout()
+        # self.density_label = qtw.QLabel('Batch density')
+        # self.density_value = qtw.QDoubleSpinBox(
+        #     self,
+        #     minimum=1,
+        #     maximum=100000,
+        #     singleStep=0.1,
+        #     value=1
+        # )
+        # self.area_label = qtw.QLabel('Batch area')
+        # self.area_value = qtw.QDoubleSpinBox(
+        #     self,
+        #     minimum=1,
+        #     maximum=100000,
+        #     singleStep=0.1,
+        #     value=1
+        # )
+        # self.data_image_btn = qtw.QPushButton('Store data and images')
+        # self.data_image_btn.setDisabled(True)
+        # self.data_image_btn.clicked.connect(self.choose_storage_data_image)
+        # self.only_image_btn = qtw.QPushButton('Store images only')
+        # self.only_image_btn.setDisabled(True)
+        # self.only_image_btn.clicked.connect(self.choose_storage_image_only)
+        # batch_parameters_layout.addRow(self.density_label, self.density_value)
+        # batch_parameters_layout.addRow(self.area_label, self.area_value)
+        # batch_parameters_layout.addRow(self.data_image_btn, self.only_image_btn)
+        # batch_layout.addLayout(batch_parameters_layout)
+        #
+        # option_layout.addLayout(batch_layout)
 
         plot_layout = qtw.QVBoxLayout()
 
@@ -133,6 +138,10 @@ class ViewFiltering(qtw.QWidget):
             'hdf5 files (*.h5)'
         )
         self.file_line.setText(filename)
+        self.data_image_btn.setEnabled(True)
+        self.only_image_btn.setEnabled(True)
+        self.file_btn.setEnabled(True)
+        self.image_btn.setEnabled(True)
 
         self.sub_data.emit(filename)
 
@@ -230,7 +239,26 @@ class ViewFiltering(qtw.QWidget):
     def choose_storage_data_image(self):
 
         directory_path = os.path.dirname(self.file_line.text())
-        self.batch_data.emit([directory_path, self.density_value.value(), self.area_value.value()])
+        for file in os.listdir(directory_path):
+            if file.endswith('.h5'):
+                self.file_path = os.path.join(directory_path, file)
+                self.batch_data.emit([self.file_path,
+                                      self.density_value.value(),
+                                      self.area_value.value()])
+
+
+    def scatter_plot(self, batch_signal):
+        self.data_df, self.summary_df = batch_signal
+        plot = plt.scatter()
+        colour = self.scatterplot_colour(self.data_df.iloc[:, -1])
+        size_pt = (2 * self.spot_size.value() / plot.dpi * 72) ** 2
+        plot.scatter(x=self.data_df.iloc[:, 0], y=self.data_df.iloc[:, 1], s=size_pt, c=colour, alpha=0.9,
+                    edgecolors='none')
+        plot.xlabel('x [nm]')
+        plot.ylabel('y [nm]')
+        plot.show()
+        plot.show()
+
 
     def show_error(self, error):
         """error message in separate window"""
