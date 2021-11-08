@@ -20,6 +20,7 @@ import numpy as np
 from matplotlib.backends.backend_qt5agg import (FigureCanvasQTAgg as FigureCanvas,
                                                 NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 
 
 class ViewFiltering(qtw.QWidget):
