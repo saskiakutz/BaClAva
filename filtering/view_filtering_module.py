@@ -240,7 +240,10 @@ class ViewFiltering(qtw.QWidget):
         directory_path = os.path.dirname(self.file_line.text())
         for file in os.listdir(directory_path):
             if file.endswith('.h5'):
-                self.batch_data.emit([os.path.join(directory_path, file), self.density_value.value(), self.area_value.value()])
+                self.batch_data.emit([os.path.join(directory_path, file),
+                                      self.density_value.value(),
+                                      self.area_value.value()])
+
 
     def show_error(self, error):
         """error message in separate window"""
