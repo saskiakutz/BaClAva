@@ -83,7 +83,7 @@ class ViewFiltering(qtw.QWidget):
         self.density_value = qtw.QDoubleSpinBox(
             self,
             minimum=1,
-            maximum=100,
+            maximum=100000,
             singleStep=0.1,
             value=1
         )
@@ -91,7 +91,7 @@ class ViewFiltering(qtw.QWidget):
         self.area_value = qtw.QDoubleSpinBox(
             self,
             minimum=1,
-            maximum=100,
+            maximum=100000,
             singleStep=0.1,
             value=1
         )
