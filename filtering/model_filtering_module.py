@@ -98,4 +98,7 @@ class ModuleFiltering(qtw.QWidget):
 
         self.data_signal.emit([self.dataset, self.summary_table])
 
+    def batch_proessing(self):
+        pass
+
 
