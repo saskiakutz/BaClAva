@@ -76,7 +76,8 @@ class ViewFiltering(qtw.QWidget):
         option_layout.addLayout(storage_layout)
 
         batch_layout = qtw.QVBoxLayout()
-
+        self.batch_label = qtw.QLabel('Batch processing:')
+        batch_layout.addWidget(self.batch_label)
         option_layout.addLayout(batch_layout)
 
         plot_layout = qtw.QVBoxLayout()
