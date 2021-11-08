@@ -15,6 +15,7 @@ class ModuleFiltering(qtw.QWidget):
 
     error = qtc.pyqtSignal(str)
     data_signal = qtc.pyqtSignal(object)
+    batch_signal = qtc.pyqtSignal(object)
 
     def __init__(self):
         super().__init__()
@@ -108,7 +109,8 @@ class ModuleFiltering(qtw.QWidget):
 
     def batch_processing(self):
         self.import_data()
-        self.data_update()
+        self.filter_update()
+        self.
 
 
 
