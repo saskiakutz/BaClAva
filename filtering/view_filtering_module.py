@@ -68,9 +68,11 @@ class ViewFiltering(qtw.QWidget):
         storage_layout = qtw.QHBoxLayout()
 
         self.image_btn = qtw.QPushButton("Store image")
+        self.image_btn.setDisabled(True)
         self.image_btn.clicked.connect(self.choose_storage_image)
         storage_layout.addWidget(self.image_btn)
         self.data_btn = qtw.QPushButton("Store data")
+        self.data_btn.setDisabled(True)
         self.data_btn.clicked.connect(self.choose_storage_data)
         storage_layout.addWidget(self.data_btn)
 
@@ -97,8 +99,10 @@ class ViewFiltering(qtw.QWidget):
             value=1
         )
         self.data_image_btn = qtw.QPushButton('Store data and images')
+        self.data_image_btn.setDisabled(True)
         self.data_image_btn.clicked.connect(self.choose_storage_data_image)
         self.only_image_btn = qtw.QPushButton('Store images only')
+        self.only_image_btn.setDisabled(True)
         self.only_image_btn.clicked.connect(self.choose_storage_image_only)
         batch_parameters_layout.addRow(self.density_label, self.density_value)
         batch_parameters_layout.addRow(self.area_label, self.area_value)
@@ -133,6 +137,10 @@ class ViewFiltering(qtw.QWidget):
             'hdf5 files (*.h5)'
         )
         self.file_line.setText(filename)
+        self.data_image_btn.setEnabled(True)
+        self.only_image_btn.setEnabled(True)
+        self.file_btn.setEnabled(True)
+        self.image_btn.setEnabled(True)
 
         self.sub_data.emit(filename)
 
