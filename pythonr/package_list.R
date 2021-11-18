@@ -7,7 +7,7 @@ if (!require(pacman, quietly = TRUE))
 
 pacman::p_load_gh("saskiakutz/RSMLM")
 pacman::p_load(
-  "pryr",
+  # "pryr",
   "ggpubr",
   "splancs",
   "igraph",
