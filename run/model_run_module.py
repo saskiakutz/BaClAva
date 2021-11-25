@@ -17,11 +17,13 @@ class ModelRun(qtc.QObject):
         super().__init__()
         self.inputs = None
         self.parallel = None
+        self.micro = None
 
     @qtc.pyqtSlot(object, object)
-    def set_data(self, inputs, parallel):
+    def set_data(self, inputs, parallel, trackmate):
         self.inputs = inputs
         self.parallel = parallel
+        self.micro = trackmate
 
     @qtc.pyqtSlot()
     def check_income(self):
