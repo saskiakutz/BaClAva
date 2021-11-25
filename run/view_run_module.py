@@ -271,13 +271,12 @@ class ViewRun(qtw.QWidget):
             'ycol': self.col_inputs['y column'].value(),
             'sdcol': self.col_inputs['SD column'].value(),
             'alpha': self.b_inputs['Dirichlet process: \u03B1'].value(),
-            'background': self.b_inputs['background proportion'].value(),
-            'trackmate': trackmate
+            'background': self.b_inputs['background proportion'].value()
         }
 
         self.start_btn.setDisabled(True)
         self.startrun.emit()
-        self.submitted.emit(data, parallel)
+        self.submitted.emit(data, parallel, trackmate)
 
     def show_error(self, error):
         """error message in separate window"""
