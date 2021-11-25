@@ -16,7 +16,8 @@ run_fun <- function(
   thpar,
   datacol,
   dirichlet_alpha,
-  bayes_background) {
+  bayes_background
+) {
   source("./pythonr/package_list.R")
   source("./pythonr/exporting_hdf5.R")
   source("./pythonr/internal_bayesian.R")
