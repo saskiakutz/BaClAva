@@ -110,7 +110,9 @@ class ViewRun(qtw.QWidget):
         self.b_inputs["model"].addItems(models)
         self.b_inputs["model"].model().item(1).setEnabled(False)
 
-        datasources = ('simulation (module 1a)', 'localised data (experiment or module 1b)')
+        datasources = ('simulation (module 1a)',
+                       'localised data (experiment or module 1b)',
+                       'TrackMate: spots in tracks')
         self.b_inputs["datasource"].addItems(datasources)
 
         clustermethods = ("ToMATo", "DBSCAN", "Ripley' K based", "DBSCAN 2")
@@ -243,9 +245,12 @@ class ViewRun(qtw.QWidget):
             parallel = {
                 "parallel": 0
             }
+        trackmate = False
         if self.b_inputs['datasource'].currentText() == 'simulation (module 1a)':
             self.b_inputs['datasource'] = 'simulation'
         else:
+            if self.b_inputs['datasource'].currentText() == 'TrackMate: spots in tracks':
+                trackmate = True
             self.b_inputs['datasource'] = 'experiment'
         data = {
             'directory': self.dir_line.text(),
@@ -266,7 +271,8 @@ class ViewRun(qtw.QWidget):
             'ycol': self.col_inputs['y column'].value(),
             'sdcol': self.col_inputs['SD column'].value(),
             'alpha': self.b_inputs['Dirichlet process: \u03B1'].value(),
-            'background': self.b_inputs['background proportion'].value()
+            'background': self.b_inputs['background proportion'].value(),
+            'trackmate': trackmate
         }
 
         self.start_btn.setDisabled(True)
