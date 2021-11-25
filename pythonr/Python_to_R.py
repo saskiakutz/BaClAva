@@ -114,7 +114,8 @@ class PythonToR:
             thpar=thseq,
             datacol=cols,
             dirichlet_alpha=input_dic.get('alpha'),
-            bayes_background=input_dic.get('background')
+            bayes_background=input_dic.get('background'),
+            micro_meter=BoolVector([input_dic.get('trackmate')])
         )
 
         numpy2ri.deactivate()
