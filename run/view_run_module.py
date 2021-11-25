@@ -15,7 +15,7 @@ from run.model_table_pd import DataFrameModel
 class ViewRun(qtw.QWidget):
     """View part of module 2"""
 
-    submitted = qtc.pyqtSignal(object, object)
+    submitted = qtc.pyqtSignal(object, object, bool)
     startrun = qtc.pyqtSignal()
 
     # noinspection PyArgumentList
