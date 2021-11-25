@@ -146,15 +146,16 @@ class PythonToR:
     def check_dataset_type(self, directory):
         """check for data type and converting to hdf5 if necessary"""
 
-        onlyfiles = [f for f in listdir(directory) if
-                     isfile(join(directory, f)) and f not in ['sim_parameters.txt', 'run_config.txt', ]]
-        convertfiles = [f for f in onlyfiles if
-                        (f.endswith('.txt') or f.endswith('.csv')) and not f.endswith('summary.txt')]
-        if convertfiles:
-            self.r.source('./pythonr/convert.R')
-            numpy2ri.activate()
-            self.r.convert_hdf5(directory, convertfiles)
-            numpy2ri.deactivate()
+        if not any(name.endswith('.h5') for name in listdir(directory)):
+            onlyfiles = [f for f in listdir(directory) if
+                         isfile(join(directory, f)) and f not in ['sim_parameters.txt', 'run_config.txt', ]]
+            convertfiles = [f for f in onlyfiles if
+                            (f.endswith('.txt') or f.endswith('.csv')) and not f.endswith('summary.txt')]
+            if convertfiles:
+                self.r.source('./pythonr/convert.R')
+                numpy2ri.activate()
+                self.r.convert_hdf5(directory, convertfiles)
+                numpy2ri.deactivate()
 
     def test_function(self, input_dic):
         self.r.source("./pythonr/plot_functions.R")
