@@ -19,7 +19,7 @@ class ModelRun(qtc.QObject):
         self.parallel = None
         self.micro = None
 
-    @qtc.pyqtSlot(object, object)
+    @qtc.pyqtSlot(object, object, bool)
     def set_data(self, inputs, parallel, trackmate):
         self.inputs = inputs
         self.parallel = parallel
@@ -63,7 +63,8 @@ class ModelRun(qtc.QObject):
                 ptor = PythonToR()
                 if source_ == 'experiment':
                     ptor.check_dataset_type(dir_)
-                ptor.r_bayesian_run(self.inputs, self.parallel, self.micro)
+                # ptor.r_bayesian_run(self.inputs, self.parallel, self.micro)
+                print(self.micro)
 
             except Exception as e:
                 error = f'Cannot do the Bayesian analysis: {e}'
