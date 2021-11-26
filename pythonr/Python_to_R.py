@@ -90,7 +90,7 @@ class PythonToR:
         numpy2ri.deactivate()
         print('done')
 
-    def r_bayesian_run(self, input_dic, status):
+    def r_bayesian_run(self, input_dic, status, conversion):
         """data preparation and connection to Bayesian engine in module 2"""
 
         self.r.source('./pythonr/run_hdf5.R')
@@ -115,7 +115,7 @@ class PythonToR:
             datacol=cols,
             dirichlet_alpha=input_dic.get('alpha'),
             bayes_background=input_dic.get('background'),
-            micro_meter=BoolVector([input_dic.get('trackmate')])
+            micro_meter=BoolVector([conversion])
         )
 
         numpy2ri.deactivate()
