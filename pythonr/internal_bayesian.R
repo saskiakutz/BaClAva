@@ -149,7 +149,7 @@ Kclust_parallel <- function(pts,
     ))
   }
 
-  if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN2") {
+  if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN 2") {
     tor <- toroid(pts, xlim, ylim, max(rseq))
     D <- as.matrix(dist(tor))
     D <- D[1:N, 1:N]
@@ -165,7 +165,7 @@ Kclust_parallel <- function(pts,
   x <- foreach::foreach(r = rseq, .export = c('label_correction', 'scorewprec', 'plabel', 'mcgaussprec')) %:%
     foreach::foreach(th = thseq) %dopar% {
 
-    if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN2") {
+    if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN 2") {
       K <- apply(D, 1, function(v) {
         sum(v <= r) - 1
       })
@@ -209,7 +209,7 @@ Kclust_parallel <- function(pts,
       labels <- label_correction(labels)
     }
 
-    if (clustermethod == "DBSCAN2") {
+    if (clustermethod == "DBSCAN 2") {
       labels <- RSMLM::clusterDBSCAN(pts, r, th)
       labels <- label_correction(labels)
     }
@@ -293,7 +293,7 @@ Kclust_sequential <- function(pts,
       labels = labels
     ))
   }
-  if (!clustermethod == "ToMATo") {
+  if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN 2") {
     tor <- toroid(pts, xlim, ylim, max(rseq))
     D <- as.matrix(dist(tor))
     D <- D[1:N, 1:N]
@@ -303,7 +303,7 @@ Kclust_sequential <- function(pts,
   rs <- c()
   ths <- c()
   for (r in rseq) {
-    if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN2") {
+    if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN 2") {
       K <- apply(D, 1, function(v) {
         sum(v <= r) - 1
       })
@@ -314,7 +314,7 @@ Kclust_sequential <- function(pts,
     }
     for (th in thseq) {
 
-      if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN2")
+      if (!clustermethod == "ToMATo" & !clustermethod == "DBSCAN 2")
         C <- which(L >= th)
       if (clustermethod == "Ripley' K based") {
         if (length(C) > 0) {
@@ -346,8 +346,10 @@ Kclust_sequential <- function(pts,
         labels <- clusterTomato(pts, r, th)
         labels <- label_correction(labels)
       }
-      if (clustermethod == "DBSCAN2") {
+      if (clustermethod == "DBSCAN 2") {
+        print('dbscan')
         labels <- clusterDBSCAN(pts, r, th)
+        print(labels)
         labels <- label_correction(labels)
       }
       s <- 0
