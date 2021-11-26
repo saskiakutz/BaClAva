@@ -65,23 +65,17 @@ run_fun <- function(
 
     datasets <- list.files(file.path(foldername), pattern = "*.h5")
     datasets <- datasets[datasets != "../run_config.txt"]
-    # datasets = datasets[datasets != "run_config.txt"]
 
     l_ply(file.path(datasets), function(filename) {
       datah5 <- H5Fopen(file.path(foldername, filename))
       # columns in data
       pts <- datah5$data[, c(datacol[1], datacol[2])]
       sds <- datah5$data[, datacol[3]]
-      # if (datasource == "experiment") {
-        # limits of dataset set by the min/max of the localisations
-        xlim <- c(min(pts[, 1]), max(pts[, 1]))
-        ylim <- c(min(pts[, 2]), max(pts[, 2]))
-      # }
+
+      xlim <- c(min(pts[, 1]), max(pts[, 1]))
+      ylim <- c(min(pts[, 2]), max(pts[, 2]))
 
       write_metadata_df(datah5, datacol, 'data', 'datacolumns')
-      # did <- H5Dopen(datah5, 'data')
-      # h5writeAttribute(did, attr = datacol, name = 'datacolumns')
-      # H5Dclose(did)
 
       if (process == "sequential") {
         res <- Kclust_sequential(
