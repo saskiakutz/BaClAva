@@ -63,8 +63,7 @@ class ModelRun(qtc.QObject):
                 ptor = PythonToR()
                 if source_ == 'experiment':
                     ptor.check_dataset_type(dir_)
-                # ptor.r_bayesian_run(self.inputs, self.parallel, self.micro)
-                print(self.micro)
+                ptor.r_bayesian_run(self.inputs, self.parallel, self.micro)
 
             except Exception as e:
                 error = f'Cannot do the Bayesian analysis: {e}'
