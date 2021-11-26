@@ -73,8 +73,8 @@ run_fun <- function(
       sds <- datah5$data[, datacol[3]]
 
       if (micro_meter == TRUE){
-        pts <- pts/1000
-        sds <- sds/1000
+        pts <- pts * 1000
+        sds <- sds * 1000
       }
 
       xlim <- c(min(pts[, 1]), max(pts[, 1]))
