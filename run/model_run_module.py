@@ -30,7 +30,7 @@ class ModelRun(qtc.QObject):
         """check for correct directory and connection to R"""
 
         print('save_connected')
-        print(self.inputs, self.parallel)
+        print(self.inputs, self.parallel, self.micro)
 
         error = ''
         dir_ = self.inputs.get('directory')
