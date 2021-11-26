@@ -20,6 +20,7 @@ import numpy as np
 from matplotlib.backends.backend_qt5agg import (FigureCanvasQTAgg as FigureCanvas,
                                                 NavigationToolbar2QT as NavigationToolbar)
 from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 
 
 class ViewFiltering(qtw.QWidget):
@@ -27,6 +28,7 @@ class ViewFiltering(qtw.QWidget):
 
     sub_data = qtc.pyqtSignal(str)
     updated_labels = qtc.pyqtSignal(object)
+    batch_data = qtc.pyqtSignal(object)
 
     def __init__(self):
         """Setup of all GUI sections and options"""
@@ -36,17 +38,15 @@ class ViewFiltering(qtw.QWidget):
         main_layout = qtw.QHBoxLayout()
         option_layout = qtw.QVBoxLayout()
 
-        parameter_layout = qtw.QHBoxLayout()
-
+        parameter_layout = qtw.QFormLayout()
         self.file_btn = qtw.QPushButton("Select file")
         self.file_btn.clicked.connect(self.choose_file)
-        parameter_layout.addWidget(self.file_btn)
+
         self.file_line = qtw.QLineEdit("Select file")
         self.file_line.setReadOnly(True)
-        parameter_layout.addWidget(self.file_line)
+        parameter_layout.addRow(self.file_btn, self.file_line)
 
-        option_layout.addLayout(parameter_layout)
-
+        self.spot_label = qtw.QLabel('Spot size')
         self.spot_size = qtw.QDoubleSpinBox(
             self,
             minimum=1,
@@ -55,7 +55,8 @@ class ViewFiltering(qtw.QWidget):
             value=1
         )
         self.spot_size.valueChanged.connect(self.update_plot_point_size)
-        option_layout.addWidget(self.spot_size)
+        parameter_layout.addRow(self.spot_label, self.spot_size)
+        option_layout.addLayout(parameter_layout)
 
         slider_layout = qtw.QVBoxLayout()
         self.density_slider = Slider('Density', 0, 10)
@@ -68,13 +69,48 @@ class ViewFiltering(qtw.QWidget):
         storage_layout = qtw.QHBoxLayout()
 
         self.image_btn = qtw.QPushButton("Store image")
+        self.image_btn.setDisabled(True)
         self.image_btn.clicked.connect(self.choose_storage_image)
         storage_layout.addWidget(self.image_btn)
         self.data_btn = qtw.QPushButton("Store data")
+        self.data_btn.setDisabled(True)
         self.data_btn.clicked.connect(self.choose_storage_data)
         storage_layout.addWidget(self.data_btn)
 
         option_layout.addLayout(storage_layout)
+
+        # batch_layout = qtw.QVBoxLayout()
+        # self.batch_label = qtw.QLabel('Batch processing:')
+        # batch_layout.addWidget(self.batch_label)
+        # batch_parameters_layout = qtw.QFormLayout()
+        # self.density_label = qtw.QLabel('Batch density')
+        # self.density_value = qtw.QDoubleSpinBox(
+        #     self,
+        #     minimum=1,
+        #     maximum=100000,
+        #     singleStep=0.1,
+        #     value=1
+        # )
+        # self.area_label = qtw.QLabel('Batch area')
+        # self.area_value = qtw.QDoubleSpinBox(
+        #     self,
+        #     minimum=1,
+        #     maximum=100000,
+        #     singleStep=0.1,
+        #     value=1
+        # )
+        # self.data_image_btn = qtw.QPushButton('Store data and images')
+        # self.data_image_btn.setDisabled(True)
+        # self.data_image_btn.clicked.connect(self.choose_storage_data_image)
+        # self.only_image_btn = qtw.QPushButton('Store images only')
+        # self.only_image_btn.setDisabled(True)
+        # self.only_image_btn.clicked.connect(self.choose_storage_image_only)
+        # batch_parameters_layout.addRow(self.density_label, self.density_value)
+        # batch_parameters_layout.addRow(self.area_label, self.area_value)
+        # batch_parameters_layout.addRow(self.data_image_btn, self.only_image_btn)
+        # batch_layout.addLayout(batch_parameters_layout)
+        #
+        # option_layout.addLayout(batch_layout)
 
         plot_layout = qtw.QVBoxLayout()
 
@@ -102,6 +138,10 @@ class ViewFiltering(qtw.QWidget):
             'hdf5 files (*.h5)'
         )
         self.file_line.setText(filename)
+        # self.data_image_btn.setEnabled(True)
+        # self.only_image_btn.setEnabled(True)
+        self.file_btn.setEnabled(True)
+        self.image_btn.setEnabled(True)
 
         self.sub_data.emit(filename)
 
@@ -155,6 +195,8 @@ class ViewFiltering(qtw.QWidget):
     def update_labels(self):
 
         updated_area_density = [self.area_slider.x, self.density_slider.x]
+        # self.density_value.setValue(self.density_slider.x)
+        # self.area_value.setValue(self.area_slider.x)
         self.updated_labels.emit(updated_area_density)
 
     def update_sliders(self):
@@ -190,6 +232,33 @@ class ViewFiltering(qtw.QWidget):
         )
 
         self.data_df.loc[:, self.data_df.columns != 'labels'].to_csv(filename)
+
+    def choose_storage_image_only(self):
+        pass
+
+    def choose_storage_data_image(self):
+
+        directory_path = os.path.dirname(self.file_line.text())
+        for file in os.listdir(directory_path):
+            if file.endswith('.h5'):
+                self.file_path = os.path.join(directory_path, file)
+                self.batch_data.emit([self.file_path,
+                                      self.density_value.value(),
+                                      self.area_value.value()])
+
+
+    def scatter_plot(self, batch_signal):
+        self.data_df, self.summary_df = batch_signal
+        plot = plt.scatter()
+        colour = self.scatterplot_colour(self.data_df.iloc[:, -1])
+        size_pt = (2 * self.spot_size.value() / plot.dpi * 72) ** 2
+        plot.scatter(x=self.data_df.iloc[:, 0], y=self.data_df.iloc[:, 1], s=size_pt, c=colour, alpha=0.9,
+                    edgecolors='none')
+        plot.xlabel('x [nm]')
+        plot.ylabel('y [nm]')
+        plot.show()
+        plot.show()
+
 
     def show_error(self, error):
         """error message in separate window"""

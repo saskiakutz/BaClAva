@@ -29,6 +29,9 @@ class MainWindowFiltering(qtw.QWidget):
         self.filtering_model.data_signal.connect(self.filtering_view.update_plot)
         self.filtering_view.updated_labels.connect(self.filtering_model.set_area_density)
         self.filtering_view.updated_labels.connect(self.filtering_model.data_update)
+        self.filtering_view.batch_data.connect(self.filtering_model.set_batch)
+        self.filtering_view.batch_data.connect(self.filtering_model.batch_processing)
+        self.filtering_model.batch_signal.connect(self.filtering_view.choose_storage_data_image)
 
         # End main UI code
         self.show()

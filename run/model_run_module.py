@@ -17,18 +17,20 @@ class ModelRun(qtc.QObject):
         super().__init__()
         self.inputs = None
         self.parallel = None
+        self.micro = None
 
-    @qtc.pyqtSlot(object, object)
-    def set_data(self, inputs, parallel):
+    @qtc.pyqtSlot(object, object, bool)
+    def set_data(self, inputs, parallel, trackmate):
         self.inputs = inputs
         self.parallel = parallel
+        self.micro = trackmate
 
     @qtc.pyqtSlot()
     def check_income(self):
         """check for correct directory and connection to R"""
 
         print('save_connected')
-        print(self.inputs, self.parallel)
+        print(self.inputs, self.parallel, self.micro)
 
         error = ''
         dir_ = self.inputs.get('directory')
@@ -61,7 +63,7 @@ class ModelRun(qtc.QObject):
                 ptor = PythonToR()
                 if source_ == 'experiment':
                     ptor.check_dataset_type(dir_)
-                ptor.r_bayesian_run(self.inputs, self.parallel)
+                ptor.r_bayesian_run(self.inputs, self.parallel, self.micro)
 
             except Exception as e:
                 error = f'Cannot do the Bayesian analysis: {e}'

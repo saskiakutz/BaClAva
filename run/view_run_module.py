@@ -15,7 +15,7 @@ from run.model_table_pd import DataFrameModel
 class ViewRun(qtw.QWidget):
     """View part of module 2"""
 
-    submitted = qtc.pyqtSignal(object, object)
+    submitted = qtc.pyqtSignal(object, object, bool)
     startrun = qtc.pyqtSignal()
 
     # noinspection PyArgumentList
@@ -110,8 +110,10 @@ class ViewRun(qtw.QWidget):
         self.b_inputs["model"].addItems(models)
         self.b_inputs["model"].model().item(1).setEnabled(False)
 
-        datasources = ('simulation (module 1a)', 'localised data (experiment or module 1b)')
-        self.b_inputs["datasource"].addItems(datasources)
+        self.datasources = ('simulation (module 1a)',
+                       'localised data (experiment or module 1b)',
+                       'TrackMate: spots in tracks')
+        self.b_inputs["datasource"].addItems(self.datasources)
 
         clustermethods = ("ToMATo", "DBSCAN", "Ripley' K based", "DBSCAN 2")
         self.b_inputs["clustermethod"].addItems(clustermethods)
@@ -202,6 +204,18 @@ class ViewRun(qtw.QWidget):
 
         self.dir_line.setText("select data directory")
         self.start_btn.setDisabled(True)
+        if self.b_inputs["datasource"].currentText() == 'simulation (module 1a)':
+            self.col_inputs['x column'].setValue(1)
+            self.col_inputs['y column'].setValue(2)
+            self.col_inputs['SD column'].setValue(3)
+        elif self.b_inputs["datasource"].currentText() == 'TrackMate: spots in tracks':
+            self.col_inputs['x column'].setValue(5)
+            self.col_inputs['y column'].setValue(6)
+            self.col_inputs['SD column'].setValue(19)
+        else:
+            self.col_inputs['x column'].setValue(2)
+            self.col_inputs['y column'].setValue(3)
+            self.col_inputs['SD column'].setValue(4)
 
     def choose_file(self):
         """file selection of calculations"""
@@ -243,9 +257,12 @@ class ViewRun(qtw.QWidget):
             parallel = {
                 "parallel": 0
             }
+        trackmate = False
         if self.b_inputs['datasource'].currentText() == 'simulation (module 1a)':
             self.b_inputs['datasource'] = 'simulation'
         else:
+            if self.b_inputs['datasource'].currentText() == 'TrackMate: spots in tracks':
+                trackmate = True
             self.b_inputs['datasource'] = 'experiment'
         data = {
             'directory': self.dir_line.text(),
@@ -271,7 +288,7 @@ class ViewRun(qtw.QWidget):
 
         self.start_btn.setDisabled(True)
         self.startrun.emit()
-        self.submitted.emit(data, parallel)
+        self.submitted.emit(data, parallel, trackmate)
 
     def show_error(self, error):
         """error message in separate window"""
