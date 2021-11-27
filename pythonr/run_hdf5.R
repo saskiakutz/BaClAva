@@ -74,7 +74,7 @@ run_fun <- function(
 
       if (micro_meter == TRUE){
         pts <- pts * 1000
-        sds <- sds * 1000
+        sds <- (sds / 4) * 1000
       }
 
       xlim <- c(min(pts[, 1]), max(pts[, 1]))
