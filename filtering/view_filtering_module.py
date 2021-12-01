@@ -140,7 +140,7 @@ class ViewFiltering(qtw.QWidget):
         self.file_line.setText(filename)
         # self.data_image_btn.setEnabled(True)
         # self.only_image_btn.setEnabled(True)
-        self.file_btn.setEnabled(True)
+        self.data_btn.setEnabled(True)
         self.image_btn.setEnabled(True)
 
         self.sub_data.emit(filename)
@@ -234,30 +234,30 @@ class ViewFiltering(qtw.QWidget):
 
         self.data_df.loc[:, self.data_df.columns != 'labels'].to_csv(filename)
 
-    def choose_storage_image_only(self):
-        pass
-
-    def choose_storage_data_image(self):
-
-        directory_path = os.path.dirname(self.file_line.text())
-        for file in os.listdir(directory_path):
-            if file.endswith('.h5'):
-                self.file_path = os.path.join(directory_path, file)
-                self.batch_data.emit([self.file_path,
-                                      self.density_value.value(),
-                                      self.area_value.value()])
-
-    def scatter_plot(self, batch_signal):
-        self.data_df, self.summary_df, self.columns_data = batch_signal
-        plot = plt.scatter()
-        colour = self.scatterplot_colour(self.data_df.iloc[:, -1])
-        size_pt = (2 * self.spot_size.value() / plot.dpi * 72) ** 2
-        plot.scatter(x=self.data_df.iloc[:, self.columns_data[0]], y=self.data_df.iloc[:, self.columns_data[1]],
-                     s=size_pt, c=colour, alpha=0.9, edgecolors='none')
-        plot.xlabel('x [nm]')
-        plot.ylabel('y [nm]')
-        plot.show()
-        plot.show()
+    # def choose_storage_image_only(self):
+    #     pass
+    #
+    # def choose_storage_data_image(self):
+    #
+    #     directory_path = os.path.dirname(self.file_line.text())
+    #     for file in os.listdir(directory_path):
+    #         if file.endswith('.h5'):
+    #             self.file_path = os.path.join(directory_path, file)
+    #             self.batch_data.emit([self.file_path,
+    #                                   self.density_value.value(),
+    #                                   self.area_value.value()])
+    #
+    # def scatter_plot(self, batch_signal):
+    #     self.data_df, self.summary_df, self.columns_data = batch_signal
+    #     plot = plt.scatter()
+    #     colour = self.scatterplot_colour(self.data_df.iloc[:, -1])
+    #     size_pt = (2 * self.spot_size.value() / plot.dpi * 72) ** 2
+    #     plot.scatter(x=self.data_df.iloc[:, self.columns_data[0]], y=self.data_df.iloc[:, self.columns_data[1]],
+    #                  s=size_pt, c=colour, alpha=0.9, edgecolors='none')
+    #     plot.xlabel('x [nm]')
+    #     plot.ylabel('y [nm]')
+    #     plot.show()
+    #     plot.show()
 
     def show_error(self, error):
         """error message in separate window"""
