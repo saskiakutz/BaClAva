@@ -147,29 +147,30 @@ class ViewFiltering(qtw.QWidget):
 
     def update_plot(self, data_signal):
 
-        self.data_df, self.summary_df = data_signal
+        self.data_df, self.summary_df, self.columns_data = data_signal
 
         self.update_sliders()
 
         self.plot_window.axes.cla()
-        self.draw_scatterplot(self.data_df, self.plot_window, 'x [nm]', 'y [nm]')
+        self.draw_scatterplot(self.data_df, self.columns_data, self.plot_window, 'x [nm]', 'y [nm]')
 
     def update_plot_point_size(self):
         self.plot_window.axes.cla()
-        self.draw_scatterplot(self.data_df, self.plot_window, 'x [nm]', 'y [nm]')
+        self.draw_scatterplot(self.data_df, self.columns_data, self.plot_window, 'x [nm]', 'y [nm]')
 
-    def draw_scatterplot(self, data_scatter, canvas, x_label, y_label):
+    def draw_scatterplot(self, data_scatter, data_columns, canvas, x_label, y_label):
         """Scatter plot of a clustering result"""
 
         canvas.axes.cla()
         size_pt = (2 * self.spot_size.value() / canvas.fig.dpi * 72) ** 2
-        canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], s=0, clip_on=False)
+        canvas.axes.scatter(x=data_scatter.iloc[:, data_columns[0]], y=data_scatter.iloc[:, data_columns[1]],
+                            s=0, clip_on=False)
         canvas.axes.set_ylabel(y_label, fontsize='10')
         canvas.axes.set_xlabel(x_label, fontsize='10')
         canvas.draw()
         colour = self.scatterplot_colour(data_scatter.iloc[:, -1])
-        canvas.axes.scatter(x=data_scatter.iloc[:, 0], y=data_scatter.iloc[:, 1], s=size_pt, color=colour, alpha=0.9,
-                            edgecolors="none")
+        canvas.axes.scatter(x=data_scatter.iloc[:, data_columns[0]], y=data_scatter.iloc[:, data_columns[1]],
+                            s=size_pt, color=colour, alpha=0.9, edgecolors="none")
 
         canvas.draw()
 
@@ -246,19 +247,17 @@ class ViewFiltering(qtw.QWidget):
                                       self.density_value.value(),
                                       self.area_value.value()])
 
-
     def scatter_plot(self, batch_signal):
-        self.data_df, self.summary_df = batch_signal
+        self.data_df, self.summary_df, self.columns_data = batch_signal
         plot = plt.scatter()
         colour = self.scatterplot_colour(self.data_df.iloc[:, -1])
         size_pt = (2 * self.spot_size.value() / plot.dpi * 72) ** 2
-        plot.scatter(x=self.data_df.iloc[:, 0], y=self.data_df.iloc[:, 1], s=size_pt, c=colour, alpha=0.9,
-                    edgecolors='none')
+        plot.scatter(x=self.data_df.iloc[:, self.columns_data[0]], y=self.data_df.iloc[:, self.columns_data[1]],
+                     s=size_pt, c=colour, alpha=0.9, edgecolors='none')
         plot.xlabel('x [nm]')
         plot.ylabel('y [nm]')
         plot.show()
         plot.show()
-
 
     def show_error(self, error):
         """error message in separate window"""
