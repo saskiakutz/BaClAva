@@ -23,6 +23,7 @@ class ModuleFiltering(qtw.QWidget):
         self.density_update = None
         self.dataset = None
         self.summary_table = None
+        self.data_cols = None
         # self.batch_dir = None
         # self.batch_density = None
         # self.batch_area = None
@@ -35,9 +36,9 @@ class ModuleFiltering(qtw.QWidget):
     def set_area_density(self, updated_values):
         self.area_update, self.density_update = updated_values
 
-    @qtc.pyqtSlot(object)
-    def set_batch(self, batch_data):
-        self.inputs, self.density_update, self.area_update = batch_data
+    # @qtc.pyqtSlot(object)
+    # def set_batch(self, batch_data):
+    #     self.inputs, self.density_update, self.area_update = batch_data
 
     @qtc.pyqtSlot()
     def print_income(self):
@@ -53,8 +54,8 @@ class ModuleFiltering(qtw.QWidget):
         elif not path.isdir(dir_.rsplit('/', 1)[0]):
             error = f'You need to choose a valid directory'
         else:
-            data, summary = self.import_data()
-            self.data_signal.emit([data, summary])
+            data, summary, columns = self.import_data()
+            self.data_signal.emit([data, summary, columns])
 
         if error:
             self.error.emit(error)
@@ -64,9 +65,9 @@ class ModuleFiltering(qtw.QWidget):
         with h5py.File(self.inputs, 'r') as f:
             label_set = f['r_vs_thresh'].attrs['best'][0].decode()
             labels = np.asarray(f['labels/' + label_set][()])
-            columns_data = f['data'].attrs['datacolumns'] - 1
-            columns_data = columns_data.tolist()
-            self.dataset = pd.DataFrame(f['data'][()]).iloc[:, columns_data]
+            self.data_cols = f['data'].attrs['datacolumns'] - 1
+            self.data_cols.tolist()
+            self.dataset = pd.DataFrame(f['data'][()])
             self.summary_table = pd.DataFrame(f['summarytable'][()])
 
         labels = self.single_values(labels)
@@ -74,7 +75,7 @@ class ModuleFiltering(qtw.QWidget):
         self.dataset['labels_plot'] = labels
         self.summary_table['labels'] = np.arange(self.summary_table.shape[0]) + 1
 
-        return [self.dataset, self.summary_table]
+        return [self.dataset, self.summary_table, self.data_cols]
 
     @staticmethod
     def single_values(cluster_labels):
@@ -93,7 +94,7 @@ class ModuleFiltering(qtw.QWidget):
     @qtc.pyqtSlot()
     def data_update(self):
         self.filter_data()
-        self.data_signal.emit([self.dataset, self.summary_table])
+        self.data_signal.emit([self.dataset, self.summary_table, self.data_cols])
 
     def filter_data(self):
         updated_df = self.summary_table.loc[self.summary_table.iloc[:, 1] > self.area_update / 1000]
@@ -106,7 +107,7 @@ class ModuleFiltering(qtw.QWidget):
         for i in range(temp_array.shape[1]):
             self.dataset.loc[self.dataset.iloc[:, -2] == (i + 1), 'labels_plot'] = temp_array[0, i].astype(int)
 
-    def batch_processing(self):
-        self.import_data()
-        self.filter_data()
-        self.batch_signal.emit([self.dataset, self.summary_table])
+    # def batch_processing(self):
+    #     self.import_data()
+    #     self.filter_data()
+    #     self.batch_signal.emit([self.dataset, self.summary_table, self.data_cols])
