@@ -94,7 +94,7 @@ class ModuleFiltering(qtw.QWidget):
     @qtc.pyqtSlot()
     def data_update(self):
         self.filter_data()
-        self.data_signal.emit([self.dataset, self.summary_table])
+        self.data_signal.emit([self.dataset, self.summary_table, self.data_cols])
 
     def filter_data(self):
         updated_df = self.summary_table.loc[self.summary_table.iloc[:, 1] > self.area_update / 1000]
@@ -110,4 +110,4 @@ class ModuleFiltering(qtw.QWidget):
     def batch_processing(self):
         self.import_data()
         self.filter_data()
-        self.batch_signal.emit([self.dataset, self.summary_table])
+        self.batch_signal.emit([self.dataset, self.summary_table, self.data_cols])
