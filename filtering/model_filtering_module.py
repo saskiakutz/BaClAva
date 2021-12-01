@@ -23,6 +23,7 @@ class ModuleFiltering(qtw.QWidget):
         self.density_update = None
         self.dataset = None
         self.summary_table = None
+        self.data_cols = None
         # self.batch_dir = None
         # self.batch_density = None
         # self.batch_area = None
@@ -66,6 +67,7 @@ class ModuleFiltering(qtw.QWidget):
             labels = np.asarray(f['labels/' + label_set][()])
             columns_data = f['data'].attrs['colnames'] - 1
             columns_data = columns_data.tolist()
+            self.data_cols = f['data'].attrs['colnames'] - 1
             self.dataset = pd.DataFrame(f['data'][()]).iloc[:, columns_data]
             self.summary_table = pd.DataFrame(f['summarytable'][()])
 
@@ -74,7 +76,7 @@ class ModuleFiltering(qtw.QWidget):
         self.dataset['labels_plot'] = labels
         self.summary_table['labels'] = np.arange(self.summary_table.shape[0]) + 1
 
-        return [self.dataset, self.summary_table]
+        return [self.dataset, self.summary_table, self.data_cols]
 
     @staticmethod
     def single_values(cluster_labels):
