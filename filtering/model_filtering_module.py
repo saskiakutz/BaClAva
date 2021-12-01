@@ -54,8 +54,8 @@ class ModuleFiltering(qtw.QWidget):
         elif not path.isdir(dir_.rsplit('/', 1)[0]):
             error = f'You need to choose a valid directory'
         else:
-            data, summary = self.import_data()
-            self.data_signal.emit([data, summary])
+            data, summary, columns = self.import_data()
+            self.data_signal.emit([data, summary, columns])
 
         if error:
             self.error.emit(error)
@@ -65,10 +65,9 @@ class ModuleFiltering(qtw.QWidget):
         with h5py.File(self.inputs, 'r') as f:
             label_set = f['r_vs_thresh'].attrs['best'][0].decode()
             labels = np.asarray(f['labels/' + label_set][()])
-            columns_data = f['data'].attrs['colnames'] - 1
-            columns_data = columns_data.tolist()
-            self.data_cols = f['data'].attrs['colnames'] - 1
-            self.dataset = pd.DataFrame(f['data'][()]).iloc[:, columns_data]
+            self.data_cols = f['data'].attrs['datacolumns'] - 1
+            self.data_cols.tolist()
+            self.dataset = pd.DataFrame(f['data'][()])
             self.summary_table = pd.DataFrame(f['summarytable'][()])
 
         labels = self.single_values(labels)
