@@ -64,7 +64,7 @@ class ModuleFiltering(qtw.QWidget):
         with h5py.File(self.inputs, 'r') as f:
             label_set = f['r_vs_thresh'].attrs['best'][0].decode()
             labels = np.asarray(f['labels/' + label_set][()])
-            columns_data = f['data'].attrs['datacolumns'] - 1
+            columns_data = f['data'].attrs['colnames'] - 1
             columns_data = columns_data.tolist()
             self.dataset = pd.DataFrame(f['data'][()]).iloc[:, columns_data]
             self.summary_table = pd.DataFrame(f['summarytable'][()])
