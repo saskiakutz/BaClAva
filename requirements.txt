@@ -29,6 +29,6 @@ sip==4.19.13
 six==1.15.0
 statsmodels==0.12.1
 tables==3.6.1
-tornado==6.0.4
+tornado==6.3.3
 tzlocal==2.1
 wcwidth==0.2.4
